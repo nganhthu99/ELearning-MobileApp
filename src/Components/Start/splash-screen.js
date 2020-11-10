@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, View, StyleSheet} from "react-native";
 
-const SplashScreen = (props) => {
+const SplashScreen = () => {
     return (
         <View style={styles.container}>
             <Image style={styles.iconLogo} source={require('../../../assets/icon-logo.png')}/>
@@ -20,16 +20,12 @@ const styles = StyleSheet.create({
         flex: 7,
         width: 450,
         resizeMode: 'contain',
-        //borderWidth: 10,
-        //borderColor: '#AAAAAA'
     },
     textLogo: {
         flex: 1,
         width: 200,
         resizeMode: 'contain',
         marginBottom: 20,
-        //borderWidth: 10,
-        //borderColor: '#AAAAAA',
     }
 });
 
