@@ -2,11 +2,15 @@ import React from 'react';
 import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 const ImageButton = (props) => {
+    const handleOnClick = () => {
+        props.handleOnClick();
+    }
+
     return (
         <View style={styles.container}>
             <ImageBackground style={styles.image} source={props.image}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={{fontSize: 18, color: '#012840', fontWeight: 'bold'}} numberOfLines={2}>{props.title}</Text>
+                <TouchableOpacity style={styles.button} onPress={handleOnClick}>
+                    <Text style={styles.text}>{props.title}</Text>
                 </TouchableOpacity>
             </ImageBackground>
         </View>
@@ -14,23 +18,24 @@ const ImageButton = (props) => {
 };
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'stretch',
-        height: 150,
-        //width: 200,
+        flex: 1,
+
+        borderWidth: 2,
+        borderColor: '#012840'
     },
     image: {
         flex: 1,
         resizeMode: 'contain',
-
-        marginTop: 10,
-
-        borderWidth: 3,
-        borderColor: '#012840'
     },
     button: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    text: {
+        fontSize: 18,
+        color: '#021F59',
+        fontWeight: 'bold'
     }
 });
 export default ImageButton;
