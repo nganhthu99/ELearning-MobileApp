@@ -1,7 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, View, StyleSheet} from "react-native";
 
-const SplashScreen = () => {
+const SplashScreen = (props) => {
+
+    useEffect(() => {
+        setTimeout(
+            ()=> {
+                props.navigation.navigate("StartMenu");
+            },3000
+        );
+    }, []);
+
     return (
         <View style={styles.container}>
             <Image style={styles.iconLogo} source={require('../../../assets/icon-logo.png')}/>

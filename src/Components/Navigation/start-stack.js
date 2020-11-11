@@ -5,6 +5,8 @@ import ForgetPassword from "../Start/forget-password";
 import React from "react";
 import {createStackNavigator} from "@react-navigation/stack";
 import MainTab from "./main-tab";
+import SplashScreen from "../Start/splash-screen";
+
 const Stack = createStackNavigator();
 
 const StartStack = () => {
@@ -20,6 +22,13 @@ const StartStack = () => {
                 },
                 headerBackTitleVisible: false,
             }}>
+
+            <Stack.Screen name="SplashScreen" component={SplashScreen}
+                          options={{
+                              title: 'Splash Screen',
+                              headerShown: false,
+                          }}/>
+
             <Stack.Screen name="StartMenu" component={StartMenu}
                                options={{
                                    title: 'Start',
@@ -40,7 +49,8 @@ const StartStack = () => {
             <Stack.Screen name="Main" component={MainTab}
                                options={{
                                    title: 'Main',
-                                   headerShown: false
+                                   headerShown: false,
+                                   gestureEnabled: false
                                }}/>
         </Stack.Navigator>
     )
