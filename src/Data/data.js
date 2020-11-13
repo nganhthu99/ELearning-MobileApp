@@ -100,17 +100,17 @@ export const authors = [
     {
         id: 4,
         name: 'Ho Thanh',
-        courses: 6
+        courses: 2
     },
     {
         id: 5,
         name: 'Phuong Nguyen',
-        courses: 6
+        courses: 3
     },
     {
         id: 6,
         name: 'Hoang Vu',
-        courses: 6
+        courses: 1
     }
 ]
 
@@ -195,7 +195,7 @@ export const searchHistory=[
         content: 'algorithm',
     },
     {
-        id: 5,
+        id: 10,
         content: 'python',
     }
 ]
