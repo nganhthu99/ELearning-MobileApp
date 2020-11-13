@@ -1,20 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import SplashScreen from "./src/Components/Start/splash-screen";
+import 'react-native-gesture-handler';
+import {NavigationContainer} from "@react-navigation/native";
+import StartStack from "./src/Components/Navigation/start-stack";
 
 export default function App() {
-  return (
-      <View style={styles.container}>
-        <SplashScreen/>
-      </View>
-  );
+    return (
+        <NavigationContainer>
+            <StartStack/>
+        </NavigationContainer>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-  },
-});
