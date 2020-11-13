@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
-import ImageButton from "./image-button";
+import ImageButton from "../Common/image-button";
 import {courses} from "../../Data/data";
 
 const HorizontalTopicList = (props) => {

@@ -49,6 +49,7 @@ const SignIn = (props) => {
                 <Text style={{alignSelf: 'center', marginBottom: 10}}>OR</Text>
                 <Button
                     type="outline"
+                    buttonStyle={{borderColor: '#A62103'}}
                     containerStyle={{paddingLeft: 40, paddingRight: 40}}
                     titleStyle={{color: '#A62103'}}
                     icon={{ type: 'font-awesome-5', name: 'google', color: '#590202'}}
