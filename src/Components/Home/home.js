@@ -1,96 +1,96 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
 import {authors, courses, topics} from "../../Data/data";
 import ImageButton from "../Common/image-button";
 import VerticalCourseList from "../CoursesList/VerticalCourseList/vertical-course-list";
 import HorizontalTopicList from "./horizontal-topic-list";
-import SectionFooter from "../Common/section-footer";
 import SectionHeader2 from "../Common/section-header-2";
 import HorizontalAuthorList from "../AuthorList/HorizontalAuthorList/horizontal-author-list";
 import SectionHeader from "../Common/section-header";
-
+import {ScreenName} from "../../Globals/constants";
+import {ThemeContext} from "../../Provider/theme-provider";
+import {LanguageContext} from "../../Provider/language-provider";
 
 const Home = (props) => {
+    const {theme} = useContext(ThemeContext)
+    const {language} = useContext(LanguageContext)
+
+    // Control
     const handleRecommendButton = () => {
-        props.navigation.navigate('CourseList', {
-            header: 'Recommended Courses',
+        props.navigation.navigate(ScreenName.CourseList, {
+            header: language.recommendForYou,
             items: courses
         })
     }
 
     const handleNewButton = () => {
-        props.navigation.navigate('CourseList', {
-            header: 'New Courses',
+        props.navigation.navigate(ScreenName.CourseList, {
+            header: language.newRelease,
             items: courses
         })
     }
 
     const handleSeeAllTopCoursesButton = () => {
-        props.navigation.navigate('CourseList', {
-            header: 'Top Courses',
+        props.navigation.navigate(ScreenName.CourseList, {
+            header: language.topCourses,
             items: courses
         })
     }
 
     const handleAllAuthorsButton = () => {
-        props.navigation.navigate('AuthorList', {
-            header: 'Authors',
+        props.navigation.navigate(ScreenName.AuthorList, {
+            header: language.listAuthors,
             items: authors
         })
     }
 
     return(
-        <ScrollView style={styles.container}>
-            <View style={styles.buttonsContainer}>
-                <View style={styles.buttonContainer}>
+        <ScrollView style={styles(theme).container}>
+            <View style={styles(theme).buttonsContainer}>
+                <View style={styles(theme).buttonContainer}>
                     <ImageButton handleOnClick={handleRecommendButton}
-                                 title='RECOMMEND FOR YOU'
+                                 title={language.recommendForYou}
                                  image={require('../../../assets/background_1.jpg')}/>
                 </View>
-                <View style={styles.buttonContainer}>
+                <View style={styles(theme).buttonContainer}>
                     <ImageButton handleOnClick={handleNewButton}
-                                 title='NEW RELEASE'
+                                 title={language.newRelease}
                                  image={require('../../../assets/background_2.jpg')}/>
                 </View>
             </View>
-            <View style={styles.hotTopicsContainer}>
-                <View style={styles.header}>
-                    <SectionHeader2 title='Hot Topics'/>
+            <View style={styles(theme).hotTopicsContainer}>
+                <View style={styles(theme).header}>
+                    <SectionHeader2 title={language.hotTopics}/>
                 </View>
                 <View style={{paddingTop: 10}}>
                     <HorizontalTopicList navigation={props.navigation} items={topics}/>
                 </View>
             </View>
 
-            <View style={styles.topCoursesContainer}>
-                <View style={styles.header}>
-                    <SectionHeader2 title='Top Courses'/>
+            <View style={styles(theme).topCoursesContainer}>
+                <View style={styles(theme).header}>
+                    <SectionHeader title={language.topCourses} handleOnClick={handleSeeAllTopCoursesButton}/>
                 </View>
                 <View>
                     <VerticalCourseList navigation={props.navigation} items={courses}/>
                 </View>
-                <View>
-                    <SectionFooter handleOnClick={handleSeeAllTopCoursesButton}/>
-                </View>
             </View>
 
-            <View style={styles.topAuthorsContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Top Authors' handleOnClick={handleAllAuthorsButton}/>
+            <View style={styles(theme).topAuthorsContainer}>
+                <View style={styles(theme).header}>
+                    <SectionHeader title={language.topAuthors} handleOnClick={handleAllAuthorsButton}/>
                 </View>
                 <View>
-                    <HorizontalAuthorList
-                        navigation={props.navigation}
-                        items={authors}/>
+                    <HorizontalAuthorList navigation={props.navigation} items={authors}/>
                 </View>
             </View>
         </ScrollView>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     buttonsContainer: {
         height: 240,
