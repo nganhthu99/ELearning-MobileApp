@@ -1,10 +1,15 @@
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView, FlatList, Image} from "react-native";
+import React, {useContext} from 'react';
+import {View, StyleSheet, ScrollView, FlatList, Image} from "react-native";
 import {comments} from "../../../Data/data";
 import CommentListItem from "./comment-list-item";
-import {Icon, Input} from "react-native-elements";
+import {Input} from "react-native-elements";
+import {ThemeContext} from "../../../Provider/theme-provider";
+import {LanguageContext} from "../../../Provider/language-provider";
 
 const CourseDetailComment = (props) => {
+    const {theme} = useContext(ThemeContext)
+    const {language} = useContext(LanguageContext)
+
     const renderItem = ({ item }) => {
         return (
             <View style={{height: 100, padding: 5}}>
@@ -13,13 +18,15 @@ const CourseDetailComment = (props) => {
         )
     };
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.commentContainer}>
-                <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={{uri:'https://i.pinimg.com/originals/8a/f7/ed/8af7ed2daec49e34d1dbfeb52ba7a582.jpg'}}/>
+        <ScrollView style={styles(theme).container}>
+            <View style={styles(theme).commentContainer}>
+                <View style={styles(theme).imageContainer}>
+                    <Image style={styles(theme).image} source={{uri:'https://i.pinimg.com/originals/8a/f7/ed/8af7ed2daec49e34d1dbfeb52ba7a582.jpg'}}/>
                 </View>
-                <View style={styles.inputContainer}>
-                    <Input placeholder='Comment'/>
+                <View style={styles(theme).inputContainer}>
+                    <Input
+                        placeholder={language.commentInput}
+                        inputStyle={{color: theme.normalText}}/>
                 </View>
             </View>
             <FlatList
@@ -31,10 +38,10 @@ const CourseDetailComment = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex:1,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     commentContainer: {
         height: 120,
@@ -43,8 +50,6 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingTop: 10,
         paddingBottom: 10,
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#021F59'
     },
     imageContainer: {
         width: 100,
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#021F59'
+        borderColor: theme.primaryEmphasis
     },
     inputContainer: {
         flex: 2,
