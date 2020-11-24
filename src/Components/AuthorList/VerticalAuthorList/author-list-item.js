@@ -1,33 +1,33 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ThemeContext} from "../../../Provider/theme-provider";
 
 const AuthorListItem = (props) => {
+    const {theme} = useContext(ThemeContext)
 
     const handleOnClick = () => {
-        props.navigation.navigate('AuthorDetail', {
-            item: props.item
-        })
+        props.handleOnClick(props.item)
     }
 
     return(
-        <TouchableOpacity style={styles.container} onPress={handleOnClick}>
-            <View style={styles.imageContainer}>
-                <Image source={require('../../../../assets/course.jpg')} style={styles.image}/>
+        <TouchableOpacity style={styles(theme).container} onPress={handleOnClick}>
+            <View style={styles(theme).imageContainer}>
+                <Image source={require('../../../../assets/course.jpg')} style={styles(theme).image}/>
             </View>
-            <View style={styles.infoContainer}>
-                <Text style={[styles.text, {fontWeight:'bold', fontSize: 16}]}>{props.item.name}</Text>
-                <Text style={styles.text}>{`${props.item.courses} courses`}</Text>
+            <View style={styles(theme).infoContainer}>
+                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{props.item.name}</Text>
+                <Text style={styles(theme).text}>{`${props.item.courses} courses`}</Text>
             </View>
         </TouchableOpacity>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
         borderBottomWidth: 2,
-        borderBottomColor: '#A9CCE3',
+        borderBottomColor: theme.listDivider,
         padding: 12,
         paddingLeft: 0,
     },
@@ -45,10 +45,12 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         width: '100%',
-        borderRadius: 50
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: theme.primaryEmphasis
     },
     text: {
-        color: '#011534'
+        color: theme.normalText
     }
 })
 export default AuthorListItem;

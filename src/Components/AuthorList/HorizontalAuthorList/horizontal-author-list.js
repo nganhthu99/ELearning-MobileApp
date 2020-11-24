@@ -1,8 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
 import HorizontalAuthorItem from "./horizontal-author-item";
+import {ScreenName} from "../../../Globals/constants";
+import {ThemeContext} from "../../../Provider/theme-provider";
 
 const HorizontalAuthorList = (props) => {
+    const {theme} = useContext(ThemeContext)
+
+    // Control
+    const handleOnClick = (item) => {
+        props.navigation.navigate(ScreenName.AuthorDetail, {
+            item: item
+        })
+    }
+
     const renderItem = ({ item }) => {
         return (
             <View key={item.id} style={{
@@ -11,7 +22,7 @@ const HorizontalAuthorList = (props) => {
                 paddingLeft: 5,
                }}>
                 <HorizontalAuthorItem
-                    navigation={props.navigation}
+                    handleOnClick={handleOnClick}
                     key={item.id}
                     item={item}/>
             </View>
@@ -19,15 +30,15 @@ const HorizontalAuthorList = (props) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <FlatList horizontal={true} data={props.items} renderItem={renderItem}/>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
 });
 

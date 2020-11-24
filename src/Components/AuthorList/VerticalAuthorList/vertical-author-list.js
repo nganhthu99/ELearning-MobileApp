@@ -1,29 +1,38 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
-import HorizontalCourseItem from "../../CoursesList/HorizontalCourseList/horizontal-course-item";
 import AuthorListItem from "./author-list-item";
-import VerticalCourseItem from "../../CoursesList/VerticalCourseList/vertical-course-item";
+import {ScreenName} from "../../../Globals/constants";
+import {ThemeContext} from "../../../Provider/theme-provider";
 
 const VerticalAuthorList = (props) => {
+    const {theme} = useContext(ThemeContext)
+
+    // Control
+    const handleOnClick = (item) => {
+        props.navigation.navigate(ScreenName.AuthorDetail, {
+            item: item
+        })
+    }
+
     const renderItem = ({ item }) => {
         return (
             <View style={{height: 120}}>
                 <AuthorListItem
-                    navigation={props.navigation}
+                    handleOnClick={handleOnClick}
                     item={item}/>
             </View>
         );
     };
     return(
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <FlatList data={props.items} renderItem={renderItem}/>
         </View>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
 });
 

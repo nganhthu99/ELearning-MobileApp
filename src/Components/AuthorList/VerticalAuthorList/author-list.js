@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
 import SectionHeader2 from "../../Common/section-header-2";
 import VerticalAuthorList from "./vertical-author-list";
+import {ThemeContext} from "../../../Provider/theme-provider";
 
 const AuthorList = (props) => {
+    const {theme} = useContext(ThemeContext)
+
     return(
-        <ScrollView style={styles.container}>
-            <View style={styles.list}>
-                <View style={styles.header}>
+        <ScrollView style={styles(theme).container}>
+            <View style={styles(theme).list}>
+                <View style={styles(theme).header}>
                     <SectionHeader2 title={props.route.params.header}/>
                 </View>
                 <VerticalAuthorList
@@ -19,9 +22,9 @@ const AuthorList = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     list: {
         padding: 5

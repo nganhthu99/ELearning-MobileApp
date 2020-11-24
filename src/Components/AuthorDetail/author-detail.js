@@ -1,27 +1,32 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import VerticalCourseList from "../CoursesList/VerticalCourseList/vertical-course-list";
 import {courses} from "../../Data/data";
 import SectionHeader2 from "../Common/section-header-2";
+import {ThemeContext} from "../../Provider/theme-provider";
+import {LanguageContext} from "../../Provider/language-provider";
 
 const AuthorDetail = (props) => {
+    const {theme} = useContext(ThemeContext)
+    const {language} = useContext(LanguageContext)
+
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles(theme).container}>
             {/*image container*/}
-            <View style={styles.avatarContainer}>
-                <Image style={styles.image} source={{uri:'https://i.pinimg.com/originals/8a/f7/ed/8af7ed2daec49e34d1dbfeb52ba7a582.jpg'}}/>
+            <View style={styles(theme).avatarContainer}>
+                <Image style={styles(theme).image} source={{uri:'https://i.pinimg.com/originals/8a/f7/ed/8af7ed2daec49e34d1dbfeb52ba7a582.jpg'}}/>
             </View>
 
             {/*info container*/}
-            <View style={styles.infoContainer}>
-                <Text style={[styles.text, {fontWeight:'bold', fontSize: 16}]}>{props.route.params.item.name}</Text>
-                <Text style={styles.text}>{`${props.route.params.item.courses} courses`}</Text>
+            <View style={styles(theme).infoContainer}>
+                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{props.route.params.item.name}</Text>
+                <Text style={styles(theme).text}>{`${props.route.params.item.courses} courses`}</Text>
             </View>
 
             {/*courses container*/}
-            <View style={styles.coursesContainer}>
-                <View style={styles.header}>
-                    <SectionHeader2 title='Courses'/>
+            <View style={styles(theme).coursesContainer}>
+                <View style={styles(theme).header}>
+                    <SectionHeader2 title={language.courses}/>
                 </View>
                 <VerticalCourseList
                     navigation={props.navigation}
@@ -31,9 +36,9 @@ const AuthorDetail = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     avatarContainer: {
         height: 350,
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
         height: '100%',
         //borderRadius: 175,
         borderWidth: 2,
-        borderColor: '#021F59',
+        borderColor: theme.primaryEmphasis,
         aspectRatio: 1
     },
     infoContainer: {
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     text: {
-        color: '#011534'
+        color: theme.normalText
     },
     header: {
         paddingTop: 15,
