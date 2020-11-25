@@ -1,85 +1,106 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {courses} from "../../Data/data";
 import HorizontalCourseList from "../CoursesList/HorizontalCourseList/horizontal-course-list";
 import SectionHeader from "../Common/section-header";
+import {ScreenName} from "../../Globals/constants";
+import {ThemeContext} from "../../Provider/theme-provider";
+import {LanguageContext} from "../../Provider/language-provider";
+import {AuthenticationContext} from "../../Provider/authentication-provider";
+import UnauthenticationView from "../Common/unauthentication-view";
+import {RegisteredCoursesContext} from "../../Provider/registered-courses-provider";
+import {DownloadedCoursesContext} from "../../Provider/downloaded-courses-provider";
+import {FavouriteCoursesContext} from "../../Provider/favourite-courses-provider";
 
 const MyCourses = (props) => {
+    const {theme} = useContext(ThemeContext)
+    const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
+    const {registeredCourses} = useContext(RegisteredCoursesContext)
+    const {downloadedCourses} = useContext(DownloadedCoursesContext)
+    const {favouriteCourses} = useContext(FavouriteCoursesContext)
+
     const handleContinueLearningButton = () => {
-        props.navigation.navigate('CourseList', {
+        props.navigation.navigate(ScreenName.CourseList, {
             items: courses,
-            header: 'Continue Learning Courses'
+            header: language.continueLearning,
         })
     }
 
     const handleRegisteredButton = () => {
-        props.navigation.navigate('CourseList', {
-            items: courses,
-            header: 'Registered Courses'
+        props.navigation.navigate(ScreenName.CourseList, {
+            items: registeredCourses,
+            header: language.registered,
         })
     }
 
     const handleDownloadedButton = () => {
-        props.navigation.navigate('CourseList', {
-            items: courses,
-            header: 'Downloaded Courses'
+        props.navigation.navigate(ScreenName.CourseList, {
+            items: downloadedCourses,
+            header: language.downloaded,
         })
     }
 
     const handleFavouriteButton = () => {
-        props.navigation.navigate('CourseList', {
-            items: courses,
-            header: 'Favourite Courses'
+        props.navigation.navigate(ScreenName.CourseList, {
+            items: favouriteCourses,
+            header: language.favourite,
         })
     }
-    return(
-        <ScrollView style={styles.container}>
-            <View style={styles.sectionContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Continue Learning' handleOnClick={handleContinueLearningButton}/>
+    if (authentication) {
+        return (
+            <ScrollView style={styles(theme).container}>
+                <View style={styles(theme).sectionContainer}>
+                    <View style={styles(theme).header}>
+                        <SectionHeader title={language.continueLearning} handleOnClick={handleContinueLearningButton}/>
+                    </View>
+                    <View>
+                        <HorizontalCourseList
+                            navigation={props.navigation}
+                            items={courses}/>
+                    </View>
                 </View>
-                <View>
-                    <HorizontalCourseList
-                        navigation={props.navigation}
-                        items={courses}/>
+                <View style={styles(theme).sectionContainer}>
+                    <View style={styles(theme).header}>
+                        <SectionHeader title={language.registered} handleOnClick={handleRegisteredButton}/>
+                    </View>
+                    <View>
+                        <HorizontalCourseList
+                            navigation={props.navigation}
+                            items={registeredCourses}/>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.sectionContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Registered' handleOnClick={handleRegisteredButton}/>
+                <View style={styles(theme).sectionContainer}>
+                    <View style={styles(theme).header}>
+                        <SectionHeader title={language.downloaded} handleOnClick={handleDownloadedButton}/>
+                    </View>
+                    <View>
+                        <HorizontalCourseList
+                            navigation={props.navigation}
+                            items={downloadedCourses}/>
+                    </View>
                 </View>
-                <View>
-                    <HorizontalCourseList
-                        navigation={props.navigation}
-                        items={courses}/>
+                <View style={styles(theme).sectionContainer}>
+                    <View style={styles(theme).header}>
+                        <SectionHeader title={language.favourite} handleOnClick={handleFavouriteButton}/>
+                    </View>
+                    <View>
+                        <HorizontalCourseList
+                            navigation={props.navigation}
+                            items={favouriteCourses}/>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.sectionContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Downloaded' handleOnClick={handleDownloadedButton}/>
-                </View>
-                <View>
-                    <HorizontalCourseList
-                        navigation={props.navigation}
-                        items={courses}/>
-                </View>
-            </View>
-            <View style={styles.sectionContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Favourite' handleOnClick={handleFavouriteButton}/>
-                </View>
-                <View>
-                    <HorizontalCourseList
-                        navigation={props.navigation}
-                        items={courses}/>
-                </View>
-            </View>
-        </ScrollView>
-    )
+            </ScrollView>
+        )
+    } else {
+        return (
+            <UnauthenticationView navigation={props.navigation}/>
+        )
+    }
 };
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     sectionContainer: {
         padding: 5,
