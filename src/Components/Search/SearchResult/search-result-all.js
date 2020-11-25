@@ -1,34 +1,38 @@
-import React from 'react';
-import CourseList from "../../CoursesList/VerticalCourseList/course-list";
+import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
-import SectionFooter from "../../Common/section-footer";
 import SectionHeader from "../../Common/section-header";
 import VerticalCourseList from "../../CoursesList/VerticalCourseList/vertical-course-list";
 import {authors, courses} from "../../../Data/data";
 import VerticalAuthorList from "../../AuthorList/VerticalAuthorList/vertical-author-list";
+import {ScreenName} from "../../../Globals/constants";
+import {ThemeContext} from "../../../Provider/theme-provider";
+import {LanguageContext} from "../../../Provider/language-provider";
 
 const SearchResultAll = (props) => {
+    const {theme} = useContext(ThemeContext)
+    const {language} = useContext(LanguageContext)
+
     const handleCoursesSeeAll = () => {
-        props.navigation.navigate('Courses')
+        props.navigation.navigate(ScreenName.CourseList)
     }
 
     const handleAuthorsSeeAll = () => {
-        props.navigation.navigate('Authors')
+        props.navigation.navigate(ScreenName.AuthorList)
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.coursesContainer}>
-                <View style={styles.header}>
-                    <SectionHeader title='Courses' handleOnClick={handleCoursesSeeAll}/>
+        <ScrollView style={styles(theme).container}>
+            <View style={styles(theme).coursesContainer}>
+                <View style={styles(theme).header}>
+                    <SectionHeader title={language.courses} handleOnClick={handleCoursesSeeAll}/>
                 </View>
                 <VerticalCourseList
                     navigation={props.route.params.navigation}
                     items={courses}/>
             </View>
-            <View style={styles.authorsContainer}>
-                <View style={[styles.header, {paddingLeft: 5, paddingTop: 20}]}>
-                    <SectionHeader title='Authors' handleOnClick={handleAuthorsSeeAll}/>
+            <View style={styles(theme).authorsContainer}>
+                <View style={[styles(theme).header, {paddingLeft: 5, paddingTop: 20}]}>
+                    <SectionHeader title={language.authors} handleOnClick={handleAuthorsSeeAll}/>
                 </View>
                 <VerticalAuthorList
                     navigation={props.route.params.navigation}
@@ -38,9 +42,9 @@ const SearchResultAll = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: '#F2F2F2',
+        backgroundColor: theme.background,
     },
     coursesContainer: {
         padding: 5
