@@ -1,12 +1,10 @@
 import React from 'react';
-import {Button, Image, StyleSheet, TouchableHighlight, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import CourseInfo from "../course-info";
 
 const HorizontalCourseItem = (props) => {
     const handleOnClick = () => {
-        props.navigation.push('CourseDetail', {
-            item: props.item
-        })
+        props.handleOnClick(props.item)
     }
     return(
         <TouchableOpacity style={styles.container} onPress={handleOnClick}>

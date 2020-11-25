@@ -1,31 +1,32 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import CourseInfo from "../course-info";
+import {ThemeContext} from "../../../Provider/theme-provider";
 
 const VerticalCourseItem = (props) => {
+    const {theme} = useContext(ThemeContext)
+
     const handleOnClick = () => {
-        props.navigation.navigate('CourseDetail', {
-            item: props.item
-        })
+        props.handleOnClick(props.item)
     }
     return(
-        <TouchableOpacity style={styles.container} onPress={handleOnClick}>
-            <View style={styles.imageContainer}>
-                <Image source={require('../../../../assets/course.jpg')} style={styles.image}/>
+        <TouchableOpacity style={styles(theme).container} onPress={handleOnClick}>
+            <View style={styles(theme).imageContainer}>
+                <Image source={require('../../../../assets/course.jpg')} style={styles(theme).image}/>
             </View>
-            <View style={styles.infoContainer}>
+            <View style={styles(theme).infoContainer}>
                 <CourseInfo item={props.item}/>
             </View>
         </TouchableOpacity>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
         borderBottomWidth: 2,
-        borderBottomColor: '#A9CCE3',
+        borderBottomColor: theme.listDivider,
     },
     imageContainer:{
         height: 90,
