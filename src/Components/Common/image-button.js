@@ -1,27 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ThemeContext} from "../../Provider/theme-provider";
 
 const ImageButton = (props) => {
+    const {theme} = useContext(ThemeContext)
+
     const handleOnClick = () => {
         props.handleOnClick();
     }
 
     return (
-        <View style={styles.container}>
-            <ImageBackground style={styles.image} source={props.image}>
-                <TouchableOpacity style={styles.button} onPress={handleOnClick}>
-                    <Text style={styles.text}>{props.title}</Text>
+        <View style={styles(theme).container}>
+            <ImageBackground style={styles(theme).image} source={props.image}>
+                <TouchableOpacity style={styles(theme).button} onPress={handleOnClick}>
+                    <Text style={styles(theme).text}>{props.title}</Text>
                 </TouchableOpacity>
             </ImageBackground>
         </View>
     )
 };
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
-
         borderWidth: 2,
-        borderColor: '#012840'
+        borderColor: theme.primaryEmphasis
     },
     image: {
         flex: 1,

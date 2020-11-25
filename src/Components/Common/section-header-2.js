@@ -1,21 +1,23 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
-import {Button, Icon} from "react-native-elements";
+import {ThemeContext} from "../../Provider/theme-provider";
 
 const SectionHeader2 = (props) => {
+    const {theme} = useContext(ThemeContext)
+
     return(
-        <View style={styles.container}>
-            <Text style={styles.text}>{props.title}</Text>
+        <View style={styles(theme).container}>
+            <Text style={styles(theme).text}>{props.title}</Text>
         </View>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1
     },
     text: {
-        color: '#155FBF',
+        color: theme.header,
         fontSize: 20,
         fontWeight: 'bold'
     }
