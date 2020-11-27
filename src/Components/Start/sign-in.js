@@ -10,18 +10,14 @@ import {AuthenticationContext} from "../../Provider/authentication-provider";
 
 const SignIn = (props) => {
     // State
-    const [username, setUserName] = useState("")
-    const [password, setPassword] = useState("")
-    const [seePassword, setSeePassword] = useState(false)
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
     const {setAuthentication} = useContext(AuthenticationContext)
+    const [username, setUserName] = useState("")
+    const [password, setPassword] = useState("")
+    const [seePassword, setSeePassword] = useState(false)
 
     // Control
-    const handleSeePasswordIcon = () => {
-        setSeePassword(!seePassword);
-    }
-
     const handleUsernameInput = (text) => {
         setUserName(text)
     }
@@ -30,9 +26,17 @@ const SignIn = (props) => {
         setPassword(text)
     }
 
+    const handleSeePasswordIcon = () => {
+        setSeePassword(!seePassword);
+    }
+
+    const handleForgetPasswordButton = () => {
+        props.navigation.navigate(ScreenName.ForgetPassword)
+    }
+
     const handleSignInButton = () => {
         if (username.length >= 6 && password.length >= 8) {
-             const signInResult = signInService(username, password)
+            const signInResult = signInService(username, password)
             if (signInResult.status === 200) {
                 setAuthentication(signInResult.user)
                 props.navigation.navigate(ScreenName.MainTab)
@@ -43,7 +47,9 @@ const SignIn = (props) => {
                     [
                         {
                             text: 'Cancel',
-                            onPress: () => console.log('Cancel Pressed'),
+                            onPress: (() => {
+
+                            }),
                             style: 'cancel'
                         }
                     ]
@@ -56,10 +62,7 @@ const SignIn = (props) => {
         // do something more
     }
 
-    const handleForgetPasswordButton = () => {
-        props.navigation.navigate(ScreenName.ForgetPassword)
-    }
-
+    // View
     return (
         <View style={styles(theme).container}>
             <View style={styles(theme).inputContainer}>
