@@ -7,11 +7,13 @@ import {LanguageContext} from "../../../Provider/language-provider";
 import {TouchableOpacity} from "react-native";
 import {Icon} from "react-native-elements";
 import Settings from "../../Settings/settings";
+import {AuthenticationContext} from "../../../Provider/authentication-provider";
 const Stack = createStackNavigator();
 
 const AccountStack = () => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
@@ -44,8 +46,10 @@ const AccountStack = () => {
             })}>
             <Stack.Screen name={ScreenName.Account}
                           component={Account}
-                          options={{
+                          options={(authentication) ? {
                               headerLeft: null,
+                              title: language.account
+                          } : {
                               title: language.account
                           }}/>
             <Stack.Screen name={ScreenName.Settings}

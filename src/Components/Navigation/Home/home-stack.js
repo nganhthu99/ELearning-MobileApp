@@ -11,11 +11,13 @@ import {LanguageContext} from "../../../Provider/language-provider";
 import {ScrollView, Text, TouchableOpacity} from "react-native";
 import Settings from "../../Settings/settings";
 import {Icon} from "react-native-elements";
+import {AuthenticationContext} from "../../../Provider/authentication-provider";
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
@@ -48,8 +50,10 @@ const HomeStack = () => {
             })}>
             <Stack.Screen name={ScreenName.Home}
                           component={Home}
-                          options={{
+                          options={(authentication) ? {
                               headerLeft: null,
+                              title: language.home
+                          } : {
                               title: language.home
                           }}/>
             <Stack.Screen name={ScreenName.CourseList}
@@ -57,7 +61,9 @@ const HomeStack = () => {
                           options={{title: language.listCourses}}/>
             <Stack.Screen name={ScreenName.CourseDetail}
                           component={CourseDetail}
-                          options={{title: language.courseDetail}}/>
+                          options={{
+                              title: language.courseDetail
+                          }}/>
             <Stack.Screen name={ScreenName.AuthorList}
                           component={AuthorList}
                           options={{title: language.listAuthors}}/>
@@ -66,9 +72,8 @@ const HomeStack = () => {
                           options={{title: language.authorDetail}}/>
             <Stack.Screen name={ScreenName.Settings}
                           component={Settings}
-                          options={{
-                              title: language.settings,
-                          }}/>
+                          scree
+                          options={{title: language.settings}}/>
         </Stack.Navigator>
     )
 }

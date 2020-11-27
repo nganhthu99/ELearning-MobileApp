@@ -9,11 +9,13 @@ import {LanguageContext} from "../../../Provider/language-provider";
 import {TouchableOpacity} from "react-native";
 import {Icon} from "react-native-elements";
 import Settings from "../../Settings/settings";
+import {AuthenticationContext} from "../../../Provider/authentication-provider";
 const Stack = createStackNavigator();
 
 const MyCoursesStack = () => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
@@ -46,13 +48,17 @@ const MyCoursesStack = () => {
             })}>
             <Stack.Screen name={ScreenName.MyCourses}
                           component={MyCourses}
-                          options={{
+                          options={(authentication) ? {
                               headerLeft: null,
+                              title: language.myCourses
+                          } : {
                               title: language.myCourses
                           }}/>
             <Stack.Screen name={ScreenName.CourseDetail}
                           component={CourseDetail}
-                          options={{title: language.courseDetail}}/>
+                          options={{
+                              title: language.courseDetail
+                          }}/>
             <Stack.Screen name={ScreenName.CourseList}
                           component={CourseList}
                           options={{title: language.listCourses}}/>

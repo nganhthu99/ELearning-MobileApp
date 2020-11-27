@@ -11,11 +11,13 @@ import Settings from "../../Settings/settings";
 import {TouchableOpacity} from "react-native";
 import {Icon} from "react-native-elements";
 import {SearchHistoryProvider} from "../../../Provider/search-history-provider";
+import {AuthenticationContext} from "../../../Provider/authentication-provider";
 const Stack = createStackNavigator();
 
 const SearchStack = () => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     return (
         <SearchHistoryProvider>
@@ -49,8 +51,11 @@ const SearchStack = () => {
                 })}>
                 <Stack.Screen name={ScreenName.Search}
                               component={Search}
-                              options={{
+                              options={(authentication) ? {
                                   headerLeft: null,
+                                  animationEnabled: true,
+                                  title: language.search
+                              } : {
                                   animationEnabled: true,
                                   title: language.search
                               }}/>
@@ -62,7 +67,9 @@ const SearchStack = () => {
                               }}/>
                 <Stack.Screen name={ScreenName.CourseDetail}
                               component={CourseDetail}
-                              options={{title: language.courseDetail}}/>
+                              options={{
+                                  title: language.courseDetail
+                              }}/>
                 <Stack.Screen name={ScreenName.AuthorDetail}
                               component={AuthorDetail}
                               options={{title: language.authorDetail}}/>
