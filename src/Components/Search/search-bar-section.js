@@ -1,11 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Image, TouchableOpacity, View} from "react-native";
 import {Icon, Input, Overlay, SearchBar} from "react-native-elements";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
 
 const SearchBarSection = (props) => {
-    const [searchFocus, setSearchFocus] = useState(false)
     const [isMapVisible, setIsMapVisible] = useState(false);
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
@@ -15,11 +14,11 @@ const SearchBarSection = (props) => {
     }
 
     const handleOnFocus = () => {
-        setSearchFocus(true)
+        props.handleOnFocus()
     }
 
     const handleOnBlur = () => {
-        setSearchFocus(false)
+        props.handleOnBlur()
     }
 
     const handleSubmit = () => {
@@ -29,12 +28,6 @@ const SearchBarSection = (props) => {
     const toggleMapOverlay = () => {
         setIsMapVisible(!isMapVisible)
     }
-
-    useEffect(() => {
-        props.navigation.setOptions({
-            headerShown: !searchFocus
-        })
-    },[searchFocus])
 
     const mapOverlay = () => {
         return (
