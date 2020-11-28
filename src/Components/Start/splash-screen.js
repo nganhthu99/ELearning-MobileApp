@@ -11,7 +11,7 @@ const SplashScreen = (props) => {
     useEffect(() => {
         this.timer = setInterval(() => {
             setLoading(loading + 1);
-        }, 1)
+        }, 100)
         if (loading === 100) {
             props.navigation.navigate(ScreenName.StartMenu);
         }

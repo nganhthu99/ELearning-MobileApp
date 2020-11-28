@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {Button, Input} from "react-native-elements";
-import {StyleSheet, View} from "react-native";
+import {Alert, Animated, StyleSheet, View} from "react-native";
 import { Icon } from 'react-native-elements'
 import {ScreenName} from "../../Globals/constants";
 import {
@@ -12,6 +12,7 @@ import {
 } from "./render-validation";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
+import {signUpService} from "../../Core/Service/authentication-service";
 
 const SignUp = (props) => {
     // State
@@ -42,8 +43,18 @@ const SignUp = (props) => {
     const handleSignUpButton = () => {
         if (username.length >= 6 && password.length >= 8 &&
             password === confirmPassword && validateEmailUtil(email)) {
-            // signUpService
-            props.navigation.navigate(ScreenName.SignIn)
+            if (signUpService(username,password,email)) {
+                Alert.alert(
+                    'Authentication Success',
+                    'Please Sign In to continue',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => props.navigation.navigate(ScreenName.SignIn),
+                        }
+                    ]
+                );
+            }
         }
     }
 

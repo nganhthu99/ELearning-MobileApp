@@ -1,9 +1,10 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from "react-native";
 import {Button} from "react-native-elements";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
+import SplashScreen from "./splash-screen";
 
 const StartMenu = (props) => {
     // State
@@ -23,6 +24,7 @@ const StartMenu = (props) => {
         props.navigation.navigate(ScreenName.MainTab)
     }
 
+    // View
     return (
         <View style={styles(theme).container}>
             <Image style={styles(theme).textLogo} source={require('../../../assets/icon-logo.png')}/>
