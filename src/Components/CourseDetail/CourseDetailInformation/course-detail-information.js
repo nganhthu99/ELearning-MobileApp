@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Button, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Icon} from "react-native-elements";
 import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
 import {courses} from "../../../Data/data";
@@ -44,7 +44,44 @@ const CourseDetailInformation = (props) => {
     );
 
     const handleRegisteredButton = () => {
-        if (authentication) setIsRegistered(!isRegistered)
+        if (authentication) {
+            if (isRegistered) {
+                Alert.alert(
+                    'Message',
+                    'Do you want to register to this course?',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => setIsRegistered(!isRegistered)
+                        },
+                        {
+                            text: 'Cancel',
+                            onPress: () => {
+                            },
+                            style: 'cancel'
+                        }
+                    ]
+                );
+            } else {
+                Alert.alert(
+                    'Message',
+                    'Do you want to unregister this course?',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => setIsRegistered(!isRegistered)
+                        },
+                        {
+                            text: 'Cancel',
+                            onPress: () => {
+                            },
+                            style: 'cancel'
+                        }
+                    ]
+                );
+            }
+            setIsRegistered(!isRegistered)
+        }
         else {
             alert()
         }
@@ -66,7 +103,9 @@ const CourseDetailInformation = (props) => {
 
     const handleShareButton = () => {
         if (authentication) {
-
+            Share.share({
+                message: 'Share course'
+            })
         }
         else {
             alert()
@@ -117,31 +156,31 @@ const CourseDetailInformation = (props) => {
             <View style={{flexDirection: "row", justifyContent:'space-evenly', padding: 5}}>
                 <TouchableOpacity
                     onPress={handleFavouriteButton}
-                    style={(isFavourite) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
+                    style={(isFavourite && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
                     <Icon type='octicon'
                           name='heart'
                           size={35}
-                          iconStyle={(isFavourite) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
+                          iconStyle={(isFavourite && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={handleRegisteredButton}
-                    style={(isRegistered) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
+                    style={(isRegistered && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
                     <Icon type='octicon'
                           name='pencil'
                           size={35}
-                          iconStyle={(isRegistered) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
+                          iconStyle={(isRegistered && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={handleDownloadedButton}
-                    style={(isDownloaded) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
+                    style={(isDownloaded && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
                     <Icon type='ionicons'
                           name='cloud-download'
                           size={35}
-                          iconStyle={(isDownloaded) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
+                          iconStyle={(isDownloaded && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={handleShareButton}
-                    style={{flex: 1, borderColor:theme.primaryButton, borderWidth: 2}}>
+                    style={{flex: 1, borderColor:theme.primaryButton, borderWidth: 1}}>
                     <Icon type='ionicons'
                           name='share'
                           size={35}
@@ -189,8 +228,8 @@ const styles = (theme) => StyleSheet.create({
     pressedButton: {
         flex: 1,
         backgroundColor: theme.primaryButton,
-        borderColor:theme.primaryButton,
-        borderWidth: 2
+        borderColor:theme.background,
+        borderWidth: 1,
     },
     pressedIcon: {
         color: theme.background
@@ -198,7 +237,7 @@ const styles = (theme) => StyleSheet.create({
     unPressedButton : {
         flex: 1,
         borderColor:theme.primaryButton,
-        borderWidth: 2,
+        borderWidth: 1,
     },
     unPressedIcon: {
         color: theme.primaryButton
