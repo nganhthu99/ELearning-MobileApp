@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View, Text} from "react-native";
 import StarRating from "react-native-star-rating";
-import {Rating} from "react-native-elements";
+import {ThemeContext} from "../../Provider/theme-provider";
 
 const CourseInfo = (props) => {
+    const {theme} = useContext(ThemeContext)
+
     return(
-        <View style={styles.container}>
-            <Text numberOfLines={1} style={[styles.text, {fontWeight:'bold', fontSize: 16}]}>{props.item.title}</Text>
-            <Text numberOfLines={1} style={styles.text}>{props.item.author}</Text>
-            <Text numberOfLines={1} style={styles.text}>{`${props.item.level} . ${props.item.release} . ${props.item.duration}`}</Text>
+        <View style={styles(theme).container}>
+            <Text numberOfLines={1} style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{props.item.title}</Text>
+            <Text numberOfLines={1} style={styles(theme).text}>{props.item.author}</Text>
+            <Text numberOfLines={1} style={styles(theme).text}>{`${props.item.level} . ${props.item.release} . ${props.item.duration}`}</Text>
             {/*<Rating*/}
             {/*    readonly*/}
             {/*    type='star'*/}
@@ -24,9 +26,9 @@ const CourseInfo = (props) => {
                 fullStar={'ios-star'}
                 halfStar={'ios-star-half'}
                 maxStars={5}
-                rating={4.5}
+                rating={props.item.rating}
                 starSize={18}
-                fullStarColor={'#0E66EE'}
+                fullStarColor={theme.star}
                 buttonStyle={{margin: 0.5}}
                 containerStyle={{justifyContent:'flex-start'}}
             />
@@ -34,12 +36,12 @@ const CourseInfo = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1
     },
     text: {
-        color: '#011534'
+        color: theme.normalText
     }
 });
 

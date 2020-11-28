@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ScrollView, StyleSheet, View} from "react-native";
+import {Alert, ScrollView, StyleSheet, View} from "react-native";
 import {authors, courses, topics} from "../../Data/data";
 import ImageButton from "../Common/image-button";
 import VerticalCourseList from "../CoursesList/VerticalCourseList/vertical-course-list";
@@ -10,17 +10,33 @@ import SectionHeader from "../Common/section-header";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
+import {AuthenticationContext} from "../../Provider/authentication-provider";
 
 const Home = (props) => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     // Control
     const handleRecommendButton = () => {
-        props.navigation.navigate(ScreenName.CourseList, {
-            header: language.recommendForYou,
-            items: courses
-        })
+        if (authentication) {
+            props.navigation.navigate(ScreenName.CourseList, {
+                header: language.recommendForYou,
+                items: courses
+            })
+        } else {
+            Alert.alert(
+                'Authentication Error',
+                'Please Sign In or Sign Up to use this feature',
+                [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel'
+                    }
+                ]
+            );
+        }
     }
 
     const handleNewButton = () => {

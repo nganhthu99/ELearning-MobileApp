@@ -11,7 +11,7 @@ const Settings = (props) => {
     const {language, setLanguage} = useContext(LanguageContext)
 
     const [isBlueMode, setIsBlueMode] = (theme === themes.light) ? useState(true) : useState(false);
-    const [selectedLanguageIndex, setSelectedLanguageIndex] = (language === language.english) ? useState(1) : useState(2);
+    const [selectedLanguageIndex, setSelectedLanguageIndex] = (language === languages.english) ? useState(1) : useState(0);
 
     const toggleSwitch = () => {
         setIsBlueMode(previousState => !previousState);
@@ -56,6 +56,7 @@ const Settings = (props) => {
                     selectedIndex={selectedLanguageIndex}
                     containerStyle={{width: 220}}
                     buttonStyle={{borderWidth: 2, borderColor: theme.primaryButton}}
+                    textStyle={{color: theme.primaryButton}}
                     buttons={['Vietnamese', 'English']}
                 />
             </View>

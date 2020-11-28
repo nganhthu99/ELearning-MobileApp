@@ -9,15 +9,18 @@ import SplashScreen from "../Start/splash-screen";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
+import {AuthenticationContext} from "../../Provider/authentication-provider";
 
 const Stack = createStackNavigator();
 
 const StartStack = () => {
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
+    const {authentication} = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
+            initialRouteName={ScreenName.StartMenu}
             screenOptions={{
                 headerStyle: {
                     backgroundColor: theme.navigationBar,
@@ -28,11 +31,11 @@ const StartStack = () => {
                 },
                 headerBackTitleVisible: false,
             }}>
-            {/*<Stack.Screen name={ScreenName.SplashScreen}*/}
-            {/*              component={SplashScreen}*/}
-            {/*              options={{*/}
-            {/*                  headerShown: false,*/}
-            {/*              }}/>*/}
+            <Stack.Screen name={ScreenName.SplashScreen}
+                          component={SplashScreen}
+                          options={{
+                              headerShown: false,
+                          }}/>
             <Stack.Screen name={ScreenName.StartMenu}
                           component={StartMenu}
                            options={{
@@ -56,9 +59,11 @@ const StartStack = () => {
                           }}/>
             <Stack.Screen name={ScreenName.MainTab}
                           component={MainTab}
-                          options={{
+                          options={(authentication) ? {
                               headerShown: false,
                               gestureEnabled: false
+                          }: {
+                              headerShown: false,
                           }}/>
         </Stack.Navigator>
     )
