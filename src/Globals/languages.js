@@ -57,7 +57,8 @@ export const languages = {
         lesson: 'LESSON',
         exercise: 'EXER...',
         comment: 'COM...',
-        rating: 'Rating',
+
+        ratingCourse: 'Rating Course',
         relatedCourses: 'Related Courses',
 
         listCourses: 'List Courses',
@@ -128,7 +129,7 @@ export const languages = {
         lesson: 'BÀI HỌC',
         exercise: 'BÀI TẬP',
         comment: 'BÌNH LUẬN',
-        rating: 'ĐÁNH GIÁ',
+        rating: 'Đánh Giá Khoá Học',
         relatedCourses: 'Khoá Học Tương Tự',
 
         listCourses: 'Danh Sách Khoá Học',

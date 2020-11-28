@@ -19,6 +19,7 @@ export const ScreenName = {
     SearchResult: "SearchResult",
     SearchResultAll: "SearchResultAll",
     Account: "Account",
+    Settings: "Settings",
     CourseDetailInformation: "CourseDetailInformation",
     CourseDetailLesson: "CourseDetailLesson",
     CourseDetailExercise: "CourseDetailExercise",
