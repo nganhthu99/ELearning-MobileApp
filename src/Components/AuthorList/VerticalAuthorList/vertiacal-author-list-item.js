@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemeContext} from "../../../Provider/theme-provider";
 
-const AuthorListItem = (props) => {
+const VertiacalAuthorListItem = (props) => {
     const {theme} = useContext(ThemeContext)
 
     const handleOnClick = () => {
@@ -32,7 +32,7 @@ const styles = (theme) => StyleSheet.create({
         paddingLeft: 0,
     },
     imageContainer:{
-        flex: 3,
+        width: 95,
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginRight: 12,
@@ -53,4 +53,4 @@ const styles = (theme) => StyleSheet.create({
         color: theme.normalText
     }
 })
-export default AuthorListItem;
+export default VertiacalAuthorListItem;
