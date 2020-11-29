@@ -1,14 +1,18 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {ThemeContext} from "../../../Provider/theme-provider";
 import Accordion from 'react-native-collapsible/Accordion';
 import {courses} from "../../../Data/data";
+import Collapsible from 'react-native-collapsible';
 
 const CourseDetailLesson = (props) => {
     const {theme} = useContext(ThemeContext)
-    const [activeSections, setActiveSections] = useState([])
-
+    const [activeSections, setActiveSections] = useState([0])
     const SECTIONS = courses[0].lesson
+
+    useEffect(() => {
+        props.route.params.handleOnChangeLesson(activeSections)
+    }, [activeSections])
 
     const _renderHeader = section => {
         return (
@@ -27,7 +31,7 @@ const CourseDetailLesson = (props) => {
     };
 
     const _updateSections = activeSections => {
-        setActiveSections(activeSections);
+        setActiveSections(activeSections)
     };
 
     return (
@@ -38,6 +42,7 @@ const CourseDetailLesson = (props) => {
                 renderHeader={_renderHeader}
                 renderContent={_renderContent}
                 onChange={_updateSections}
+                // expandMultiple
             />
         </ScrollView>
     )

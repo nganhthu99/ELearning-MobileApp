@@ -39,6 +39,9 @@ const CourseDetailTab = (props) => {
                         options={{title: language.information}}/>
             <Tab.Screen name={ScreenName.CourseDetailLesson}
                         component={CourseDetailLesson}
+                        initialParams={{
+                            handleOnChangeLesson: props.handleOnChangeLesson
+                        }}
                         options={{title: language.lesson}}/>
             <Tab.Screen name={ScreenName.CourseDetailExercise}
                         component={CourseDetailExercise}
