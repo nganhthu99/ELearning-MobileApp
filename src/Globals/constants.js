@@ -25,8 +25,3 @@ export const ScreenName = {
     CourseDetailExercise: "CourseDetailExercise",
     CourseDetailComment: "CourseDetailComment"
 }
-
-export const ImageName = {
-    LogoImage: "",
-    LogoText: "",
-}

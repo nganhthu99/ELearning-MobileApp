@@ -1,14 +1,14 @@
 export const themes = {
     light: {
-        background: '#F2F2F2',
-        navigationBar: '#AED3F2',
-        listDivider: '#AED3F2',
-        primaryButton: '#2089DC',
-        star: '#0E66EE',
-        header: '#155FBF',
-        primaryEmphasis: '#021F59',
-        normalText: '#011534',
-        secondaryButton: '#A62103',
+        background: '#F2F2F2', // background: '#F2F2F2'
+        navigationBar: '#AED3F2', // light: '#AED3F2'
+        listDivider: '#AED3F2', // x
+        primaryButton: '#2089DC', // primary: '#2089DC'
+        star: '#0E66EE', // bright: '#0E66EE'
+        header: '#155FBF', // header: '#155FBF'
+        primaryEmphasis: '#021F59', // emphasis: '#021F59'
+        normalText: '#011534', // text: '#011534'
+        secondaryButton: '#A62103', //
         secondaryEmphasis: '#590202',
     },
     dark: {
