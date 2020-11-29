@@ -25,8 +25,8 @@ const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        borderBottomWidth: 2,
-        borderBottomColor: theme.listDivider,
+        borderBottomWidth: 1.5,
+        borderBottomColor: theme.primaryEmphasis,
     },
     imageContainer:{
         height: 90,

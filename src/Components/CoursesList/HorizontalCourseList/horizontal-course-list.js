@@ -17,9 +17,10 @@ const HorizontalCourseList = (props) => {
     const renderItem = ({ item }) => {
         return (
             <View key={item.id} style={{
-                height: 230, width: 250,
+                height: 250, width: 250,
+                marginRight: 5,
                 padding: 5,
-                borderRightWidth: 2, borderRightColor: theme.listDivider,}}>
+                borderWidth: 1.5, borderColor: theme.primaryEmphasis, borderRadius: 3}}>
                 <HorizontalCourseItem
                     handleOnClick={handleOnClick}
                     key={item.id}
