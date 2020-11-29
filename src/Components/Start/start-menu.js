@@ -1,10 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, View} from "react-native";
 import {Button} from "react-native-elements";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Provider/theme-provider";
 import {LanguageContext} from "../../Provider/language-provider";
-import SplashScreen from "./splash-screen";
 
 const StartMenu = (props) => {
     // State

@@ -69,8 +69,9 @@ const SignUp = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleUsernameInput(text)}
+                       errorMessage={renderUsernameValidation(username)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderUsernameValidation(username)}
                 <Input placeholder={language.emailInput}
                        inputStyle={{color: theme.normalText}}
                        leftIcon={
@@ -79,8 +80,9 @@ const SignUp = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleEmailInput(text)}
+                       errorMessage={renderEmailValidation(email)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderEmailValidation(email)}
                 <Input placeholder={language.passwordInput}
                        inputStyle={{color: theme.normalText}}
                        secureTextEntry={true}
@@ -90,8 +92,9 @@ const SignUp = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handlePasswordInput(text)}
+                       errorMessage={renderPasswordValidation(password)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderPasswordValidation(password)}
                 <Input placeholder={language.confirmPasswordInput}
                        inputStyle={{color: theme.normalText}}
                        secureTextEntry={true}
@@ -101,8 +104,9 @@ const SignUp = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleConfirmPasswordInput(text)}
+                       errorMessage={renderConfirmPasswordValidation(confirmPassword, password)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderConfirmPasswordValidation(confirmPassword, password)}
                 <Button type='outline'
                         title={language.signUp}
                         buttonStyle={{borderColor: theme.primaryButton}}

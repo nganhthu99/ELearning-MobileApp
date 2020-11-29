@@ -118,8 +118,9 @@ const ForgetPassword = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleEmailInput(text)}
+                       errorMessage={renderEmailValidation(email)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderEmailValidation(email)}
                 <Button
                         type='outline'
                         buttonStyle={{borderColor: theme.primaryButton}}
@@ -171,8 +172,9 @@ const ForgetPassword = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handlePasswordInput(text)}
+                       errorMessage={renderPasswordValidation(password)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderPasswordValidation(password)}
                 <Input placeholder={language.confirmPasswordInput}
                        inputStyle={{color: theme.normalText}}
                        secureTextEntry={true}
@@ -182,8 +184,9 @@ const ForgetPassword = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleConfirmPasswordInput(text)}
+                       errorMessage={renderConfirmPasswordValidation(confirmPassword, password)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderConfirmPasswordValidation(confirmPassword, password)}
                 <Button
                     onPress={handleResetPasswordButton}
                     type='outline'

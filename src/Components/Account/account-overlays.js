@@ -33,8 +33,9 @@ export const UserOverlay = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleOnChangeText(text)}
+                       errorMessage={renderUsernameValidation(username)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderUsernameValidation(username)}
                 <Button type='outline'
                         title='Update'
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}
@@ -73,8 +74,9 @@ export const EmailOverlay = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleOnChangeText(text)}
+                       errorMessage={renderEmailValidation(email)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderEmailValidation(email)}
                 <Button type='outline'
                         title='Update'
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}
@@ -120,8 +122,9 @@ export const PasswordOverlay = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleOnChangeCurrentPassword(text)}
+                       errorMessage={renderPasswordValidation(currentPassword)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderPasswordValidation(currentPassword)}
                 <Input placeholder='New Password'
                        secureTextEntry
                        leftIcon={
@@ -130,8 +133,9 @@ export const PasswordOverlay = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleOnChangeNewPassword(text)}
+                       errorMessage={renderPasswordValidation(newPassword)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderPasswordValidation(newPassword)}
                 <Button type='outline'
                         title='Update'
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}

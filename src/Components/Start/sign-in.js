@@ -74,8 +74,9 @@ const SignIn = (props) => {
                                  color={theme.primaryEmphasis}/>
                        }
                        onChangeText={(text) => handleUsernameInput(text)}
+                       errorMessage={renderUsernameValidation(username)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderUsernameValidation(username)}
                 <Input placeholder={language.passwordInput}
                        inputStyle={{color: theme.normalText}}
                        secureTextEntry={!seePassword}
@@ -94,8 +95,9 @@ const SignIn = (props) => {
                            />
                        }
                        onChangeText={(text) => handlePasswordInput(text)}
+                       errorMessage={renderPasswordValidation(password)}
+                       errorStyle={{color: theme.secondaryButton}}
                 />
-                {renderPasswordValidation(password)}
                 <TouchableOpacity
                     style={{alignSelf: 'flex-end', paddingRight: 10, marginBottom: 20}}
                     onPress={handleForgetPasswordButton}>
