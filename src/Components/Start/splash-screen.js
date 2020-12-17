@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Image, View, StyleSheet, Text, ActivityIndicator} from "react-native";
 import {ScreenName} from "../../Globals/constants";
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const SplashScreen = (props) => {
     // State

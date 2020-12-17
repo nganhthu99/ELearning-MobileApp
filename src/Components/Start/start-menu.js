@@ -2,8 +2,8 @@ import React, {useContext} from 'react';
 import {Image, StyleSheet, View} from "react-native";
 import {Button} from "react-native-elements";
 import {ScreenName} from "../../Globals/constants";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {LanguageContext} from "../../Core/Provider/language-provider";
 
 const StartMenu = (props) => {
     // State
@@ -30,36 +30,36 @@ const StartMenu = (props) => {
             <View style={styles(theme).buttonsContainer}>
                 <Button
                     type="outline"
-                    buttonStyle={{borderColor: theme.primaryButton}}
-                    titleStyle={{color: theme.primaryButton}}
+                    buttonStyle={{borderColor: theme.primary}}
+                    titleStyle={{color: theme.primary}}
                     icon={{
                         type: 'font-awesome',
                         name: 'sign-in',
-                        color: theme.primaryEmphasis
+                        color: theme.emphasis
                     }}
                     iconLeft
-                    title={language.signIn}
+                    title={language.sign_in}
                     onPress={handleSignInButton}/>
                 <Button
                     type="outline"
-                    buttonStyle={{borderColor: theme.primaryButton}}
-                    titleStyle={{color: theme.primaryButton}}
+                    buttonStyle={{borderColor: theme.primary}}
+                    titleStyle={{color: theme.primary}}
                     icon={{
                         type: 'font-awesome',
                         name: 'user-plus',
-                        color: theme.primaryEmphasis
+                        color: theme.emphasis
                     }}
                     iconLeft
-                    title={language.signUp}
+                    title={language.sign_up}
                     onPress={handleSignUpButton}/>
                 <Button
                     type="outline"
-                    buttonStyle={{borderColor: theme.primaryButton}}
-                    titleStyle={{color: theme.primaryButton}}
+                    buttonStyle={{borderColor: theme.primary}}
+                    titleStyle={{color: theme.primary}}
                     icon={{
                         type: 'font-awesome',
                         name: 'eye',
-                        color: theme.primaryEmphasis
+                        color: theme.emphasis
                     }}
                     iconLeft
                     title={language.explore}

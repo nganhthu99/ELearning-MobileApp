@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {CountdownCircleTimer} from "react-native-countdown-circle-timer";
 import {Animated, Text, View} from "react-native";
 
