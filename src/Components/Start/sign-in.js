@@ -1,25 +1,39 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Input, Icon} from "react-native-elements";
-import {StyleSheet, Text, View, TouchableOpacity, Alert} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from "react-native";
 import {ScreenName} from "../../Globals/constants";
-import {signInService} from "../../Core/Service/authentication-service";
-import {renderPasswordValidation, renderUsernameValidation} from "./render-validation";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
-import {AuthenticationContext} from "../../Provider/authentication-provider";
+import {
+    renderEmailValidation, renderPasswordValidation,
+    validateEmailUtil, validatePasswordUtil,
+} from "./render-validation";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {LanguageContext} from "../../Core/Provider/language-provider";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
+import {signInService, signInWithGoogleService} from "../../Core/Service/authentication-service";
+import * as Google from 'expo-google-app-auth';
 
+// 373788081790-rqnoie3idj1i5b99u0qiovpmedvhjmp5.apps.googleusercontent.com
+// 373788081790-rd6nsepnibjmm4ejc67vt1b2dd1hmolb.apps.googleusercontent.com
 const SignIn = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
-    const {setAuthentication} = useContext(AuthenticationContext)
-    const [username, setUserName] = useState("")
+    const authenticationContext = useContext(AuthenticationContext)
+    const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [seePassword, setSeePassword] = useState(false)
 
+    // Listen
+    useEffect(() => {
+        if (authenticationContext.state.isAuthenticated) {
+            props.navigation.navigate(ScreenName.MainTab)
+        }
+    }, [authenticationContext.state.isAuthenticated])
+
     // Control
-    const handleUsernameInput = (text) => {
-        setUserName(text)
+    const handleEmailInput = (text) => {
+        setEmail(text)
     }
 
     const handlePasswordInput = (text) => {
@@ -35,88 +49,169 @@ const SignIn = (props) => {
     }
 
     const handleSignInButton = () => {
-        if (username.length >= 6 && password.length >= 8) {
-            const signInResult = signInService(username, password)
-            if (signInResult.status === 200) {
-                setAuthentication(signInResult.user)
-                props.navigation.navigate(ScreenName.MainTab)
-            } else {
-                Alert.alert(
-                    'Authentication Error',
-                    'Wrong username or password!',
-                    [
-                        {
-                            text: 'Cancel',
-                            onPress: (() => {
-
-                            }),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            }
+        if (validateEmailUtil(email) && validatePasswordUtil(password)) {
+            setIsLoading(true)
+            signInService(email, password)
+                .then((response) => {
+                    if (response.status === 200) {
+                        authenticationContext.signIn(response)
+                    } else if (response.status === 400) {
+                        Alert.alert(
+                            'Error Signing In',
+                            'Wrong email or password',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    } else if (response.status === 403) {
+                        Alert.alert(
+                            'Error Signing In',
+                            'Account has not been activated',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    } else {
+                        Alert.alert(
+                            'Error Signing In',
+                            'Please try again later',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    }
+                })
+                .catch((error) => {
+                    Alert.alert(
+                        'Error Signing In',
+                        'Please try again later',
+                        [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                }
+                            }
+                        ]
+                    )
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
         }
     }
 
-    const handleGoogleButton = () => {
-        // do something more
+    const handleGoogleButton = async () => {
+        const { type, user } = await Google.logInAsync({
+            iosClientId: "373788081790-rqnoie3idj1i5b99u0qiovpmedvhjmp5.apps.googleusercontent.com",
+            androidClientId: "373788081790-rd6nsepnibjmm4ejc67vt1b2dd1hmolb.apps.googleusercontent.com"
+        });
+        if (type === "success") {
+            setIsLoading(true);
+            signInWithGoogleService(user.email, user.id)
+                .then((response) => {
+                    if (response.status === 200) {
+                        authenticationContext.signIn(response.data)
+                    } else {
+                        Alert.alert(
+                            'Error Signing In With Google',
+                            'Please try again later',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    }
+                })
+                .catch((error) => {
+                    Alert.alert(
+                        'Error Signing In With Google',
+                        'Please try again later',
+                        [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                }
+                            }
+                        ]
+                    )
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
     }
 
     // View
     return (
         <View style={styles(theme).container}>
             <View style={styles(theme).inputContainer}>
-                <Input placeholder={language.usernameInput}
-                       inputStyle={{color: theme.normalText}}
+                {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
+                <Input placeholder={language.email}
+                       inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
-                                 name='person-outline'
-                                 color={theme.primaryEmphasis}/>
+                                 name='mail-outline'
+                                 color={theme.emphasis}/>
                        }
-                       onChangeText={(text) => handleUsernameInput(text)}
-                       errorMessage={renderUsernameValidation(username)}
-                       errorStyle={{color: theme.secondaryButton}}
+                       onChangeText={(text) => handleEmailInput(text)}
+                       errorMessage={renderEmailValidation(email)}
+                       errorStyle={{color: theme.danger}}
                 />
-                <Input placeholder={language.passwordInput}
-                       inputStyle={{color: theme.normalText}}
+                <Input placeholder={language.password}
+                       inputStyle={{color: theme.text}}
                        secureTextEntry={!seePassword}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='lock-outline'
-                                 color={theme.primaryEmphasis}/>
+                                 color={theme.emphasis}/>
                        }
                        rightIcon={
                            <Icon
                                type='font-awesome-5'
                                name={(seePassword) ? 'eye' : 'eye-slash'}
-                               color={theme.primaryEmphasis}
+                               color={theme.emphasis}
                                size={22}
                                onPress={handleSeePasswordIcon}
                            />
                        }
                        onChangeText={(text) => handlePasswordInput(text)}
                        errorMessage={renderPasswordValidation(password)}
-                       errorStyle={{color: theme.secondaryButton}}
+                       errorStyle={{color: theme.danger}}
                 />
                 <TouchableOpacity
                     style={{alignSelf: 'flex-end', paddingRight: 10, marginBottom: 20}}
                     onPress={handleForgetPasswordButton}>
-                    <Text style={{color: theme.primaryButton,  textDecorationLine:'underline'}}>{language.forgetPwButton}</Text>
+                    <Text style={{color: theme.primary}}>{language.forget_password}</Text>
                 </TouchableOpacity>
                 <Button type='outline'
-                        title={language.signIn}
+                        title={language.sign_in}
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}
-                        buttonStyle={{borderColor: theme.primaryButton, marginBottom: 10}}
-                        titleStyle={{color: theme.primaryButton}}
+                        buttonStyle={{borderColor: theme.primary, marginBottom: 10}}
+                        titleStyle={{color: theme.primary}}
                         onPress={handleSignInButton}/>
-                <Text style={{alignSelf: 'center', marginBottom: 10, color: theme.normalText}}>{language.or}</Text>
+                <Text style={{alignSelf: 'center', marginBottom: 10, color: theme.text}}>{language.or}</Text>
                 <Button
                     type="outline"
-                    title={language.googleSignIn}
+                    title={language.sign_in_with_google}
                     containerStyle={{paddingLeft: 40, paddingRight: 40}}
-                    buttonStyle={{borderColor: theme.secondaryButton}}
-                    titleStyle={{color: theme.secondaryButton}}
-                    icon={{ type: 'font-awesome-5', name: 'google', color: theme.secondaryEmphasis}}
+                    buttonStyle={{borderColor: theme.danger}}
+                    titleStyle={{color: theme.danger}}
+                    icon={{ type: 'font-awesome-5', name: 'google', color: theme.danger}}
                     iconLeft
                     onPress={handleGoogleButton}/>
             </View>
@@ -132,7 +227,7 @@ const styles = (theme) => (
         },
         inputContainer: {
             flex: 5,
-            paddingTop: 50
+            paddingTop: 20
         }
     })
 )
