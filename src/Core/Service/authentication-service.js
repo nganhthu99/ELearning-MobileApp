@@ -1,47 +1,69 @@
-import {users} from "../../Data/data";
+import axios from "axios";
 
-export const signInService = (username, password) => {
-    let returnItem = users.find(returnItem => returnItem.username === username && returnItem.password === password)
-    if (returnItem) {
-        return {
-            status: 200,
-            user: {
-                username: returnItem.username,
-                email: returnItem.email
-            }
-        }
-    } else {
-        return {
-            status: 404,
-            error: 'Wrong username or password!'
-        }
-    }
-}
+export const api = 'http://api.dev.letstudy.org'
 
-export const signUpService = (username, password, email) => {
-    users.push({
-        username,
+export const signUpService = (name, email, phone, password) => {
+    return axios.post(api + '/user/register', {
+        name,
         email,
-        password,
+        phone,
+        password
+    }, {validateStatus: () => true})
+}
+
+export const signInService = (email, password) => {
+    return axios.post(api + '/user/login', {
+        email,
+        password
+    }, {validateStatus: () => true})
+}
+
+export const signInWithGoogleService = (email, googleId) => {
+    return axios.post(api + '/user/login-google-mobile', {
+        email,
+        id: googleId
+    }, {validateStatus: () => true})
+}
+
+export const forgetPasswordSendEmailService = (email) => {
+    return axios.post(api + '/user/forget-pass/send-email', {
+        email
+    }, {validateStatus: () => true})
+}
+
+export const updateProfileService = (username, avatar, phone, token) => {
+    return axios.put(api + '/user/update-profile', {
+        name: username,
+        avatar,
+        phone
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        },
+        validateStatus: () => true
     })
-    return true;
 }
 
-export const verifyEmailService = (email) => {
-    return (users.some(returnItem => returnItem.email === email))
-}
-
-export const verifyCodeService = (code) => {
-    return (code === '1234')
-}
-
-export const resetPasswordService = (password, email) => {
-    let returnItem = users.find(returnItem => returnItem.email === email)
-    users.filter(returnItem => returnItem.email !== email)
-    users.push({
-        username: returnItem.username,
-        email: returnItem.email,
-        password: password
+export const updatePasswordService = (userId, oldPass, newPass, token) => {
+    return axios.post(api + '/user/change-password', {
+        id: userId,
+        oldPass,
+        newPass
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        },
+        validateStatus: () => true
     })
-    return true
+}
+
+export const updateEmailService = (newEmail, token) => {
+    return axios.put(api + '/user/change-user-email', {
+        newEmail
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        },
+        validateStatus: () => true
+    })
 }
