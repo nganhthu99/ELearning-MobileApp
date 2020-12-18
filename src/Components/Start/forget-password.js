@@ -1,208 +1,102 @@
 import React, {useContext, useState} from 'react';
-import {Alert, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, StyleSheet, Text, View} from "react-native";
 import {Button, Icon, Input} from "react-native-elements";
-import {
-    renderConfirmPasswordValidation,
-    renderEmailValidation,
-    renderPasswordValidation,
-    validateEmailUtil
-} from "./render-validation";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
-import ConfirmationCode from "./confirmation-code";
-import TimerClock from "./timer-clock";
-import {resetPasswordService, verifyCodeService, verifyEmailService} from "../../Core/Service/authentication-service";
+import {renderEmailValidation, validateEmailUtil} from "./render-validation";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {LanguageContext} from "../../Core/Provider/language-provider";
+import {forgetPasswordSendEmailService} from "../../Core/Service/authentication-service";
 import {ScreenName} from "../../Globals/constants";
+
 
 const ForgetPassword = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
     const {language} = useContext(LanguageContext)
-    const [state, setState] = useState(1)
-    // 1
+    const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState("")
-    // 2
-    const [code, setCode] = useState("")
-    // 3
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
 
     // Control
-    // 1
     const handleEmailInput = (text) => {
         setEmail(text)
     }
 
     const handleSendEmailButton = () => {
         if (validateEmailUtil(email)) {
-            if (verifyEmailService(email)) {
-                setState(2)
-            } else {
-                Alert.alert(
-                    'Authentication Error',
-                    'Email does not exist.',
-                    [
-                        {
-                            text: 'Cancel',
-                            onPress: (() => {
-
-                            }),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            }
+            setIsLoading(true)
+            forgetPasswordSendEmailService(email)
+                .then((response) => {
+                    console.log(response)
+                    if (response.status === 200) {
+                        Alert.alert(
+                            'Send Email Successfully',
+                            'Follow instruction on your email to reset your password',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                        props.navigation.navigate(ScreenName.SignIn)
+                                    }
+                                }
+                            ]
+                        )
+                    } else if (response.status === 400) {
+                        Alert.alert(
+                            'Error Sending Email',
+                            'Email does not exist in the system',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    }
+                })
+                .catch((error) => {
+                    Alert.alert(
+                        'Error Sending Email',
+                        'Please try again later',
+                        [
+                            {
+                                text: 'OK',
+                                onPress: () => {
+                                }
+                            }
+                        ]
+                    )
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
         }
-    }
-
-    // 2
-    const handleOnCompleteTimer = () => {
-        setState(1)
-    }
-
-    const handleCodeInput = (text) => {
-        setCode(text)
-    }
-
-    const handleVerifyCodeButton = () => {
-        if (code.length === 4) {
-            if (verifyCodeService(code)) {
-                setState(3)
-            } else {
-                Alert.alert(
-                    'Authentication Error',
-                    'Incorrect confirmation code.',
-                    [
-                        {
-                            text: 'Cancel',
-                            onPress: (() => {
-                                setState(1)
-                            }),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            }
-        }
-    }
-
-    // 3
-    const handlePasswordInput = (text) => {
-        setPassword(text)
-    }
-
-    const handleConfirmPasswordInput = (text) => {
-        setConfirmPassword(text)
-    }
-
-    const handleResetPasswordButton = () => {
-        if (password === confirmPassword) {
-            if (resetPasswordService(password, email)) {
-                props.navigation.navigate(ScreenName.SignIn)
-            }
-        }
-    }
-
-    // state 1
-    const renderVerifyEmailBox = () => {
-        const {theme} = useContext(ThemeContext)
-        return (
-            <View style={{alignItems: 'stretch', paddingTop: 25}}>
-                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{language.forgetPwInstruction}</Text>
-                <Input
-                       placeholder={language.forgetPwEmailInput}
-                       inputStyle={{color: theme.normalText}}
-                       leftIcon={
-                           <Icon type='ionicons'
-                                 name='mail-outline'
-                                 color={theme.primaryEmphasis}/>
-                       }
-                       onChangeText={(text) => handleEmailInput(text)}
-                       errorMessage={renderEmailValidation(email)}
-                       errorStyle={{color: theme.secondaryButton}}
-                />
-                <Button
-                        type='outline'
-                        buttonStyle={{borderColor: theme.primaryButton}}
-                        titleStyle={{color: theme.primaryButton}}
-                        title={language.forgetPwEmailButton}
-                        containerStyle={{paddingLeft: 40, paddingRight: 40}}
-                        onPress={handleSendEmailButton}/>
-            </View>
-        )
-    }
-
-    // state 2
-    const renderConfirmationBox = () => {
-        const {theme} = useContext(ThemeContext)
-        return (
-            <View style={{alignItems: 'stretch', paddingTop: 25}}>
-                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>
-                    Please enter the 4-digit code sended to your email
-                </Text>
-                <View style={{padding: 8, alignItems: 'center'}}>
-                    <TimerClock onComplete={handleOnCompleteTimer}/>
-                    <ConfirmationCode onChangeText={handleCodeInput}/>
-                </View>
-                <Button
-                    onPress={handleVerifyCodeButton}
-                    type='outline'
-                    buttonStyle={{borderColor: theme.primaryButton}}
-                    titleStyle={{color: theme.primaryButton}}
-                    title='Verify Code'
-                    containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 50}}/>
-            </View>
-        )
-    }
-
-    // state 3
-    const renderResetPasswordBox = () => {
-        const {theme} = useContext(ThemeContext)
-        return (
-            <View style={{alignItems: 'stretch', paddingTop: 25}}>
-                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>
-                    Change Password
-                </Text>
-                <Input placeholder={language.passwordInput}
-                       inputStyle={{color: theme.normalText}}
-                       secureTextEntry={true}
-                       leftIcon={
-                           <Icon type='ionicons'
-                                 name='lock-outline'
-                                 color={theme.primaryEmphasis}/>
-                       }
-                       onChangeText={(text) => handlePasswordInput(text)}
-                       errorMessage={renderPasswordValidation(password)}
-                       errorStyle={{color: theme.secondaryButton}}
-                />
-                <Input placeholder={language.confirmPasswordInput}
-                       inputStyle={{color: theme.normalText}}
-                       secureTextEntry={true}
-                       leftIcon={
-                           <Icon type='ionicons'
-                                 name='lock'
-                                 color={theme.primaryEmphasis}/>
-                       }
-                       onChangeText={(text) => handleConfirmPasswordInput(text)}
-                       errorMessage={renderConfirmPasswordValidation(confirmPassword, password)}
-                       errorStyle={{color: theme.secondaryButton}}
-                />
-                <Button
-                    onPress={handleResetPasswordButton}
-                    type='outline'
-                    buttonStyle={{borderColor: theme.primaryButton}}
-                    titleStyle={{color: theme.primaryButton}}
-                    title='Reset Password'
-                    containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 20}}/>
-            </View>
-        )
     }
 
     return(
         <View style={styles(theme).container}>
-            {state === 1 && renderVerifyEmailBox()}
-            {state === 2 && renderConfirmationBox()}
-            {state === 3 && renderResetPasswordBox()}
+            <View style={{alignItems: 'stretch', paddingTop: 20}}>
+                {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
+                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{language.forget_password_instruction}</Text>
+                <Input
+                    placeholder={language.registered_email}
+                    inputStyle={{color: theme.text}}
+                    leftIcon={
+                        <Icon type='ionicons'
+                              name='mail-outline'
+                              color={theme.emphasis}/>
+                    }
+                    onChangeText={(text) => handleEmailInput(text)}
+                    errorMessage={renderEmailValidation(email)}
+                    errorStyle={{color: theme.danger}}
+                />
+                <Button
+                    type='outline'
+                    buttonStyle={{borderColor: theme.primary}}
+                    titleStyle={{color: theme.primary}}
+                    title={language.send_email_verification}
+                    containerStyle={{paddingLeft: 40, paddingRight: 40}}
+                    onPress={handleSendEmailButton}/>
+            </View>
         </View>
     )
 };
@@ -214,7 +108,7 @@ const styles = (theme) => (
             backgroundColor: theme.background,
         },
         text: {
-            color: theme.normalText,
+            color: theme.emphasis,
             padding: 10,
             paddingLeft: 15
         },
