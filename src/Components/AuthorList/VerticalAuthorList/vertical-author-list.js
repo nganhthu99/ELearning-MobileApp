@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
-import VertiacalAuthorListItem from "./vertiacal-author-list-item";
+import VerticalAuthorListItem from "./vertical-author-list-item";
 import {ScreenName} from "../../../Globals/constants";
-import {ThemeContext} from "../../../Provider/theme-provider";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
 
 const VerticalAuthorList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -17,7 +17,7 @@ const VerticalAuthorList = (props) => {
     const renderItem = ({ item }) => {
         return (
             <View style={{height: 120}}>
-                <VertiacalAuthorListItem
+                <VerticalAuthorListItem
                     handleOnClick={handleOnClick}
                     item={item}/>
             </View>

@@ -1,24 +1,61 @@
-import React, {useContext} from 'react';
-import {ScrollView, StyleSheet, View} from "react-native";
-import SectionHeader2 from "../../Common/section-header-2";
-import VerticalAuthorList from "./vertical-author-list";
-import {ThemeContext} from "../../../Provider/theme-provider";
+import React, {useContext, useEffect, useState} from 'react';
+import {FlatList, RefreshControl, ScrollView, StyleSheet, View} from "react-native";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import {ScreenName} from "../../../Globals/constants";
+import VerticalAuthorListItem from "./vertical-author-list-item";
+import {getListIntructors} from "../../../Core/Service/instructor-service";
 
 const AuthorList = (props) => {
+    // State
     const {theme} = useContext(ThemeContext)
+    const [authors, setAuthors] = useState(props.route.params.items)
+    const [isRefreshing, setIsRefreshing] = useState(false)
 
+    // Control
+    const handleOnRefresh = () => {
+        setIsRefreshing(true)
+        getListIntructors()
+            .then((response) => {
+                if (response.status === 200) {
+                    setAuthors(response.data.payload)
+                }
+            })
+            .finally(() => {
+                setIsRefreshing(false)
+            })
+    }
+
+    const handleOnClick = (item) => {
+        props.navigation.navigate(ScreenName.AuthorDetail, {
+            item: item
+        })
+    }
+
+    const renderItem = ({ item }) => {
+        return (
+            <VerticalAuthorListItem
+                handleOnClick={handleOnClick}
+                item={item}/>
+        );
+    };
     return(
-        <ScrollView style={styles(theme).container}>
-            <View style={styles(theme).list}>
-                <View style={styles(theme).header}>
-                    <SectionHeader2 title={props.route.params.header}/>
-                </View>
-                <VerticalAuthorList
-                    // navigation={props.route.params.navigation}
-                    navigation={props.navigation}
-                    items={props.route.params.items}/>
-            </View>
-        </ScrollView>
+        <FlatList data={props.route.params.items}
+                  renderItem={renderItem}
+                  ItemSeparatorComponent={() => (
+                      <View style={{
+                          height: 1,
+                          width: '100%',
+                          backgroundColor: theme.primary,
+                      }}/>
+                  )}
+                  refreshControl={
+                      <RefreshControl refreshing={isRefreshing}
+                                      onRefresh={handleOnRefresh}/>
+                  }
+                  style={{
+                      backgroundColor: theme.background,
+                      padding: 5,
+                  }}/>
     )
 };
 
@@ -26,14 +63,6 @@ const styles = (theme) => StyleSheet.create({
     container: {
         backgroundColor: theme.background,
     },
-    list: {
-        padding: 5
-    },
-    header: {
-        paddingTop: 10,
-        paddingBottom: 10
-    }
 });
-
 
 export default AuthorList;
