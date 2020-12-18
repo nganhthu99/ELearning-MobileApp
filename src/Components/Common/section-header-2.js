@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const SectionHeader2 = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -14,7 +14,8 @@ const SectionHeader2 = (props) => {
 
 const styles = (theme) => StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        padding: 5
     },
     text: {
         color: theme.header,

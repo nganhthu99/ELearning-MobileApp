@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const ImageButton = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -23,7 +23,7 @@ const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         borderWidth: 2,
-        borderColor: theme.primaryEmphasis
+        borderColor: theme.emphasis
     },
     image: {
         flex: 1,

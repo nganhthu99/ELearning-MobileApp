@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {Button} from "react-native-elements";
-import {LanguageContext} from "../../Provider/language-provider";
+import {LanguageContext} from "../../Core/Provider/language-provider";
 import {ScreenName} from "../../Globals/constants";
 
 const UnauthenticationView = (props) => {
