@@ -8,14 +8,14 @@ import HorizontalAuthorList from "../AuthorList/HorizontalAuthorList/horizontal-
 import SectionHeader from "../Common/section-header";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import {LanguageContext} from "../../Core/Provider/language-provider";
 import {getTopRatingCoursesService, getTopSellingCoursesService} from "../../Core/Service/course-service";
 import {getListIntructors} from "../../Core/Service/instructor-service";
 import {getAllCategoryService} from "../../Core/Service/category-service";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const Home = (props) => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [topRatingCourses, setTopRatingCourses] = useState([])
     const [topSellingCourses, setTopSellingCourses] = useState([])
@@ -91,28 +91,27 @@ const Home = (props) => {
 
     const handleNewButton = () => {
         props.navigation.navigate(ScreenName.CourseList, {
-            header: language.new_release,
+            header: i18n.t(strings.new_release),
             items: []
         })
     }
 
     const handleSeeAllTopRatingCoursesButton = () => {
         props.navigation.navigate(ScreenName.CourseList, {
-            header: language.top_rating_courses,
+            header: i18n.t(strings.top_rating_courses),
             items: topRatingCourses
         })
     }
 
     const handleSeeAllTopSellingCoursesButton = () => {
         props.navigation.navigate(ScreenName.CourseList, {
-            header: language.top_selling_courses,
+            header: i18n.t(strings.top_selling_courses),
             items: topSellingCourses
         })
     }
 
     const handleAllAuthorsButton = () => {
         props.navigation.navigate(ScreenName.AuthorList, {
-            // header: language.top_authors,
             items: authors
         })
     }
@@ -125,32 +124,32 @@ const Home = (props) => {
                     }>
             <View style={styles(theme).buttonContainer}>
                 <ImageButton handleOnClick={handleNewButton}
-                             title={language.new_release}
+                             title={i18n.t(strings.new_release)}
                              image={require('../../../assets/background_2.jpg')}/>
             </View>
 
             <View>
-                    <SectionHeader2 title={language.hot_topics}/>
-                    <HorizontalTopicList navigation={props.navigation}
-                                         items={categories}/>
+                <SectionHeader2 title={i18n.t(strings.hot_topics)}/>
+                <HorizontalTopicList navigation={props.navigation}
+                                     items={categories}/>
             </View>
 
             <View>
-                <SectionHeader title={language.top_rating_courses}
+                <SectionHeader title={i18n.t(strings.top_rating_courses)}
                                handleOnClick={handleSeeAllTopRatingCoursesButton}/>
                 <VerticalCourseList navigation={props.navigation}
                                     items={topRatingCourses}/>
             </View>
 
             <View>
-                <SectionHeader title={language.top_selling_courses}
+                <SectionHeader title={i18n.t(strings.top_selling_courses)}
                                handleOnClick={handleSeeAllTopSellingCoursesButton}/>
                 <VerticalCourseList navigation={props.navigation}
                                     items={topSellingCourses}/>
             </View>
 
             <View>
-                <SectionHeader title={language.top_authors}
+                <SectionHeader title={i18n.t(strings.top_authors)}
                                handleOnClick={handleAllAuthorsButton}/>
                 <HorizontalAuthorList navigation={props.navigation}
                                       items={authors}/>
