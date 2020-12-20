@@ -1,24 +1,19 @@
 import React, {useContext} from 'react';
 import {StyleSheet, View, Text} from "react-native";
 import StarRating from "react-native-star-rating";
-import {ThemeContext} from "../../Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const CourseInfo = (props) => {
     const {theme} = useContext(ThemeContext)
+    const author = (props.item["name"]) ? (props.item["name"]) : props.item["instructor.user.name"]
+    const price = (props.item["price"] && parseInt(props.item["price"]) > 0) ? `${props.item["price"]} vnđ` : 'Free'
+    const date = (props.item["createdAt"]) ? props.item["createdAt"] : props.item["updatedAt"]
 
     return(
         <View style={styles(theme).container}>
-            <Text numberOfLines={1} style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{props.item.title}</Text>
-            <Text numberOfLines={1} style={styles(theme).text}>{props.item.author}</Text>
-            <Text numberOfLines={1} style={styles(theme).text}>{`${props.item.level} . ${props.item.release} . ${props.item.duration}`}</Text>
-            {/*<Rating*/}
-            {/*    readonly*/}
-            {/*    type='star'*/}
-            {/*    imageSize={20}*/}
-            {/*    ratingCount={5}*/}
-            {/*    startingValue={4.4}*/}
-            {/*    style={{alignItems: 'flex-start'}}*/}
-            {/*/>*/}
+            <Text numberOfLines={1} style={[styles(theme).text, {fontWeight:'bold', fontSize: 18}]}>{props.item.title}</Text>
+            <Text numberOfLines={1} style={styles(theme).authorText}>{author}</Text>
+            <Text numberOfLines={1} style={styles(theme).text}>{`${price} . ${date.substring(0, 10)} . ${props.item.totalHours} hours`}</Text>
             <StarRating
                 disabled
                 iconSet={'Ionicons'}
@@ -26,22 +21,26 @@ const CourseInfo = (props) => {
                 fullStar={'ios-star'}
                 halfStar={'ios-star-half'}
                 maxStars={5}
-                rating={props.item.rating}
+                rating={props.item["ratedNumber"]}
                 starSize={18}
-                fullStarColor={theme.star}
+                fullStarColor={theme.bright}
                 buttonStyle={{margin: 0.5}}
-                containerStyle={{justifyContent:'flex-start'}}
-            />
+                containerStyle={{justifyContent:'flex-start'}}/>
         </View>
     )
 };
 
 const styles = (theme) => StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+    },
+    authorText: {
+        fontSize: 16,
+        color: theme.text
     },
     text: {
-        color: theme.normalText
+        color: theme.text,
+        fontSize: 13
     }
 });
 

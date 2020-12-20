@@ -2,11 +2,12 @@ import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
 import {Button, Icon} from "react-native-elements";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import {LanguageContext} from "../../Core/Provider/language-provider";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
+import buttonLikeRoles from "react-native-web/dist/modules/AccessibilityUtil/buttonLikeRoles";
 
 const SectionHeader = (props) => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
 
     const handleOnClick = () => {
         props.handleOnClick()
@@ -14,12 +15,10 @@ const SectionHeader = (props) => {
 
     return(
         <View style={styles(theme).container}>
-            <Text style={styles(theme).text}>{props.title}</Text>
+            <Text style={styles(theme).titleStyle}>{props.title}</Text>
             <Button
-                onPress={handleOnClick}
-                titleStyle={{fontSize: 12, paddingRight: 3, color: theme.primary}}
-                buttonStyle={{borderColor: theme.primary}}
                 type="clear"
+                title={props.type==='delete' ? i18n.t(strings.delete_all) : i18n.t(strings.see_all)}
                 icon={props.type==='delete' ?
                     <Icon type='octicon'
                           name='trashcan'
@@ -31,7 +30,8 @@ const SectionHeader = (props) => {
                           size={20}/>
                 }
                 iconRight
-                title={props.type==='delete' ? language.delete_all : language.see_all}/>
+                titleStyle={styles(theme).buttonTitleStyle}
+                onPress={handleOnClick}/>
         </View>
     )
 };
@@ -39,15 +39,21 @@ const SectionHeader = (props) => {
 const styles = (theme) => StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
+        alignItems: 'center',
         padding: 5,
+        paddingRight: 0
     },
-    text: {
+    titleStyle: {
         color: theme.header,
         fontSize: 20,
         fontWeight: 'bold'
     },
+    buttonTitleStyle: {
+        fontSize: 12,
+        paddingRight: 3,
+        color: theme.primary
+    }
 });
 
 export default SectionHeader;

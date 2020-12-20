@@ -1,7 +1,8 @@
 import React, {useContext} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import CourseInfo from "../course-info";
-import {ThemeContext} from "../../../Provider/theme-provider";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import CourseInfo2 from "../course-info-2";
 
 const VerticalCourseItem = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -9,32 +10,48 @@ const VerticalCourseItem = (props) => {
     const handleOnClick = () => {
         props.handleOnClick(props.item)
     }
-    return(
-        <TouchableOpacity style={styles(theme).container} onPress={handleOnClick}>
-            <View style={styles(theme).imageContainer}>
-                <Image source={require('../../../../assets/course.jpg')} style={styles(theme).image}/>
-            </View>
-            <View style={styles(theme).infoContainer}>
-                <CourseInfo item={props.item}/>
-            </View>
-        </TouchableOpacity>
-    )
+
+    if (props.item["courseImage"]) {
+        return (
+            <TouchableOpacity style={styles(theme).container}
+                              onPress={handleOnClick}>
+                <View style={styles(theme).imageContainer}>
+                    <Image source={{uri: props.item["courseImage"]}}
+                           style={styles(theme).image}/>
+                </View>
+                <View style={styles(theme).infoContainer}>
+                    <CourseInfo2 item={props.item}/>
+                </View>
+            </TouchableOpacity>
+        )
+    } else if (props.item["imageUrl"]) {
+        return (
+            <TouchableOpacity style={styles(theme).container} onPress={handleOnClick}>
+                <View style={styles(theme).imageContainer}>
+                    <Image source={{uri: props.item["imageUrl"]}} style={styles(theme).image}/>
+                </View>
+                <View style={styles(theme).infoContainer}>
+                    <CourseInfo item={props.item}/>
+                </View>
+            </TouchableOpacity>
+        )
+    }
 };
 
 const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        borderBottomWidth: 1.5,
-        borderBottomColor: theme.primaryEmphasis,
+        height: 135,
+        paddingTop: 15
     },
     imageContainer:{
-        height: 90,
-        // width: 80,
         flex: 1,
+        height: 95,
+        width: 95,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        marginRight: 12,
+        marginRight: 10,
     },
     infoContainer: {
         flex: 3,
