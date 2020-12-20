@@ -11,13 +11,13 @@ import {
     validatePhoneUtil, validateUsernameUtil
 } from "./render-validation";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import {LanguageContext} from "../../Core/Provider/language-provider";
 import {signUpService} from "../../Core/Service/authentication-service";
+import i18n from "i18n-js";
+import {strings} from "../../Globals/Localization/string";
 
 const SignUp = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
     const [isLoading, setIsLoading] = useState(false)
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
@@ -106,7 +106,7 @@ const SignUp = (props) => {
         <View style={styles(theme).container}>
             <View style={styles(theme).inputContainer}>
                 {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
-                <Input placeholder={language.username}
+                <Input placeholder={i18n.t(strings.username)}
                        inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
@@ -117,7 +117,7 @@ const SignUp = (props) => {
                        errorMessage={renderUsernameValidation(username)}
                        errorStyle={{color: theme.danger}}
                 />
-                <Input placeholder={language.email}
+                <Input placeholder={i18n.t(strings.email)}
                        inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
@@ -128,7 +128,7 @@ const SignUp = (props) => {
                        errorMessage={renderEmailValidation(email)}
                        errorStyle={{color: theme.danger}}
                 />
-                <Input placeholder={language.phone}
+                <Input placeholder={i18n.t(strings.phone)}
                        inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
@@ -139,7 +139,7 @@ const SignUp = (props) => {
                        errorMessage={renderPhoneValidation(phone)}
                        errorStyle={{color: theme.danger}}
                 />
-                <Input placeholder={language.password}
+                <Input placeholder={i18n.t(strings.password)}
                        inputStyle={{color: theme.text}}
                        secureTextEntry={true}
                        leftIcon={
@@ -151,7 +151,7 @@ const SignUp = (props) => {
                        errorMessage={renderPasswordValidation(password)}
                        errorStyle={{color: theme.danger}}
                 />
-                <Input placeholder={language.confirm_password}
+                <Input placeholder={i18n.t(strings.confirm_password)}
                        inputStyle={{color: theme.text}}
                        secureTextEntry={true}
                        leftIcon={
@@ -164,7 +164,7 @@ const SignUp = (props) => {
                        errorStyle={{color: theme.danger}}
                 />
                 <Button type='outline'
-                        title={language.sign_up}
+                        title={i18n.t(strings.sign_up)}
                         buttonStyle={{borderColor: theme.primary}}
                         titleStyle={{color: theme.primary}}
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}

@@ -3,15 +3,14 @@ import {ActivityIndicator, Alert, StyleSheet, Text, View} from "react-native";
 import {Button, Icon, Input} from "react-native-elements";
 import {renderEmailValidation, validateEmailUtil} from "./render-validation";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import {LanguageContext} from "../../Core/Provider/language-provider";
 import {forgetPasswordSendEmailService} from "../../Core/Service/authentication-service";
 import {ScreenName} from "../../Globals/constants";
-
+import i18n from "i18n-js";
+import {strings} from "../../Globals/Localization/string";
 
 const ForgetPassword = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState("")
 
@@ -76,9 +75,9 @@ const ForgetPassword = (props) => {
         <View style={styles(theme).container}>
             <View style={{alignItems: 'stretch', paddingTop: 20}}>
                 {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
-                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{language.forget_password_instruction}</Text>
+                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 16}]}>{i18n.t(strings.forget_password_instruction)}</Text>
                 <Input
-                    placeholder={language.registered_email}
+                    placeholder={i18n.t(strings.registered_email)}
                     inputStyle={{color: theme.text}}
                     leftIcon={
                         <Icon type='ionicons'
@@ -93,7 +92,7 @@ const ForgetPassword = (props) => {
                     type='outline'
                     buttonStyle={{borderColor: theme.primary}}
                     titleStyle={{color: theme.primary}}
-                    title={language.send_email_verification}
+                    title={i18n.t(strings.send_email_verification)}
                     containerStyle={{paddingLeft: 40, paddingRight: 40}}
                     onPress={handleSendEmailButton}/>
             </View>
