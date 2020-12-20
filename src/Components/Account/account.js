@@ -1,58 +1,36 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Image, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
-import {Button, Icon, Input} from "react-native-elements";
-import {ScreenName} from "../../Globals/constants";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
-import {AuthenticationContext} from "../../Provider/authentication-provider";
+import {Button, Icon} from "react-native-elements";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import UnauthenticationView from "../Common/unauthentication-view";
-import {EmailOverlay, PasswordOverlay, UserOverlay} from "./account-overlays";
+import ChangeUsername from "./change-username";
+import ChangePhone from "./change-phone";
+import ChangeEmail from "./change-email";
+import ChangePassword from "./change-password";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
+import {clearAllStorage, removeStorageToken} from "../../Core/Service/async-storage-service";
 
 const Account = (props) => {
-    const [userOverLayVisible, setUserOverLayVisible] = useState(false);
-    const [emailOverLayVisible, setEmailOverLayVisible] = useState(false);
-    const [passwordOverLayVisible, setPasswordOverLayVisible] = useState(false);
-
+    // State
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
-    const {authentication, setAuthentication} = useContext(AuthenticationContext)
+    const authenticationContext = useContext(AuthenticationContext)
 
-    const toggleUserOverlay = () => {
-        setUserOverLayVisible(!userOverLayVisible);
-    };
-
-    const toggleEmailOverlay = () => {
-        setEmailOverLayVisible(!emailOverLayVisible);
-    };
-
-    const togglePasswordOverlay = () => {
-        setPasswordOverLayVisible(!passwordOverLayVisible);
-    };
-
-    const handleUpdateUsernameButton = (newUsername) => {
-        setAuthentication({
-            ...authentication,
-            username: newUsername
-        });
-    }
-
-    const handleUpdateEmailButton = (newEmail) => {
-        setAuthentication({
-            ...authentication,
-            email: newEmail
-        });
-    }
-
-    const handleUpdatePasswordButton = (currentPassword, newPassword) => {
-        // do something
-    }
-
+    // Control
     const handleSignOutButton = () => {
-        setAuthentication(null)
-        props.navigation.navigate(ScreenName.StartMenu)
+        clearAllStorage()
+            .then(() => {
+                authenticationContext.signOut()
+            })
     }
 
-    if (authentication) {
+    // View
+    if(!authenticationContext.state.isAuthenticated) {
+        return (
+            <UnauthenticationView navigation={props.navigation}/>
+        )
+    } else {
         return (
             <ScrollView style={styles(theme).container}>
                 {/*image container*/}
@@ -62,94 +40,27 @@ const Account = (props) => {
                         <Icon
                             type='font-awesome'
                             name='pencil-square-o'
-                            color={theme.primaryEmphasis}
+                            color={theme.emphasis}
                             containerStyle={{alignSelf: 'flex-end'}}/>
                     </TouchableOpacity>
                 </View>
                 {/*info container*/}
                 <View style={styles(theme).infoContainer}>
-                    <Input
-                        disabled
-                        disabledInputStyle={{color: theme.normalText, fontWeight: 'bold'}}
-                        value={authentication.username}
-                        leftIcon={
-                            <Icon
-                                type='ionicons'
-                                name='person'
-                                color={theme.primaryEmphasis}
-                            />
-                        }
-                        rightIcon={
-                            <TouchableOpacity onPress={toggleUserOverlay}>
-                                <Icon
-                                    type='font-awesome'
-                                    color={theme.primaryEmphasis}
-                                    name='pencil-square-o'
-                                />
-                            </TouchableOpacity>
-                        }
-                    />
-                    <UserOverlay
-                        visible={userOverLayVisible}
-                        handleUpdateButton={handleUpdateUsernameButton}
-                        toggle={toggleUserOverlay}/>
-                    <Input
-                        disabled
-                        disabledInputStyle={{color: theme.normalText, fontWeight: 'bold'}}
-                        value={authentication.email}
-                        leftIcon={
-                            <Icon
-                                type='ionicons'
-                                name='mail'
-                                color={theme.primaryEmphasis}
-                            />
-                        }
-                        rightIcon={
-                            <TouchableOpacity onPress={toggleEmailOverlay}>
-                                <Icon
-                                    type='font-awesome'
-                                    color={theme.primaryEmphasis}
-                                    name='pencil-square-o'
-                                />
-                            </TouchableOpacity>
-                        }
-                    />
-                    <EmailOverlay
-                        visible={emailOverLayVisible}
-                        handleUpdateButton={handleUpdateEmailButton}
-                        toggle={toggleEmailOverlay}/>
-                    <Button
-                        type="clear"
-                        icon={
-                            <Icon
-                                type='ionicons'
-                                name='lock'
-                                color={theme.primaryEmphasis}
-                            />
-                        }
-                        iconLeft
-                        titleStyle={{paddingLeft: 6, color: theme.primaryButton}}
-                        title={language.changePassword}
-                        onPress={togglePasswordOverlay}/>
-                    <PasswordOverlay
-                        visible={passwordOverLayVisible}
-                        handleUpdateButton={handleUpdatePasswordButton}
-                        toggle={togglePasswordOverlay}/>
+                    <ChangeUsername/>
+                    <ChangeEmail/>
+                    <ChangePhone/>
+                    <ChangePassword/>
                 </View>
                 <Button
                     onPress={handleSignOutButton}
                     type="outline"
-                    buttonStyle={{borderColor: theme.secondaryButton}}
+                    buttonStyle={{borderColor: theme.danger}}
                     containerStyle={{padding: 40}}
-                    titleStyle={{color: theme.secondaryButton}}
-                    icon={{ type: 'font-awesome', name: 'sign-out', color: theme.secondaryEmphasis}}
+                    titleStyle={{color: theme.danger}}
+                    icon={{ type: 'font-awesome', name: 'sign-out', color: theme.danger}}
                     iconLeft
-                    title={language.signOut}/>
+                    title={i18n.t(strings.sign_out)}/>
             </ScrollView>
-        )
-    } else {
-        return (
-            <UnauthenticationView navigation={props.navigation}/>
         )
     }
 };
@@ -170,11 +81,12 @@ const styles = (theme) => StyleSheet.create({
         height: '100%',
         //borderRadius: 175,
         borderWidth: 2,
-        borderColor: theme.primaryEmphasis,
+        borderColor: theme.emphasis,
         aspectRatio: 1
     },
     infoContainer: {
-        alignItems: 'flex-start'
+        alignItems: 'stretch',
+        paddingTop: 30
     },
 });
 
