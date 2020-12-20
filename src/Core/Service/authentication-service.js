@@ -67,3 +67,11 @@ export const updateEmailService = (newEmail, token) => {
         validateStatus: () => true
     })
 }
+
+export const getUserInfoService = (token) => {
+    return axios.get(api + '/user/me', {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}

@@ -7,26 +7,25 @@ import {createStackNavigator} from "@react-navigation/stack";
 import MainTab from "./main-tab";
 import SplashScreen from "../Start/splash-screen";
 import {ScreenName} from "../../Globals/constants";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
-import {AuthenticationContext} from "../../Provider/authentication-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
+import i18n from "i18n-js";
+import {strings} from "../../Globals/Localization/string";
 
 const Stack = createStackNavigator();
 
 const StartStack = () => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
-    const {authentication} = useContext(AuthenticationContext)
+    const authenticationContext = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
-            initialRouteName={ScreenName.StartMenu}
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: theme.navigationBar,
+                    backgroundColor: theme.secondary,
                 },
                 headerTitleStyle: {
-                    color: theme.primaryEmphasis,
+                    color: theme.emphasis,
                     fontWeight: 'bold'
                 },
                 headerBackTitleVisible: false,
@@ -38,19 +37,19 @@ const StartStack = () => {
                           }}/>
             <Stack.Screen name={ScreenName.StartMenu}
                           component={StartMenu}
-                           options={{
+                          options={{
                                headerShown: false,
                                gestureEnabled: false
-                           }}/>
+                          }}/>
             <Stack.Screen name={ScreenName.SignUp}
                           component={SignUp}
                           options={{
-                              title: language.signUp,
+                              title: i18n.t(strings.sign_up)
                           }}/>
             <Stack.Screen name={ScreenName.SignIn}
                           component={SignIn}
                           options={{
-                              title: language.signIn,
+                              title: i18n.t(strings.sign_in)
                           }}/>
             <Stack.Screen name={ScreenName.ForgetPassword}
                           component={ForgetPassword}
@@ -59,7 +58,7 @@ const StartStack = () => {
                           }}/>
             <Stack.Screen name={ScreenName.MainTab}
                           component={MainTab}
-                          options={(authentication) ? {
+                          options={(authenticationContext.state.isAuthenticated) ? {
                               headerShown: false,
                               gestureEnabled: false
                           }: {
@@ -68,4 +67,5 @@ const StartStack = () => {
         </Stack.Navigator>
     )
 }
+
 export default StartStack
