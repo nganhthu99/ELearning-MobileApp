@@ -10,7 +10,7 @@ const VerticalAuthorList = (props) => {
     // Control
     const handleOnClick = (item) => {
         props.navigation.navigate(ScreenName.AuthorDetail, {
-            item: item
+            itemId: item.id
         })
     }
 
@@ -18,6 +18,7 @@ const VerticalAuthorList = (props) => {
         return (
             <View style={{height: 120}}>
                 <VerticalAuthorListItem
+                    type='search'
                     handleOnClick={handleOnClick}
                     item={item}/>
             </View>
@@ -25,7 +26,15 @@ const VerticalAuthorList = (props) => {
     };
     return(
         <View style={styles(theme).container}>
-            <FlatList data={props.items} renderItem={renderItem}/>
+            <FlatList data={props.items}
+                      renderItem={renderItem}
+                      ItemSeparatorComponent={() => (
+                          <View style={{
+                              height: 1,
+                              width: '100%',
+                              backgroundColor: theme.primary,
+                          }}/>
+                      )}/>
         </View>
     )
 };
