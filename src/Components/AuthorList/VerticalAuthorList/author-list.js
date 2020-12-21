@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, ScrollView, StyleSheet, View} from "react-native";
+import React, {useContext, useState} from 'react';
+import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import {ScreenName} from "../../../Globals/constants";
 import VerticalAuthorListItem from "./vertical-author-list-item";
@@ -27,7 +27,7 @@ const AuthorList = (props) => {
 
     const handleOnClick = (item) => {
         props.navigation.navigate(ScreenName.AuthorDetail, {
-            item: item
+            itemId: item.id
         })
     }
 
@@ -39,7 +39,7 @@ const AuthorList = (props) => {
         );
     };
     return(
-        <FlatList data={props.route.params.items}
+        <FlatList data={authors}
                   renderItem={renderItem}
                   ItemSeparatorComponent={() => (
                       <View style={{
