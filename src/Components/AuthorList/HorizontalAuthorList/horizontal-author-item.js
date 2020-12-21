@@ -6,7 +6,7 @@ const HorizontalAuthorItem = (props) => {
     const {theme} = useContext(ThemeContext)
 
     const handleOnClick = () => {
-        props.handleOnClick(props.item)
+        props.handleOnClick(props.item.id)
     }
 
     return(
@@ -16,7 +16,10 @@ const HorizontalAuthorItem = (props) => {
                        style={styles(theme).image}/>
             </View>
             <View style={styles(theme).textContainer}>
-                <Text style={styles(theme).text} numberOfLines={1}>{props.item["user.name"]}</Text>
+                <Text style={styles(theme).text}
+                      numberOfLines={1}>
+                    {props.item["user.name"]}
+                </Text>
             </View>
         </TouchableOpacity>
     )
@@ -28,6 +31,7 @@ const styles = (theme) => StyleSheet.create({
         alignItems: 'center',
         height: 180,
         width: 150,
+        marginRight: 8
     },
     imageContainer: {
         height: 120,

@@ -8,9 +8,9 @@ const HorizontalAuthorList = (props) => {
     const {theme} = useContext(ThemeContext)
 
     // Control
-    const handleOnClick = (item) => {
+    const handleOnClick = (itemId) => {
         props.navigation.navigate(ScreenName.AuthorDetail, {
-            item: item
+            itemId,
         })
     }
 
@@ -24,7 +24,7 @@ const HorizontalAuthorList = (props) => {
     };
 
     return (
-        <FlatList horizontal={true}
+        <FlatList horizontal
                   data={props.items}
                   renderItem={renderItem}
                   style={{
@@ -34,11 +34,5 @@ const HorizontalAuthorList = (props) => {
                   }}/>
     )
 }
-
-const styles = (theme) => StyleSheet.create({
-    container: {
-        backgroundColor: theme.background,
-    },
-});
 
 export default HorizontalAuthorList;
