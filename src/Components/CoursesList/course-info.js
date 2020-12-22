@@ -5,9 +5,18 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const CourseInfo = (props) => {
     const {theme} = useContext(ThemeContext)
-    const author = (props.item["name"]) ? (props.item["name"]) : props.item["instructor.user.name"]
+    const author = (props.item["name"]) ? (props.item["name"]) : props.item["instructor.user.name"] ? props.item["instructor.user.name"] : props.item["instructorName"]
     const price = (props.item["price"] && parseInt(props.item["price"]) > 0) ? `${props.item["price"]} vnđ` : 'Free'
     const date = (props.item["createdAt"]) ? props.item["createdAt"] : props.item["updatedAt"]
+
+    // let author = () => {
+    //     if (props.item["name"])
+    //         return props.item["name"]
+    //     else if (props.item["instructor.user.name"])
+    //         return props.item["instructor.user.name"]
+    //     else if (props.item["instructorName"])
+    //         return props.item["instructorName"]
+    // }
 
     return(
         <View style={styles(theme).container}>
