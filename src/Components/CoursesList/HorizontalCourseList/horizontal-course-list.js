@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {FlatList, StyleSheet, View} from "react-native";
-import HorizontalCourseItem from "./horizontal-course-item";
 import {ScreenName} from "../../../Globals/constants";
-import {ThemeContext} from "../../../Provider/theme-provider";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import HorizontalCourseItem from "./horizontal-course-item";
 
 const HorizontalCourseList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -10,7 +10,7 @@ const HorizontalCourseList = (props) => {
     // Control
     const handleOnClick = (item) => {
         props.navigation.push(ScreenName.CourseDetail, {
-            item: item
+            itemId: item.id
         })
     }
 
@@ -20,18 +20,18 @@ const HorizontalCourseList = (props) => {
                 height: 250, width: 250,
                 marginRight: 5,
                 padding: 5,
-                borderWidth: 1.5, borderColor: theme.primaryEmphasis, borderRadius: 3}}>
-                <HorizontalCourseItem
-                    handleOnClick={handleOnClick}
-                    key={item.id}
-                    item={item}/>
+                borderWidth: 1.5, borderColor: theme.primary, borderRadius: 3}}>
+                <HorizontalCourseItem handleOnClick={handleOnClick}
+                                      key={item.id}
+                                      item={item}/>
             </View>
         );
     };
     return (
-        <View style={styles(theme).container}>
-            <FlatList horizontal={true} data={props.items} renderItem={renderItem}/>
-        </View>
+        <FlatList horizontal={true}
+                  data={props.items}
+                  renderItem={renderItem}
+                  style={{padding: 5}}/>
     )
 }
 
