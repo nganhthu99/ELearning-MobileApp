@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import {courses} from "../Data/data";
+import {courses} from "../../Data/data";
 const FavouriteCoursesContext = createContext()
 
 const FavouriteCoursesProvider = (props) => {
