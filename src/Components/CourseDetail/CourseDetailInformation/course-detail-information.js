@@ -1,37 +1,41 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, ScrollView, Share, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Icon} from "react-native-elements";
-import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
-import {courses} from "../../../Data/data";
-import CourseInfo from "../../CoursesList/course-info";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
+import {FavouriteCoursesContext} from "../../../Core/Provider/favourite-courses-provider";
+import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
+import {getFavoriteCoursesService, getUserCourseFavouriteStatus, updateCourseFavouriteStatus} from "../../../Core/Service/course-service";
+import CourseInfo3 from "../../CoursesList/course-info-3";
 import SectionHeader2 from "../../Common/section-header-2";
-import {ThemeContext} from "../../../Provider/theme-provider";
-import {RegisteredCoursesContext} from "../../../Provider/registered-courses-provider";
-import {DownloadedCoursesContext} from "../../../Provider/downloaded-courses-provider";
-import {FavouriteCoursesContext} from "../../../Provider/favourite-courses-provider";
-import {AuthenticationContext} from "../../../Provider/authentication-provider";
-import ViewMoreText from "react-native-view-more-text";
+import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
+import * as WebBrowser from 'expo-web-browser';
 
 const CourseDetailInformation = (props) => {
-    const item = props.route.params.item
     const {theme} = useContext(ThemeContext)
-    const {authentication} = useContext(AuthenticationContext)
-    const {registeredCourses, setRegisteredCourses} = useContext(RegisteredCoursesContext)
-    const {downloadedCourses, setDownloadedCourses} = useContext(DownloadedCoursesContext)
+    const detail = props.route.params.detail
+
+    const authenticationContext = useContext(AuthenticationContext)
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
 
-    const [isRegistered, setIsRegistered] = useState(
-        (registeredCourses.some(returnItem => returnItem.id === item.id))
+    const [isFavourite, setIsFavourite] = useState(false)
+    const [isEnrolled, setIsEnrolled] = useState(
+        (continueCourses.some(returnItem => returnItem.id === detail.id))
     )
 
-    const [isDownloaded, setIsDownloaded] = useState(
-        (downloadedCourses.some(returnItem => returnItem.id === item.id))
-    )
-    const [isFavourite, setIsFavourite] = useState(
-        (favouriteCourses.some(returnItem => returnItem.id === item.id))
-    )
+    useEffect(() => {
+        if (authenticationContext.state.isAuthenticated) {
+            getUserCourseFavouriteStatus(detail.id, authenticationContext.state.token)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setIsFavourite(response.data.likeStatus)
+                    }
+                })
+        }
+    }, [])
 
-    const alert = () => Alert.alert(
+    const errorAuthenticationAlert = () => Alert.alert(
         'Authentication Error',
         'Please Sign In or Sign Up to use this feature',
         [
@@ -43,179 +47,117 @@ const CourseDetailInformation = (props) => {
         ]
     );
 
-    const handleRegisteredButton = () => {
-        if (authentication) {
-            if (isRegistered) {
-                Alert.alert(
-                    'Message',
-                    'Do you want to register to this course?',
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => setIsRegistered(!isRegistered)
-                        },
-                        {
-                            text: 'Cancel',
-                            onPress: () => {
-                            },
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            } else {
-                Alert.alert(
-                    'Message',
-                    'Do you want to unregister this course?',
-                    [
-                        {
-                            text: 'OK',
-                            onPress: () => setIsRegistered(!isRegistered)
-                        },
-                        {
-                            text: 'Cancel',
-                            onPress: () => {
-                            },
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            }
-            setIsRegistered(!isRegistered)
-        }
-        else {
-            alert()
-        }
-    }
-
-    const handleDownloadedButton = () => {
-        if (authentication) setIsDownloaded(!isDownloaded)
-        else {
-            alert()
-        }
-    }
-
     const handleFavouriteButton = () => {
-        if (authentication) setIsFavourite(!isFavourite)
-        else {
-            alert()
+        if (!authenticationContext.state.isAuthenticated) {
+            errorAuthenticationAlert()
+        } else {
+            updateCourseFavouriteStatus(detail.id, authenticationContext.state.token)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setIsFavourite(response.data.likeStatus)
+                        //recheck
+                        getFavoriteCoursesService(authenticationContext.state.token)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    setFavouriteCourses(response.data.payload)
+                                }
+                            })
+                    }
+                })
         }
     }
 
-    const handleShareButton = () => {
-        if (authentication) {
-            Share.share({
-                message: 'Share course'
+    const handleEnrollButton = () => {
+        if (!authenticationContext.state.isAuthenticated) {
+            errorAuthenticationAlert()
+        } else if (!isEnrolled) {
+            WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id).then(() => {
+                console.log('open google chrome')
             })
         }
-        else {
-            alert()
-        }
     }
-
-    useEffect(() => {
-        if (isFavourite) {
-            if (!favouriteCourses.some(returnItem => returnItem.id === item.id)) {
-                const newFavourite = favouriteCourses.slice()
-                setFavouriteCourses(newFavourite.concat(item))
-            }
-        } else {
-            const newFavourite = favouriteCourses.filter(returnItem => returnItem.id !== item.id)
-            setFavouriteCourses(newFavourite)
-        }
-    },[isFavourite])
-
-    useEffect(() => {
-        if (isRegistered) {
-            if (!registeredCourses.some(returnItem => returnItem.id === item.id)) {
-                const newRegistered = registeredCourses.slice()
-                setRegisteredCourses(newRegistered.concat(item))
-            }
-        } else {
-            const newRegistered = registeredCourses.filter(returnItem => returnItem.id !== item.id)
-            setRegisteredCourses(newRegistered)
-        }
-    },[isRegistered])
-
-    useEffect(() => {
-        if (isDownloaded) {
-            if (!downloadedCourses.some(returnItem => returnItem.id === item.id)) {
-                const newDownloaded = downloadedCourses.slice()
-                setDownloadedCourses(newDownloaded.concat(item))
-            }
-        } else {
-            const newDownloaded = downloadedCourses.filter(returnItem => returnItem.id !== item.id)
-            setDownloadedCourses(newDownloaded)
-        }
-    },[isDownloaded])
 
     return (
         <ScrollView style={styles(theme).container}>
             <View style={{padding: 5}}>
-                <CourseInfo item={item}/>
+                <CourseInfo3 course={{
+                    title: detail.title,
+                    price: detail.price,
+                    createdAt: detail.createdAt,
+                    totalHours: detail.totalHours,
+                    ratedNumber: detail.ratedNumber
+                }}
+                             author={detail.instructor}
+                />
             </View>
-            <View style={{flexDirection: "row", justifyContent:'space-evenly', padding: 5}}>
+            <View style={{flexDirection: "row"}}>
                 <TouchableOpacity
                     onPress={handleFavouriteButton}
-                    style={(isFavourite && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
+                    style={!isFavourite?
+                        {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.danger, borderWidth: 1, justifyContent:'center', alignItems: 'center'}:
+                        {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.background, backgroundColor: theme.danger, borderWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={!isFavourite?
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.danger}:
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isFavourite ? 'Like' : 'Liked'}</Text>
                     <Icon type='octicon'
                           name='heart'
                           size={35}
-                          iconStyle={(isFavourite && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
+                          color={!isFavourite ? theme.danger : theme.background}
+                    />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={handleRegisteredButton}
-                    style={(isRegistered && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
-                    <Icon type='octicon'
-                          name='pencil'
-                          size={35}
-                          iconStyle={(isRegistered && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={handleDownloadedButton}
-                    style={(isDownloaded && authentication) ? styles(theme).pressedButton : styles(theme).unPressedButton}>
+                    onPress={handleEnrollButton}
+                    style={!isEnrolled?
+                        {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.primary, borderWidth: 1, justifyContent:'center', alignItems: 'center'}:
+                        {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.background, backgroundColor: theme.primary, borderWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={!isEnrolled?
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.primary}:
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isEnrolled ? 'Enroll' : 'Enrolled'}</Text>
                     <Icon type='ionicons'
-                          name='cloud-download'
+                          name='person-add'
                           size={35}
-                          iconStyle={(isDownloaded && authentication) ? styles(theme).pressedIcon : styles(theme).unPressedIcon}/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={handleShareButton}
-                    style={{flex: 1, borderColor:theme.primaryButton, borderWidth: 1}}>
-                    <Icon type='ionicons'
-                          name='share'
-                          size={35}
-                          iconStyle={styles(theme).unPressedIcon}/>
+                          color={!isEnrolled ? theme.primary : theme.background}
+                    />
                 </TouchableOpacity>
             </View>
-            <View style={{padding: 5, paddingTop: 20}}>
-                <ViewMoreText
-                    numberOfLines={5}
-                    renderViewMore={(onPress) => (
-                        <Text onPress={onPress}
-                              style={{color:theme.primaryButton, fontSize: 16}}>
-                            View more
-                        </Text>
-                    )}
-                    renderViewLess={(onPress) => (
-                        <Text onPress={onPress}
-                              style={{color:theme.primaryButton, fontSize: 16}}>
-                            View less
-                        </Text>
-                    )}
-                    textStyle={{color: theme.normalText}}
-                >
-                    <Text>
-                        {item.overview}
-                    </Text>
-                </ViewMoreText>
-            </View>
-            <View style={{padding: 5}}>
-                <View style={{paddingTop: 5, paddingBottom: 10}}>
-                    <SectionHeader2 title='Related Courses'/>
+            <View style={{padding: 5, paddingTop: 10}}>
+                <Text style={styles(theme).headerText}>
+                    Description:
+                </Text>
+                <Text style={styles(theme).text}>
+                    {detail.description}
+                </Text>
+                <Text style={styles(theme).headerText}>
+                    Field:
+                </Text>
+                <View>
+                    {detail["learnWhat"] && detail["learnWhat"].map(learn => {
+                        return (
+                            <View
+                                key={learn}
+                                style={{flexDirection: 'row', marginLeft: 20, marginTop: 5}}>
+                                <Icon type='octicon'
+                                      name='check'
+                                      color={theme.emphasis}/>
+                                <Text style={[styles(theme).text, {marginLeft: 20}]}>
+                                    {learn}
+                                </Text>
+                            </View>
+                        )
+                    })}
                 </View>
+                <Text style={styles(theme).headerText}>
+                    Requirement:
+                </Text>
+                <Text style={styles(theme).text}>
+                    {detail.requirement}
+                </Text>
+            </View>
+            <View style={{paddingTop: 10}}>
+                <SectionHeader2 title='Related Courses'/>
                 <HorizontalCourseList
                     navigation={props.navigation}
-                    items={courses}/>
+                    items={detail.coursesLikeCategory}/>
             </View>
         </ScrollView>
     )
@@ -225,22 +167,14 @@ const styles = (theme) => StyleSheet.create({
     container: {
         backgroundColor: theme.background,
     },
-    pressedButton: {
-        flex: 1,
-        backgroundColor: theme.primaryButton,
-        borderColor:theme.background,
-        borderWidth: 1,
+    headerText: {
+        color: theme.text,
+        paddingBottom: 5,
+        fontWeight: 'bold'
     },
-    pressedIcon: {
-        color: theme.background
-    },
-    unPressedButton : {
-        flex: 1,
-        borderColor:theme.primaryButton,
-        borderWidth: 1,
-    },
-    unPressedIcon: {
-        color: theme.primaryButton
+    text: {
+        color: theme.text,
+        paddingBottom: 10,
     }
 });
 
