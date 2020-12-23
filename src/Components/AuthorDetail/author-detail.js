@@ -5,7 +5,7 @@ import SectionHeader2 from "../Common/section-header-2";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {getIntructorInfo} from "../../Core/Service/instructor-service";
 import {Icon} from "react-native-elements";
-import AuthorDetailNoCourses from "../Common/NoDataView/author-detail-no-courses";
+import NoDataView from "../Common/no-data-view";
 
 const AuthorDetail = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -70,7 +70,7 @@ const AuthorDetail = (props) => {
                 <VerticalCourseList navigation={props.navigation}
                                     items={detail.courses}/>}
                 {detail.courses && detail.courses.length === 0 &&
-                <AuthorDetailNoCourses/>}
+                <NoDataView message='Author has no courses available now!'/>}
             </View>
         </ScrollView>
     )
@@ -109,9 +109,6 @@ const styles = (theme) => StyleSheet.create({
     header: {
         paddingTop: 15,
         paddingBottom: 10
-    },
-    coursesContainer: {
-        padding: 5,
     }
 });
 

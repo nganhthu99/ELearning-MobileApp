@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, View} from "react-native";
 import {ScreenName} from "../../../Globals/constants";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import HorizontalCourseItem from "./horizontal-course-item";
+import NoDataView from "../../Common/no-data-view";
 
 const HorizontalCourseList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -27,7 +28,12 @@ const HorizontalCourseList = (props) => {
             </View>
         );
     };
-    return (
+
+    if(props.items.length === 0) {
+        return (
+            <NoDataView message={`There's no courses matched or available`}/>
+        )
+    } else return (
         <FlatList horizontal={true}
                   data={props.items}
                   renderItem={renderItem}

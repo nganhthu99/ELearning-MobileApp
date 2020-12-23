@@ -4,6 +4,7 @@ import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import {ScreenName} from "../../../Globals/constants";
 import VerticalAuthorListItem from "./vertical-author-list-item";
 import {getListIntructors} from "../../../Core/Service/instructor-service";
+import NoDataView from "../../Common/no-data-view";
 
 const AuthorList = (props) => {
     // State
@@ -38,6 +39,12 @@ const AuthorList = (props) => {
                 item={item}/>
         );
     };
+
+    if(authors.length === 0) {
+        return (
+            <NoDataView message={`There's no authors matched your search`}/>
+        )
+    }
     return(
         <FlatList data={authors}
                   renderItem={renderItem}

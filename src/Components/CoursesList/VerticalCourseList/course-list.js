@@ -14,6 +14,7 @@ import SwipeableVerticalCourseItem from "./swipeable-vertical-course-item";
 import {FavouriteCoursesContext} from "../../../Core/Provider/favourite-courses-provider";
 import i18n from 'i18n-js';
 import {strings} from "../../../Globals/Localization/string";
+import NoDataView from "../../Common/no-data-view";
 
 const constLimit = 5
 const startPage = 1
@@ -113,7 +114,7 @@ const CourseList = (props) => {
                         setPage(p => p + 1);
                         if (header === i18n.t(strings.new_release) ||
                             header === i18n.t(strings.top_rating_courses) ||
-                            header === i18n.t(strings.top_selling_courses)) {
+                            header === i18n.t(strings.top_selling_courses)){
                             const copyCourses = courses.slice()
                             setCourses(copyCourses.concat(response.data.payload.slice(0, constLimit)))
                         } else {
@@ -167,7 +168,11 @@ const CourseList = (props) => {
             }
         // }
     };
-    return(
+    if (courses.length === 0 && favouriteCourses.length === 0) {
+        return (
+            <NoDataView message={`There's no courses matched or available.`}/>
+        )
+    } else return (
         <FlatList
             data={header === i18n.t(strings.favourite) ? favouriteCourses : courses}
             renderItem={renderItem}
@@ -183,6 +188,7 @@ const CourseList = (props) => {
                 <RefreshControl refreshing={isRefreshing}
                                 onRefresh={handleOnRefresh}/>
             }
+            onEndReachedThreshold={2}
             onEndReached={handleOnEndReached}/>
     )
 };
