@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import CourseInfo from "../course-info";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import CourseInfo2 from "../course-info-2";
@@ -34,6 +34,14 @@ const VerticalCourseItem = (props) => {
                     <CourseInfo item={props.item}/>
                 </View>
             </TouchableOpacity>
+        )
+    } else {
+        return(
+            <View style={{
+                height: 0,
+                width: '100%',
+                backgroundColor: theme.primary,
+            }}/>
         )
     }
 };

@@ -166,11 +166,7 @@ const styles = (theme) => StyleSheet.create({
         height: 180,
         padding: 5,
         marginBottom: 10
-    },
-    // hotTopicsContainer: {
-    //     padding: 5,
-    //     paddingTop: 15
-    // },
+    }
 });
 
 export default Home;

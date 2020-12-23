@@ -29,6 +29,7 @@ const HorizontalAuthorList = (props) => {
                   renderItem={renderItem}
                   style={{
                       backgroundColor: theme.background,
+                      padding: 5,
                       paddingTop: 15,
                       paddingBottom: 10
                   }}/>
