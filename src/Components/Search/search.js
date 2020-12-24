@@ -1,92 +1,62 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {View, StyleSheet} from "react-native";
-import SearchHistoryList from "./SearchHistory/search-history-list";
-import {ScreenName} from "../../Globals/constants";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {SearchHistoryContext} from "../../Provider/search-history-provider";
-import SearchBarSection from "./search-bar-section";
-import SearchFilterList from "./search-filter-list";
-import {courses} from "../../Data/data";
+import React, {useContext} from 'react';
+import {View, StyleSheet, FlatList} from "react-native";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
+import {SearchHistoryContext} from "../../Core/Provider/search-history-provider";
+import SearchHistoryItem from "./SearchHistory/search-history-item";
+import SectionHeader from "../Common/section-header";
+import {SearchInputContext} from "../../Core/Provider/search-input-provider";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const Search = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
-    // search history
+    const {setSearchInput} = useContext(SearchInputContext)
     const {searchHistory, setSearchHistory} = useContext(SearchHistoryContext)
-    // search bar
-    const [searchInput, setSearchInput] = useState("")
-    const [searchFocus, setSearchFocus] = useState(false)
-    //search filter
-    const [filteredDataSource, setFilteredDataSource] = useState([]);
-    const [masterDataSource, setMasterDataSource] = useState(courses);
 
     // Control
     const handleOnClickHistoryItem = (item) => {
         setSearchInput(item.content)
     }
 
-    const handleOnClickFilterItem = (item) => {
-        setSearchInput(item)
+    const handleDeleteHistoryItem = (item) => {
+        const newHistory = searchHistory.filter(returnItem => returnItem.id !== item.id)
+        setSearchHistory(newHistory)
     }
 
-    const handleSearchSubmit = () => {
-        if (searchInput.length > 0) {
-            const newHistory = searchHistory.slice()
-            setSearchHistory(newHistory.concat({
-                id: Math.floor(Math.random() * 100000),
-                content: searchInput
-            }))
-            props.navigation.navigate(ScreenName.SearchResult)
-        }
+    const handleDeleteAllHistory = () => {
+        setSearchHistory([])
     }
 
-    const handleSearchOnChange = (text) => {
-        if (text) {
-            const newData = masterDataSource.filter(
-                function (item) {
-                    const itemData = item.title
-                        ? item.title.toUpperCase()
-                        : ''.toUpperCase();
-                    const textData = text.toUpperCase();
-                    return itemData.indexOf(textData) > -1;
-                });
-            setFilteredDataSource(newData);
-            setSearchInput(text)
-        } else {
-            setFilteredDataSource(masterDataSource);
-            setSearchInput(text)
-        }
+    const renderItem = ({item}) => {
+        return (
+            <SearchHistoryItem
+                key={item.id}
+                item={item}
+                handleOnClick={handleOnClickHistoryItem}
+                handleDeleteButton={handleDeleteHistoryItem}
+            />
+        )
     }
-
-    const handleSearchOnFocus = () => {
-        setSearchFocus(true)
-    }
-
-    const handleSearchOnBlur = () => {
-        setSearchFocus(false)
-    }
-
-    useEffect(() => {
-        props.navigation.setOptions({
-            headerShown: !searchFocus
-        })
-    },[searchFocus])
 
     return (
-        <View style={styles(theme).container}>
-            <SearchBarSection
-                handleOnChangeText={handleSearchOnChange}
-                handleSubmit={handleSearchSubmit}
-                handleOnFocus={handleSearchOnFocus}
-                handleOnBlur={handleSearchOnBlur}
-                searchInput={searchInput}
-                navigation={props.navigation}/>
-            {searchFocus && <SearchFilterList
-                handleOnClickItem={handleOnClickFilterItem}
-                filteredDataSource={filteredDataSource}/>}
-            {!searchFocus && <SearchHistoryList
-                handleOnClickItem={handleOnClickHistoryItem}/>}
-        </View>
+        <FlatList
+            data={searchHistory}
+            renderItem={renderItem}
+            ItemSeparatorComponent={() => (
+                <View style={{
+                    height: 1,
+                    backgroundColor: theme.primary,
+                    marginLeft: 5,
+                    marginRight: 5
+                }}/>
+            )}
+            ListHeaderComponent={() => (
+                <SectionHeader title={i18n.t(strings.recent_searches)} type='delete'
+                               handleOnClick={handleDeleteAllHistory}/>
+            )}
+            style={{paddingTop: 10}}
+        />
     )
 };
 
