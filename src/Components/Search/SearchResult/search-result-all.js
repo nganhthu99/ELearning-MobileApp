@@ -1,42 +1,32 @@
 import React, {useContext} from 'react';
 import {ScrollView, StyleSheet, View} from "react-native";
-import SectionHeader from "../../Common/section-header";
 import VerticalCourseList from "../../CoursesList/VerticalCourseList/vertical-course-list";
-import {authors, courses} from "../../../Data/data";
 import VerticalAuthorList from "../../AuthorList/VerticalAuthorList/vertical-author-list";
-import {ScreenName} from "../../../Globals/constants";
-import {ThemeContext} from "../../../Provider/theme-provider";
-import {LanguageContext} from "../../../Provider/language-provider";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import SectionHeader3 from "../../Common/section-header-3";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const SearchResultAll = (props) => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
-
-    const handleCoursesSeeAll = () => {
-        props.navigation.navigate(ScreenName.CourseList)
-    }
-
-    const handleAuthorsSeeAll = () => {
-        props.navigation.navigate(ScreenName.AuthorList)
-    }
 
     return (
         <ScrollView style={styles(theme).container}>
             <View style={styles(theme).coursesContainer}>
-                <View style={styles(theme).header}>
-                    <SectionHeader title={language.courses} handleOnClick={handleCoursesSeeAll}/>
-                </View>
+                <SectionHeader3
+                    title={i18n.t(strings.courses)}
+                    number={props.route.params.courses.total}/>
                 <VerticalCourseList
                     navigation={props.route.params.navigation}
-                    items={courses}/>
+                    items={props.route.params.courses.data}/>
             </View>
             <View style={styles(theme).authorsContainer}>
-                <View style={[styles(theme).header, {paddingLeft: 5, paddingTop: 20}]}>
-                    <SectionHeader title={language.authors} handleOnClick={handleAuthorsSeeAll}/>
-                </View>
+                <SectionHeader3
+                    title={i18n.t(strings.authors)}
+                    number={props.route.params.authors.total}/>
                 <VerticalAuthorList
                     navigation={props.route.params.navigation}
-                    items={authors}/>
+                    items={props.route.params.authors.data}/>
             </View>
         </ScrollView>
     )
