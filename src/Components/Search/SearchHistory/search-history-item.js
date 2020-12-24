@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {Button} from "react-native-elements";
-import {ThemeContext} from "../../../Provider/theme-provider";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
 
 const SearchHistoryItem = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -10,17 +10,17 @@ const SearchHistoryItem = (props) => {
         props.handleOnClick(props.item)
     }
 
-    const handleDeleteButton = () => {
+    const handleDelete= () => {
         props.handleDeleteButton(props.item)
     }
 
     return (
         <TouchableOpacity style={styles(theme).container} onPress={handleOnClick}>
-            <Text style={{fontSize: 18, color: theme.normalText}}>{props.item.content}</Text>
+            <Text style={{fontSize: 16, color: theme.text}}>{props.item.content}</Text>
             <Button
-                onPress={handleDeleteButton}
+                onPress={handleDelete}
                 type="clear"
-                icon={{ type: 'font-awesome', name: 'times', color: theme.primaryEmphasis, size: 15}}
+                icon={{type: 'font-awesome', name: 'times', color: theme.emphasis, size: 14}}
                 iconRight/>
         </TouchableOpacity>
     )
@@ -28,13 +28,12 @@ const SearchHistoryItem = (props) => {
 
 const styles = (theme) => StyleSheet.create({
     container: {
-        flex: 1,
+        height: 60,
         backgroundColor: theme.background,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomWidth: 0.5,
-        borderBottomColor: theme.primaryEmphasis
+        paddingLeft: 5
     },
 });
 
