@@ -17,8 +17,11 @@ const MyCourses = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
     const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
-    const {downloadedCourses, setDownloadedCourses} = useContext(DownloadedCoursesContext)
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
+
+    const handleDownloadedButton = () => {
+        props.navigation.navigate('DownloadedLessonList')
+    }
 
     const handleRecommendButton = () => {
         props.navigation.navigate(ScreenName.CourseList, {
@@ -34,20 +37,6 @@ const MyCourses = (props) => {
         })
     }
 
-    // const handleRegisteredButton = () => {
-    //     props.navigation.navigate(ScreenName.CourseList, {
-    //         items: registeredCourses,
-    //         header: language.registered,
-    //     })
-    // }
-
-    // const handleDownloadedButton = () => {
-    //     props.navigation.navigate(ScreenName.CourseList, {
-    //         items: downloadedCourses,
-    //         header: language.downloaded,
-    //     })
-    // }
-
     const handleFavouriteButton = () => {
         props.navigation.navigate(ScreenName.CourseList, {
             items: favouriteCourses,
@@ -62,10 +51,15 @@ const MyCourses = (props) => {
     } else {
         return (
             <ScrollView style={styles(theme).container}>
+                <View style={[styles(theme).buttonContainer, {paddingBottom: 0}]}>
+                    <ImageButton handleOnClick={handleDownloadedButton}
+                                 title='Downloaded Lessons'
+                                 image={require('../../../assets/background_1.jpg')}/>
+                </View>
                 <View style={styles(theme).buttonContainer}>
                     <ImageButton handleOnClick={handleRecommendButton}
                                  title={i18n.t(strings.recommend_for_you)}
-                                 image={require('../../../assets/background_3.jpg')}/>
+                                 image={require('../../../assets/background_5.jpg')}/>
                 </View>
                 <View style={styles(theme).sectionContainer}>
                     <SectionHeader title={i18n.t(strings.continue_learning)}
@@ -73,24 +67,6 @@ const MyCourses = (props) => {
                     <HorizontalCourseList navigation={props.navigation}
                                           items={continueCourses}/>
                 </View>
-                {/*<View style={styles(theme).sectionContainer}>*/}
-                {/*    <View style={styles(theme).header}>*/}
-                {/*        <SectionHeader title={language.registered}*/}
-                {/*                       handleOnClick={handleRegisteredButton}/>*/}
-                {/*    </View>*/}
-                {/*    <View>*/}
-                {/*        <HorizontalCourseList*/}
-                {/*            navigation={props.navigation}*/}
-                {/*            items={registeredCourses}/>*/}
-                {/*    </View>*/}
-                {/*</View>*/}
-                {/*<View style={styles(theme).sectionContainer}>*/}
-                {/*    <SectionHeader title={language.downloaded}*/}
-                {/*                   handleOnClick={handleDownloadedButton}/>*/}
-                {/*    <HorizontalCourseList*/}
-                {/*        navigation={props.navigation}*/}
-                {/*        items={downloadedCourses}/>*/}
-                {/*</View>*/}
                 <View style={styles(theme).sectionContainer}>
                     <SectionHeader title={i18n.t(strings.favourite)}
                                    handleOnClick={handleFavouriteButton}/>
@@ -114,8 +90,8 @@ const styles = (theme) => StyleSheet.create({
         paddingBottom: 15
     },
     buttonContainer: {
-        height: 180,
-        padding: 5
+        height: 120,
+        padding: 5,
     },
 })
 export default MyCourses;
