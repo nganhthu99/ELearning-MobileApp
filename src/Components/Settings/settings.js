@@ -1,17 +1,15 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Switch, Text, View} from "react-native";
-import {ButtonGroup, Icon} from "react-native-elements";
-import {ThemeContext} from "../../Provider/theme-provider";
-import {LanguageContext} from "../../Provider/language-provider";
+import {StyleSheet, Switch, Text, View} from "react-native";
+import {ButtonGroup} from "react-native-elements";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {themes} from "../../Globals/themes";
-import {languages} from "../../Globals/languages";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const Settings = (props) => {
     const {theme, setTheme} = useContext(ThemeContext)
-    const {language, setLanguage} = useContext(LanguageContext)
-
     const [isBlueMode, setIsBlueMode] = (theme === themes.light) ? useState(true) : useState(false);
-    const [selectedLanguageIndex, setSelectedLanguageIndex] = (language === languages.english) ? useState(1) : useState(0);
+    const [selectedLanguageIndex, setSelectedLanguageIndex] = (i18n.locale === 'vi') ? useState(0) : useState(1);
 
     const toggleSwitch = () => {
         setIsBlueMode(previousState => !previousState);
@@ -22,25 +20,17 @@ const Settings = (props) => {
     }
 
     useEffect(() => {
-        if (isBlueMode) {
-            setTheme(themes.light)
-        } else {
-            setTheme(themes.dark)
-        }
+        isBlueMode ? setTheme(themes.light) : setTheme(themes.dark)
     }, [isBlueMode])
 
     useEffect(() => {
-        if (selectedLanguageIndex === 0) {
-            setLanguage(languages.vietnamese)
-        } else {
-            setLanguage(languages.english)
-        }
+        selectedLanguageIndex === 0 ? i18n.locale = 'vi' : i18n.locale = 'en'
     }, [selectedLanguageIndex])
 
     return (
         <View style={styles(theme).container}>
-            <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.primaryEmphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text style={{fontSize: 18, color: theme.normalText}}>{language.blueMode}</Text>
+            <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Text style={{fontSize: 18, color: theme.text}}>{i18n.t(strings.light_mode)}</Text>
                 <Switch
                     trackColor={{ false: '#021F59', true: '#AED3F2' }}
                     thumbColor={isBlueMode ? '#0E66EE' : '#0E66EE'}
@@ -49,14 +39,14 @@ const Settings = (props) => {
                     value={isBlueMode}
                 />
             </View>
-            <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.primaryEmphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text style={{fontSize: 18, color: theme.normalText}}>{language.language}</Text>
+            <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Text style={{fontSize: 18, color: theme.text}}>{i18n.t(strings.language)}</Text>
                 <ButtonGroup
                     onPress={updateIndex}
                     selectedIndex={selectedLanguageIndex}
                     containerStyle={{width: 220}}
-                    buttonStyle={{borderWidth: 2, borderColor: theme.primaryButton}}
-                    textStyle={{color: theme.primaryButton}}
+                    buttonStyle={{borderWidth: 2, borderColor: theme.primary}}
+                    textStyle={{color: theme.primary}}
                     buttons={['Vietnamese', 'English']}
                 />
             </View>
