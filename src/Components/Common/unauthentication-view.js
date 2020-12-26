@@ -2,15 +2,13 @@ import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {Button} from "react-native-elements";
-import {LanguageContext} from "../../Core/Provider/language-provider";
 import {ScreenName} from "../../Globals/constants";
 
 const UnauthenticationView = (props) => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
 
     const handleGoBackButton = () => {
-        props.navigation.popToTop()
+        props.navigation.navigate(ScreenName.StartMenu)
     }
 
     return (
@@ -22,8 +20,8 @@ const UnauthenticationView = (props) => {
                 <Button type='outline'
                         title='Go Back'
                         containerStyle={{paddingLeft: 40, paddingRight: 40}}
-                        buttonStyle={{borderColor: theme.primaryButton, marginBottom: 10}}
-                        titleStyle={{color: theme.primaryButton}}
+                        buttonStyle={{borderColor: theme.primary, marginBottom: 10}}
+                        titleStyle={{color: theme.primary}}
                         onPress={handleGoBackButton}/>
             </View>
         </View>
