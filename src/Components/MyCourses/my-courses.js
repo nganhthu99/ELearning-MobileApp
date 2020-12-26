@@ -54,12 +54,12 @@ const MyCourses = (props) => {
                 <View style={[styles(theme).buttonContainer, {paddingBottom: 0}]}>
                     <ImageButton handleOnClick={handleDownloadedButton}
                                  title='Downloaded Lessons'
-                                 image={require('../../../assets/background_1.jpg')}/>
+                                 image={{uri: 'https://images.pexels.com/photos/1111317/pexels-photo-1111317.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}}/>
                 </View>
                 <View style={styles(theme).buttonContainer}>
                     <ImageButton handleOnClick={handleRecommendButton}
                                  title={i18n.t(strings.recommend_for_you)}
-                                 image={require('../../../assets/background_5.jpg')}/>
+                                 image={{uri: 'https://images.pexels.com/photos/3842751/pexels-photo-3842751.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'}}/>
                 </View>
                 <View style={styles(theme).sectionContainer}>
                     <SectionHeader title={i18n.t(strings.continue_learning)}

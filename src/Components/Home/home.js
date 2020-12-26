@@ -125,7 +125,7 @@ const Home = (props) => {
             <View style={styles(theme).buttonContainer}>
                 <ImageButton handleOnClick={handleNewButton}
                              title={i18n.t(strings.new_release)}
-                             image={require('../../../assets/background_2.jpg')}/>
+                             image={{uri: 'https://images.pexels.com/photos/1038001/pexels-photo-1038001.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}}/>
             </View>
 
             <View>
