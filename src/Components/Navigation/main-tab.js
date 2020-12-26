@@ -28,29 +28,31 @@ const MainTab = (props) => {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const resultContinueCourses = getContinueCoursesService(authenticationContext.state.token)
-            .then((response) => {
-                if (response.status === 200) {
-                    setContinueCourses(response.data.payload)
-                }
-            })
-        const resultFavouriteCourses = getFavoriteCoursesService(authenticationContext.state.token)
-            .then((response) => {
-                if (response.status === 200) {
-                    setFavouriteCourses(response.data.payload)
-                }
-            })
-        const resultDownloadedCourses = getStorageDownloadedVideo()
-            .then(async (value) => {
-                const parsedValue = await JSON.parse(value)
-                console.log("VALUEVALUEVALUE", parsedValue)
-                if (parsedValue) {
-                    setDownloadedCourses(parsedValue)
-                } else {
-                    setStorageDownloadedVideo({})
-                        .then(() => {})
-                }
-            })
+        if (authenticationContext.state.isAuthenticated) {
+            const resultContinueCourses = getContinueCoursesService(authenticationContext.state.token)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setContinueCourses(response.data.payload)
+                    }
+                })
+            const resultFavouriteCourses = getFavoriteCoursesService(authenticationContext.state.token)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setFavouriteCourses(response.data.payload)
+                    }
+                })
+            const resultDownloadedCourses = getStorageDownloadedVideo()
+                .then(async (value) => {
+                    const parsedValue = await JSON.parse(value)
+                    console.log("VALUEVALUEVALUE", parsedValue)
+                    if (parsedValue) {
+                        setDownloadedCourses(parsedValue)
+                    } else {
+                        setStorageDownloadedVideo({})
+                            .then(() => {
+                            })
+                    }
+                })
             // .then((value) => {
             //     console.log("VALUEVALUEVALUE")
             //     if (value) {
@@ -60,10 +62,13 @@ const MainTab = (props) => {
             //             .then(() => {})
             //     }
             // })
-        Promise.all([resultContinueCourses, resultFavouriteCourses, resultDownloadedCourses])
-            .then(() => {
-                setIsLoading(false)
-            })
+            Promise.all([resultContinueCourses, resultFavouriteCourses, resultDownloadedCourses])
+                .then(() => {
+                    setIsLoading(false)
+                })
+        } else {
+            setIsLoading(false)
+        }
     }, [])
 
     if (isLoading) {
