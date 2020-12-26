@@ -6,42 +6,40 @@ import CourseDetail from "../../CourseDetail/course-detail";
 import AuthorList from "../../AuthorList/VerticalAuthorList/author-list";
 import AuthorDetail from "../../AuthorDetail/author-detail";
 import {ScreenName} from "../../../Globals/constants";
-import {ThemeContext} from "../../../Provider/theme-provider";
-import {LanguageContext} from "../../../Provider/language-provider";
-import {ScrollView, Text, TouchableOpacity} from "react-native";
+import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import {TouchableOpacity} from "react-native";
 import Settings from "../../Settings/settings";
 import {Icon} from "react-native-elements";
-import {AuthenticationContext} from "../../../Provider/authentication-provider";
+import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
 const Stack = createStackNavigator();
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const HomeStack = () => {
     const {theme} = useContext(ThemeContext)
-    const {language} = useContext(LanguageContext)
-    const {authentication} = useContext(AuthenticationContext)
+    const authenticationContext = useContext(AuthenticationContext)
 
     return (
         <Stack.Navigator
             screenOptions={({ navigation, route }) => ({
                 headerStyle: {
-                    backgroundColor: theme.navigationBar,
+                    backgroundColor: theme.secondary,
                 },
                 headerTitleStyle: {
-                    color: theme.primaryEmphasis,
+                    color: theme.emphasis,
                     fontWeight: 'bold'
                 },
                 headerBackTitleVisible: false,
                 headerRight: () => (
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Settings')
-                        }}
-                    >
+                            navigation.navigate(ScreenName.Settings)
+                        }}>
                         <Icon
                             type='ionicons'
                             name='settings'
-                            color={theme.primaryEmphasis}
-                            size={28}
-                        />
+                            color={theme.emphasis}
+                            size={28}/>
                     </TouchableOpacity>
                 ),
                 headerRightContainerStyle: {
@@ -50,30 +48,37 @@ const HomeStack = () => {
             })}>
             <Stack.Screen name={ScreenName.Home}
                           component={Home}
-                          options={(authentication) ? {
+                          options={(authenticationContext.state.isAuthenticated) ? {
                               headerLeft: null,
-                              title: language.home
+                              title: i18n.t(strings.home)
                           } : {
-                              title: language.home
+                              title: i18n.t(strings.home)
                           }}/>
             <Stack.Screen name={ScreenName.CourseList}
                           component={CourseList}
-                          options={{title: language.listCourses}}/>
+                          options={({ route }) => ({
+                              title: route.params.header
+                          })}/>
             <Stack.Screen name={ScreenName.CourseDetail}
                           component={CourseDetail}
                           options={{
-                              title: language.courseDetail
+                              headerShown: false
                           }}/>
             <Stack.Screen name={ScreenName.AuthorList}
                           component={AuthorList}
-                          options={{title: language.listAuthors}}/>
+                          options={{
+                              title: i18n.t(strings.authors_list)
+                          }}/>
             <Stack.Screen name={ScreenName.AuthorDetail}
                           component={AuthorDetail}
-                          options={{title: language.authorDetail}}/>
+                          options={{
+                              title: ''
+                          }}/>
             <Stack.Screen name={ScreenName.Settings}
                           component={Settings}
-                          scree
-                          options={{title: language.settings}}/>
+                          options={{
+                              title: i18n.t(strings.settings)
+                          }}/>
         </Stack.Navigator>
     )
 }
