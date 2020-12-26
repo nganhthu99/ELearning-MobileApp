@@ -154,6 +154,7 @@ const SignIn = (props) => {
                             }
                         ]
                     )
+                    console.log(error)
                 })
                 .finally(() => {
                     setIsLoading(false)

@@ -33,16 +33,13 @@ const SplashScreen = (props) => {
                                 .then(() => {
                                     props.navigation.navigate(ScreenName.StartMenu)
                                 })
-                                .finally(() => {
-                                    setIsLoading(false)
-                                })
+                        })
+                        .finally(() => {
+                            setIsLoading(false)
                         })
                 } else {
                     props.navigation.navigate(ScreenName.StartMenu)
                 }
-            })
-            .finally(() => {
-                setIsLoading(false)
             })
     }, [])
 

@@ -20,9 +20,11 @@ export const signInService = (email, password) => {
 
 export const signInWithGoogleService = (email, googleId) => {
     return axios.post(api + '/user/login-google-mobile', {
-        email,
-        id: googleId
-    }, {validateStatus: () => true})
+        user: {
+            email,
+            id: googleId
+        }
+    })
 }
 
 export const forgetPasswordSendEmailService = (email) => {
