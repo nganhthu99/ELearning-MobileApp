@@ -1,9 +1,8 @@
 import React, {createContext, useState} from 'react';
-import {courses} from "../../Data/data";
 const FavouriteCoursesContext = createContext()
 
 const FavouriteCoursesProvider = (props) => {
-    const [favouriteCourses, setFavouriteCourses] = useState(courses.slice(7))
+    const [favouriteCourses, setFavouriteCourses] = useState([])
     return(
         <FavouriteCoursesContext.Provider value={{favouriteCourses, setFavouriteCourses}}>
             {props.children}

@@ -1,13 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet, ScrollView, FlatList, Text, TouchableOpacity, Alert, ActivityIndicator} from "react-native";
-import {comments} from "../../../Data/data";
 import CommentListItem from "./comment-list-item";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import StarRating from "react-native-star-rating";
 import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
 import {getCourseDetail, getUserRatingCourse, updateUserRatingCourse} from "../../../Core/Service/course-service";
-import {ScreenName} from "../../../Globals/constants";
 
 const CourseDetailComment = (props) => {
     const {theme} = useContext(ThemeContext)

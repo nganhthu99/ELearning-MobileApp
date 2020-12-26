@@ -1,5 +1,4 @@
 import React, {createContext, useState} from 'react';
-import {courses} from "../../Data/data";
 const ContinueCoursesContext = createContext()
 
 const ContinueCoursesProvider = (props) => {
