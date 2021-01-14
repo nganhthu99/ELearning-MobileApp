@@ -63,7 +63,7 @@ const SignUp = (props) => {
                                 {
                                     text: 'OK',
                                     onPress: () => {
-                                        props.navigation.navigate(ScreenName.SignIn)
+                                        props.navigation.replace(ScreenName.SignIn)
                                     }
                                 }
                             ]

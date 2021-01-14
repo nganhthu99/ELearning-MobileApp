@@ -26,7 +26,11 @@ const SignIn = (props) => {
     // Listen
     useEffect(() => {
         if (authenticationContext.state.isAuthenticated) {
-            props.navigation.navigate(ScreenName.MainTab)
+            // props.navigation.replace(ScreenName.MainTab)
+            props.navigation.reset({
+                index: 0,
+                routes: [{ name: ScreenName.MainTab }],
+            });
         }
     }, [authenticationContext.state.isAuthenticated])
 

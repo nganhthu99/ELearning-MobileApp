@@ -38,7 +38,7 @@ const SplashScreen = (props) => {
                             setIsLoading(false)
                         })
                 } else {
-                    props.navigation.navigate(ScreenName.StartMenu)
+                    props.navigation.replace(ScreenName.StartMenu)
                 }
             })
     }, [])
