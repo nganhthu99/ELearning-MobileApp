@@ -1,19 +1,20 @@
-import React, {useContext, useState} from 'react';
-import {TouchableOpacity, View} from "react-native";
-import {Icon, Overlay, SearchBar} from "react-native-elements";
+import React, {useContext} from 'react';
+import {View} from "react-native";
+import {SearchBar} from "react-native-elements";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {SearchHistoryContext} from "../../Core/Provider/search-history-provider";
 import {SearchInputContext} from "../../Core/Provider/search-input-provider";
 import {ScreenName} from "../../Globals/constants";
-import {searchService} from "../../Core/Service/course-service";
+import {getSearchHistoryService, searchService} from "../../Core/Service/course-service";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 
 const SearchBarSection = (props) => {
-    const [isMapVisible, setIsMapVisible] = useState(false);
     const {theme} = useContext(ThemeContext)
     const {searchInput, setSearchInput} = useContext(SearchInputContext)
     const {setSearchHistory} = useContext(SearchHistoryContext)
+    const authenticationContext = useContext(AuthenticationContext)
 
     const handleOnChangeText = (text) => {
         setSearchInput(text)
@@ -21,12 +22,18 @@ const SearchBarSection = (props) => {
 
     const handleSubmit = () => {
         if (searchInput) {
-            setSearchHistory(preHistory => [...preHistory, {
-                id: searchInput,
-                content: searchInput
-            }])
-            searchService(searchInput)
+            // setSearchHistory(preHistory => [...preHistory, {
+            //     id: searchInput,
+            //     content: searchInput
+            // }])
+            searchService(searchInput, authenticationContext.state.token)
                 .then((response) => {
+                    getSearchHistoryService(authenticationContext.state.token)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                setSearchHistory(response.data.payload.data)
+                            }
+                        })
                     props.navigation.push(ScreenName.SearchResult, {
                         courses: response.data.payload.courses,
                         authors: response.data.payload.instructors
@@ -35,53 +42,18 @@ const SearchBarSection = (props) => {
         }
     }
 
-    const toggleMapOverlay = () => {
-        setIsMapVisible(!isMapVisible)
-    }
-
-    const mapOverlay = () => {
-        return (
-            <Overlay
-                fullScreen
-                isVisible={isMapVisible}>
-                <View style={{flex: 1}}>
-                    <TouchableOpacity style={{alignSelf: 'flex-start', paddingTop: 15}}
-                                      onPress={toggleMapOverlay}>
-                        <Icon type='ionicons'
-                              name='close'
-                              color={theme.emphasis}/>
-                    </TouchableOpacity>
-                    {/*<Input placeholder='Enter Address'*/}
-                    {/*       leftIcon={*/}
-                    {/*           <Icon type='font-awesome-5'*/}
-                    {/*                 name='map-marker-alt'*/}
-                    {/*                 color={theme.emphasis}/>*/}
-                    {/*       }*/}
-                    {/*/>*/}
-                    {/*<Image style={{flex: 1, width: '100%', resizeMode: 'cover'}} source={require('../../../assets/map.jpg')}/>*/}
-                </View>
-            </Overlay>
-        )
-    }
-
     return (
         <View style={{flexDirection: 'row', alignItems: 'center', padding: 5, paddingTop: 25, backgroundColor: theme.secondary}}>
             <SearchBar
                 placeholder={i18n.t(strings.search)}
                 inputStyle={{color: '#011534', fontSize: 15}}
-                containerStyle={{flex: 1, height: 40, padding: 0, marginRight: 5}}
+                containerStyle={{flex: 1, height: 40, padding: 0}}
                 inputContainerStyle={{height: 40, backgroundColor: theme.background}}
                 lightTheme={true}
                 value={searchInput}
                 onChangeText={(text)=> handleOnChangeText(text)}
                 onSubmitEditing={handleSubmit}
             />
-            <TouchableOpacity onPress={toggleMapOverlay}>
-                <Icon type='font-awesome-5'
-                      name='globe-asia'
-                      color={theme.emphasis}/>
-            </TouchableOpacity>
-            {mapOverlay()}
         </View>
     )
 };

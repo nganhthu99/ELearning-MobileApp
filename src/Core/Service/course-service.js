@@ -75,11 +75,28 @@ export const updateCourseFavouriteStatus = (courseId, token) => {
     })
 }
 
-export const searchService = (keyword) => {
+export const searchService = (keyword, token) => {
     return axios.post(api+'/course/searchV2', {
+        token,
         keyword
     })
 };
+
+export const getSearchHistoryService = (token) => {
+    return axios.get(api + '/course/search-history', {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
+export const deleteSearchHistoryService = (token, searchHistoryId) => {
+    return axios.delete(api + '/course/delete-search-history/' + searchHistoryId, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
 
 export const getCourseDetail = (courseId) => {
     return axios.get(api + '/course/get-course-detail/'+courseId+'/null')
@@ -116,6 +133,14 @@ export const getLessonWithVideoUrl = (token, courseId, lessonId) => {
     })
 }
 
+export const getLessonDetailService = (token, courseId, lessonId) => {
+    return axios.get(api + '/lesson/detail/' + courseId + '/' + lessonId, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
 export const getLessonExercises = (token, lessonId) => {
     return axios.post(api + '/exercise/student/list-exercise-lesson',{
         lessonId,
@@ -130,6 +155,35 @@ export const getExerciseQuestions = (token, exerciseId) => {
     return axios.post(api + '/exercise/student/exercise-test',{
         exerciseId,
     },{
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
+export const enrollCourseService = (token, courseId) => {
+    return axios.post(api + '/payment/get-free-courses', {
+        courseId
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
+export const updateCurrentLearntTimeLessonService = (token, lessonId, currentTime) => {
+    return axios.put(api + '/lesson/update-current-time-learn-video', {
+        lessonId,
+        currentTime
+    }, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
+
+export const getLastWatchedLessonService = (token, courseId) => {
+    return axios.get(api + '/course/last-watched-lesson/' + courseId, {
         headers: {
             Authorization: 'Bearer ' + token
         }
