@@ -1,15 +1,21 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Alert, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Share, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Icon} from "react-native-elements";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
 import {FavouriteCoursesContext} from "../../../Core/Provider/favourite-courses-provider";
 import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
-import {getFavoriteCoursesService, getUserCourseFavouriteStatus, updateCourseFavouriteStatus} from "../../../Core/Service/course-service";
+import {
+    enrollCourseService,
+    getFavoriteCoursesService,
+    getUserCourseFavouriteStatus,
+    updateCourseFavouriteStatus
+} from "../../../Core/Service/course-service";
 import CourseInfo3 from "../../CoursesList/course-info-3";
 import SectionHeader2 from "../../Common/section-header-2";
 import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
 import * as WebBrowser from 'expo-web-browser';
+import {ScreenName} from "../../../Globals/constants";
 
 const CourseDetailInformation = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -71,10 +77,34 @@ const CourseDetailInformation = (props) => {
         if (!authenticationContext.state.isAuthenticated) {
             errorAuthenticationAlert()
         } else if (!isEnrolled) {
-            WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id).then(() => {
-                console.log('open google chrome')
-            })
+            enrollCourseService(authenticationContext.state.token, detail.id)
+                .then((response) => {
+                    if (response.status === 200) {
+                        Alert.alert(
+                            'Enroll Course Successfully',
+                            '',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {}
+                                }
+                            ]
+                        )
+                    }
+                })
+                .catch((error) => {
+                    WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id)
+                        .then(() => {
+                            console.log('open google chrome')
+                        })
+                })
         }
+    }
+
+    const handleShareButton = () => {
+        Share.share({
+            message: 'http://dev.letstudy.org/course-detail/'+detail.id
+        });
     }
 
     return (
@@ -120,6 +150,15 @@ const CourseDetailInformation = (props) => {
                     />
                 </TouchableOpacity>
             </View>
+            <TouchableOpacity
+                style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderColor: theme.primary, borderWidth: 1, margin: 2}}
+                onPress={handleShareButton}>
+                <Text style={{fontWeight: 'bold', paddingRight: 5, color: theme.primary}}>Share</Text>
+                <Icon type='ionicons'
+                      name='share'
+                      size={35}
+                      color={theme.primary}/>
+            </TouchableOpacity>
             <View style={{padding: 5, paddingTop: 10}}>
                 <Text style={styles(theme).headerText}>
                     Description:
