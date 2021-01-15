@@ -19,7 +19,7 @@ const HorizontalTopicList = (props) => {
                   style={{height: 150, width: 200, paddingRight: 3}}>
                 <ImageButton handleOnClick={() => handleTopicItemButton(item)}
                              title={item.name}
-                             image={{uri: 'https://images.pexels.com/photos/1036808/pexels-photo-1036808.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}}/>
+                             image={{uri: 'https://images.pexels.com/photos/4210784/pexels-photo-4210784.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}}/>
             </View>
         )
     }

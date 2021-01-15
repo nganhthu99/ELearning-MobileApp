@@ -8,21 +8,13 @@ const CourseInfo = (props) => {
     const author = (props.item["name"]) ? (props.item["name"]) : props.item["instructor.user.name"] ? props.item["instructor.user.name"] : props.item["instructorName"]
     const price = (props.item["price"] && parseInt(props.item["price"]) > 0) ? `${props.item["price"]} vnđ` : 'Free'
     const date = (props.item["createdAt"]) ? props.item["createdAt"] : props.item["updatedAt"]
-
-    // let author = () => {
-    //     if (props.item["name"])
-    //         return props.item["name"]
-    //     else if (props.item["instructor.user.name"])
-    //         return props.item["instructor.user.name"]
-    //     else if (props.item["instructorName"])
-    //         return props.item["instructorName"]
-    // }
+    const totalHours = Number(props.item.totalHours.toFixed(2))
 
     return(
         <View style={styles(theme).container}>
             <Text numberOfLines={1} style={[styles(theme).text, {fontWeight:'bold', fontSize: 18}]}>{props.item.title}</Text>
             <Text numberOfLines={1} style={styles(theme).authorText}>{author}</Text>
-            <Text numberOfLines={1} style={styles(theme).text}>{`${price} . ${date.substring(0, 10)} . ${props.item.totalHours} hours`}</Text>
+            <Text numberOfLines={1} style={styles(theme).text}>{`${price}  |  ${date.substring(0, 10)}  |  ${totalHours} hours`}</Text>
             <StarRating
                 disabled
                 iconSet={'Ionicons'}

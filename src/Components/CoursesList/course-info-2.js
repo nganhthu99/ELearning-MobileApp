@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import StarRating from "react-native-star-rating";
 
 const CourseInfo2 = (props) => {
     const {theme} = useContext(ThemeContext)

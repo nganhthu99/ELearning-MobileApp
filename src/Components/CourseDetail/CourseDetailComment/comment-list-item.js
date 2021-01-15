@@ -11,7 +11,7 @@ const CommentListItem = (props) => {
         <View style={styles(theme).container}>
             <View style={{flex: 2, flexDirection: 'row', alignItems: 'center'}}>
                 <View style={{width: 40, height: 40}}>
-                    <Image style={{flex: 1, resizeMode: 'cover', width: '100%', height: '100%', borderRadius: 6, borderWidth: 1, borderColor: theme.emphasis, aspectRatio: 1}}
+                    <Image style={{flex: 1, resizeMode: 'cover', width: '100%', height: '100%', borderRadius: 5, borderWidth: 1, borderColor: theme.emphasis, aspectRatio: 1}}
                            source={{uri:props.item.user.avatar}}/>
                 </View>
                 <View style={{paddingLeft: 10}}>

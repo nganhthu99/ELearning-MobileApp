@@ -2,13 +2,12 @@ import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from "react-native";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {Button} from "react-native-elements";
-import {ScreenName} from "../../Globals/constants";
 
 const UnauthenticationView = (props) => {
     const {theme} = useContext(ThemeContext)
 
     const handleGoBackButton = () => {
-        props.navigation.navigate(ScreenName.StartMenu)
+        props.navigation.popToTop()
     }
 
     return (

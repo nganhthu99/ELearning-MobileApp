@@ -7,12 +7,13 @@ const CourseInfo3 = (props) => {
     const {theme} = useContext(ThemeContext)
     const price = (props.course["price"] && parseInt(props.course["price"]) > 0) ? `${props.course["price"]} vnđ` : 'Free'
     let date = (props.course["createdAt"]) ? props.course["createdAt"] : props.course["updatedAt"]
+    const totalHours = Number(props.course.totalHours.toFixed(2))
 
     return(
         <View style={styles(theme).container}>
             <Text style={styles(theme).titleText}>{props.course.title}</Text>
             <Text numberOfLines={1} style={styles(theme).authorText}>{props.author.name}</Text>
-            <Text numberOfLines={1} style={styles(theme).text}>{`${price} . ${date.substring(0, 10)} . ${props.course.totalHours} hours`}</Text>
+            <Text numberOfLines={1} style={styles(theme).text}>{`${price}    |    ${date.substring(0, 10)}    |    ${totalHours} hours`}</Text>
             <StarRating
                 disabled
                 iconSet={'Ionicons'}
