@@ -2,7 +2,7 @@ import React, {useContext, useState, useEffect} from 'react';
 import {ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import Accordion from 'react-native-collapsible/Accordion';
-import {getLessonWithVideoUrl} from "../../../Core/Service/course-service";
+import {getLessonWithVideoUrl, updateCurrentLearntTimeLessonService} from "../../../Core/Service/course-service";
 import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
 import {Icon} from "react-native-elements";
 import {CurrentLessonContext} from "../../../Core/Provider/current-lesson-provider";
@@ -22,7 +22,10 @@ const CourseDetailLesson = (props) => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        courseSections.map((section) => {
+        if (props.route.params.initialLesson) {
+            setCurrentLesson(props.route.params.initialLesson)
+        }
+        Promise.all([courseSections.map((section) => {
             section.lesson.map((lesson) => {
                 getLessonWithVideoUrl(authenticationContext.state.token, lesson.courseId, lesson.id)
                     .then((response) => {
@@ -34,11 +37,80 @@ const CourseDetailLesson = (props) => {
                         setError(error)
                     })
             })
-        })
-        setIsLoading(false)
+        })]).then(r => setIsLoading(false))
+
+        return () => {
+            console.log('DID MOUNT')
+            // bug needs fix
+            /*if (currentLesson.video) {
+                let currentTime = null
+                let promise
+                if (currentLesson.video.videoUrl.includes('youtube')) {
+                    promise = props.route.params.playerRef.current?.getCurrentTime()
+                        .then((time) => {
+                            console.log(time)
+                            currentTime = time
+                        })
+                } else {
+                    promise = props.route.params.playerRef.current?.getStatusAsync()
+                        .then((response) => {
+                            console.log(response.positionMillis)
+                            currentTime = Number(response.positionMillis) / 1000
+                        })
+                }
+                Promise.all([promise])
+                    .then(() => {
+                        console.log('currenttime: ',currentTime)
+                        updateCurrentLearntTimeLessonService(authenticationContext.state.token, currentLesson.id, currentTime)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    console.log('UPDATE latest lesson succeed')
+                                }
+                            })
+                            .catch((error) => {
+                                console.log('ERROR: ', error)
+                            })
+                    })
+            }*/
+        }
     }, [])
 
     const handleOnChangeLesson = (lesson) => {
+        if (currentLesson.video) {
+            let currentTime = null
+            let promise
+            if (currentLesson.video.videoUrl.includes('youtube')) {
+                promise = props.route.params.playerRef.current?.getCurrentTime()
+                    .then((time) => {
+                        console.log(time)
+                        currentTime = time
+                    })
+            } else {
+                promise = props.route.params.playerRef.current?.getStatusAsync()
+                    .then((response) => {
+                        console.log(response.positionMillis)
+                        currentTime = Number(response.positionMillis) / 1000
+                    })
+            }
+            Promise.all([promise])
+                .then(() => {
+                    updateCurrentLearntTimeLessonService(authenticationContext.state.token, currentLesson.id, currentTime)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                setCoursesSection(prev => {
+                                    const copyCoursesSection = prev.slice()
+                                    const st = copyCoursesSection.find((section) => section.id === currentLesson.sectionId)
+                                    const ls = st.lesson.find((lesson) => lesson.id === currentLesson.id)
+                                    ls.video.currentTime = currentTime
+                                    return copyCoursesSection
+                                })
+                            }
+                        })
+                        .catch((error) => {
+                            console.log('ERROR: ', error)
+                        })
+                })
+        }
         setCurrentLesson(lesson)
         props.route.params.handleOnChangeLesson(lesson)
     }
@@ -76,20 +148,23 @@ const CourseDetailLesson = (props) => {
 
     const _renderContent = section => {
         const renderLessonItem = (lesson, index) => {
+            const totalMinutes = Math.floor(Number(lesson.hours) * 60)
+            const currentTime = (lesson.video && lesson.video.currentTime !== null) ? `${Math.floor(Number(lesson.video.currentTime) / 60)}:${Math.floor(Number(lesson.video.currentTime) % 60)}` : `0:0`
             return (
                 <TouchableOpacity
                     key={lesson.id}
                     onPress={() => handleOnChangeLesson(lesson)}
                     style={{flex: 1, flexDirection: 'row', paddingTop: 10, paddingBottom: 10}}>
                     <View style={{flex: 1.5, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: 10}}>{index + 1}</Text>
+                        <Text style={(lesson.id === currentLesson.id) ? {fontSize: 10, fontWeight: 'bold'} : {fontSize: 10}}>{index + 1}</Text>
                     </View>
                     <View style={{flex: 8}}>
-                        <Text style={{color: theme.text, fontSize: 14, paddingBottom: 8}}>
+                        <Text style={(lesson.id === currentLesson.id) ? {color: theme.text, fontSize: 14, paddingBottom: 8, fontWeight: 'bold'} : {color: theme.text, fontSize: 14, paddingBottom: 8}}>
                             {lesson.name}
                         </Text>
-                        <Text style={{color: theme.text, fontSize: 10}}>
-                            {`${lesson.hours} hours`}
+                        {/*${lesson.video.currentTime}*/}
+                        <Text style={(lesson.id === currentLesson.id) ? {color: theme.text, fontSize: 10, fontWeight: 'bold'} : {color: theme.text, fontSize: 10}}>
+                            {`at ${currentTime} minute / ${totalMinutes} minutes`}
                         </Text>
                     </View>
                     {lesson.video && !lesson.video.videoUrl.includes('youtube') &&

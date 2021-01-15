@@ -44,6 +44,8 @@ const CourseDetailTab = (props) => {
                 <Tab.Screen name={ScreenName.CourseDetailLesson}
                             component={CourseDetailLesson}
                             initialParams={{
+                                initialLesson: props.initialLesson,
+                                playerRef: props.playerRef,
                                 handleOnChangeLesson: props.handleOnChangeLesson,
                                 detail: props.detail
                             }}

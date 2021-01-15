@@ -1,37 +1,80 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View} from "react-native";
-import {Video} from "expo-av";
 import YoutubePlayer from "react-native-youtube-iframe";
 import CourseDetailTab from "./course-detail-tab";
-import {getCourseDetail} from "../../Core/Service/course-service";
+import {
+    getCourseDetail,
+    getLastWatchedLessonService,
+    getLessonDetailService,
+    getLessonWithVideoUrl
+} from "../../Core/Service/course-service";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
+import { Video } from 'expo-av';
+import {Button} from "react-native-elements";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 
 const CourseDetail = (props) => {
     const {theme} = useContext(ThemeContext)
+    const authenticationContext = useContext(AuthenticationContext)
     const [isLoading, setIsLoading] = useState(true)
     const [detail, setDetail] = useState({})
-    const [video, setVideo] = useState(null)
-    const [youtube, setYoutube] = useState(null)
+    const [initialLesson, setInitialLesson] = useState(null)
+
+    const [video, setVideo] = useState({
+        url: '',
+        currentTime: 0
+    })
+
     let playerRef = useRef(null)
 
     useEffect(() => {
+        let promoVidUrl
         getCourseDetail(props.route.params.itemId)
             .then((response) => {
                 if(response.status === 200) {
+                    promoVidUrl = response.data.payload.promoVidUrl
                     setDetail(response.data.payload)
-                    setVideo(response.data.payload.promoVidUrl)
                 }
             })
-            .finally(() => {
-                setIsLoading(false)
+            .then(() => {
+                getLastWatchedLessonService(authenticationContext.state.token, props.route.params.itemId)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setVideo({
+                                url: response.data.payload.videoUrl,
+                                currentTime: response.data.payload.currentTime,
+                            })
+                            return response.data.payload
+                        }
+                    })
+                    .then((video) => {
+                        getLessonDetailService(authenticationContext.state.token, props.route.params.itemId, video.lessonId)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    const newLesson = response.data.payload
+                                    newLesson.video = video
+                                    setInitialLesson(newLesson)
+                                }
+                            })
+                            .finally(() => {
+                                setIsLoading(false)
+                            })
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        setVideo({
+                            url: promoVidUrl,
+                            currentTime: 0
+                        })
+                    })
             })
     }, [])
 
-    const handleOnChangeLesson = (lesson) => {
-        if (lesson.video.videoUrl.includes('youtube')) {
-            setYoutube(lesson.video.videoUrl.substring(25))
-        }
-        setVideo(lesson.video.videoUrl)
+    const handleOnChangeLesson =  (lesson) => {
+        setVideo({
+            url: lesson.video.videoUrl,
+            currentTime: lesson.video.currentTime
+        })
     }
 
     if (isLoading) {
@@ -44,30 +87,34 @@ const CourseDetail = (props) => {
     } else {
         return (
             <View style={styles.container}>
-                {!youtube &&
+                {!video.url.includes('youtube') &&
                 <Video
-                    source={{uri: video}}
-                    shouldPlay={false}
+                    onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
+                    source={{uri: video.url}}
+                    shouldPlay={true}
                     useNativeControls
                     ref={playerRef}
                     style={{height: 220}}/>}
-                {youtube &&
+                {video.url.includes('youtube') &&
                 <YoutubePlayer
-                    videoId={youtube}
-                    play={false}
+                    onReady={() => {playerRef.current.seekTo(video.currentTime)}}
+                    videoId={video.url.substring(25)}
+                    play={true}
                     ref={playerRef}
                     height={220}
                     volume={50}
-                    playbackRate={1}
-                />}
+                    playbackRate={1}/>}
                 {/*<Button title='Seek to'*/}
                 {/*        onPress={async () => {await playerRef.current.setPositionAsync(15000)}}/>*/}
+                {/*<Button title='Seek to'*/}
+                {/*        onPress={() => {playerRef.current.seekTo(15)}}/>*/}
                 <CourseDetailTab
+                    initialLesson={initialLesson}
+                    playerRef={playerRef}
                     handleOnChangeLesson={handleOnChangeLesson}
                     navigation={props.navigation}
                     itemId={props.route.params.itemId}
-                    detail={detail}
-                />
+                    detail={detail}/>
             </View>
         )
     }
