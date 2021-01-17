@@ -6,7 +6,7 @@ import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-pr
 import {FavouriteCoursesContext} from "../../../Core/Provider/favourite-courses-provider";
 import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
 import {
-    enrollCourseService,
+    enrollCourseService, getContinueCoursesService,
     getFavoriteCoursesService,
     getUserCourseFavouriteStatus,
     updateCourseFavouriteStatus
@@ -15,7 +15,6 @@ import CourseInfo3 from "../../CoursesList/course-info-3";
 import SectionHeader2 from "../../Common/section-header-2";
 import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
 import * as WebBrowser from 'expo-web-browser';
-import {ScreenName} from "../../../Globals/constants";
 
 const CourseDetailInformation = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -26,20 +25,23 @@ const CourseDetailInformation = (props) => {
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
 
     const [isFavourite, setIsFavourite] = useState(false)
-    const [isEnrolled, setIsEnrolled] = useState(
-        (continueCourses.some(returnItem => returnItem.id === detail.id))
-    )
+    const [isEnrolled, setIsEnrolled] = useState(false)
 
     useEffect(() => {
-        if (authenticationContext.state.isAuthenticated) {
-            getUserCourseFavouriteStatus(detail.id, authenticationContext.state.token)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setIsFavourite(response.data.likeStatus)
-                    }
-                })
-        }
-    }, [])
+        // if (authenticationContext.state.isAuthenticated) {
+        //     getUserCourseFavouriteStatus(detail.id, authenticationContext.state.token)
+        //         .then((response) => {
+        //             if (response.status === 200) {
+        //                 setIsFavourite(response.data.likeStatus)
+        //             }
+        //         })
+        // }
+        setIsFavourite(favouriteCourses.some(returnItem => returnItem.id === detail.id))
+    }, [favouriteCourses])
+
+    useEffect(() => {
+        setIsEnrolled(continueCourses.some(returnItem => returnItem.id === detail.id))
+    }, [continueCourses])
 
     const errorAuthenticationAlert = () => Alert.alert(
         'Authentication Error',
@@ -60,8 +62,7 @@ const CourseDetailInformation = (props) => {
             updateCourseFavouriteStatus(detail.id, authenticationContext.state.token)
                 .then((response) => {
                     if (response.status === 200) {
-                        setIsFavourite(response.data.likeStatus)
-                        //recheck
+                        // setIsFavourite(response.data.likeStatus)
                         getFavoriteCoursesService(authenticationContext.state.token)
                             .then((response) => {
                                 if (response.status === 200) {
@@ -79,18 +80,24 @@ const CourseDetailInformation = (props) => {
         } else if (!isEnrolled) {
             enrollCourseService(authenticationContext.state.token, detail.id)
                 .then((response) => {
-                    if (response.status === 200) {
-                        Alert.alert(
-                            'Enroll Course Successfully',
-                            '',
-                            [
-                                {
-                                    text: 'OK',
-                                    onPress: () => {}
-                                }
-                            ]
-                        )
-                    }
+                    getContinueCoursesService(authenticationContext.state.token)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                setContinueCourses(response.data.payload)
+                            }
+                        })
+                    // if (response.status === 200) {
+                    //     Alert.alert(
+                    //         'Enroll Course Successfully',
+                    //         '',
+                    //         [
+                    //             {
+                    //                 text: 'OK',
+                    //                 onPress: () => {}
+                    //             }
+                    //         ]
+                    //     )
+                    // }
                 })
                 .catch((error) => {
                     WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id)
