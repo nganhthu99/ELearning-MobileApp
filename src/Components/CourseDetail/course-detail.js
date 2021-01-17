@@ -12,10 +12,12 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import { Video } from 'expo-av';
 import {Button} from "react-native-elements";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
+import {ContinueCoursesContext} from "../../Core/Provider/continue-courses-provider";
 
 const CourseDetail = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const [isLoading, setIsLoading] = useState(true)
     const [detail, setDetail] = useState({})
     const [initialLesson, setInitialLesson] = useState(null)
@@ -32,41 +34,50 @@ const CourseDetail = (props) => {
         getCourseDetail(props.route.params.itemId)
             .then((response) => {
                 if(response.status === 200) {
+                    console.log(response.data.payload)
                     promoVidUrl = response.data.payload.promoVidUrl
                     setDetail(response.data.payload)
                 }
             })
             .then(() => {
-                getLastWatchedLessonService(authenticationContext.state.token, props.route.params.itemId)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            setVideo({
-                                url: response.data.payload.videoUrl,
-                                currentTime: response.data.payload.currentTime,
-                            })
-                            return response.data.payload
-                        }
-                    })
-                    .then((video) => {
-                        getLessonDetailService(authenticationContext.state.token, props.route.params.itemId, video.lessonId)
-                            .then((response) => {
-                                if (response.status === 200) {
-                                    const newLesson = response.data.payload
-                                    newLesson.video = video
-                                    setInitialLesson(newLesson)
-                                }
-                            })
-                            .finally(() => {
-                                setIsLoading(false)
-                            })
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                        setVideo({
-                            url: promoVidUrl,
-                            currentTime: 0
+                if (continueCourses.some(returnItem => returnItem.id === props.route.params.itemId)) {
+                    getLastWatchedLessonService(authenticationContext.state.token, props.route.params.itemId)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                setVideo({
+                                    url: response.data.payload.videoUrl,
+                                    currentTime: response.data.payload.currentTime,
+                                })
+                                return response.data.payload
+                            }
                         })
+                        .then((video) => {
+                            getLessonDetailService(authenticationContext.state.token, props.route.params.itemId, video.lessonId)
+                                .then((response) => {
+                                    if (response.status === 200) {
+                                        const newLesson = response.data.payload
+                                        newLesson.video = video
+                                        setInitialLesson(newLesson)
+                                    }
+                                })
+                                .finally(() => {
+                                    setIsLoading(false)
+                                })
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            setVideo({
+                                url: promoVidUrl,
+                                currentTime: 0
+                            })
+                        })
+                } else {
+                    setIsLoading(false)
+                    setVideo({
+                        url: promoVidUrl,
+                        currentTime: 0
                     })
+                }
             })
     }, [])
 
@@ -91,7 +102,7 @@ const CourseDetail = (props) => {
                 <Video
                     onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
                     source={{uri: video.url}}
-                    shouldPlay={true}
+                    // shouldPlay={true}
                     useNativeControls
                     ref={playerRef}
                     style={{height: 220}}/>}
@@ -99,7 +110,7 @@ const CourseDetail = (props) => {
                 <YoutubePlayer
                     onReady={() => {playerRef.current.seekTo(video.currentTime)}}
                     videoId={video.url.substring(25)}
-                    play={true}
+                    // play={true}
                     ref={playerRef}
                     height={220}
                     volume={50}

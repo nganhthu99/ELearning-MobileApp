@@ -10,16 +10,18 @@ import * as FileSystem from "expo-file-system";
 import {setStorageDownloadedVideo} from "../../../Core/Service/async-storage-service";
 import {DownloadedCoursesContext} from "../../../Core/Provider/downloaded-courses-provider";
 import NoDataView from "../../Common/no-data-view";
+import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
 
 const CourseDetailLesson = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const {downloadedCourses, setDownloadedCourses} = useContext(DownloadedCoursesContext)
     const {currentLesson, setCurrentLesson} = useContext(CurrentLessonContext)
     const [isLoading, setIsLoading] = useState(true)
     const [activeSections, setActiveSections] = useState([0])
     const [courseSections, setCoursesSection] = useState(props.route.params.detail.section)
-    const [error, setError] = useState(null)
+    const [isAccessible, setIsAccessible] = useState(false)
 
     useEffect(() => {
         if (props.route.params.initialLesson) {
@@ -34,7 +36,7 @@ const CourseDetailLesson = (props) => {
                         }
                     })
                     .catch((error) => {
-                        setError(error)
+                        setIsAccessible(false)
                     })
             })
         })]).then(r => setIsLoading(false))
@@ -74,6 +76,12 @@ const CourseDetailLesson = (props) => {
             }*/
         }
     }, [])
+
+    useEffect(() => {
+        if (continueCourses.some(returnItem => returnItem.id === props.route.params.detail.id)) {
+            setIsAccessible(true)
+        }
+    }, [continueCourses])
 
     const handleOnChangeLesson = (lesson) => {
         if (currentLesson.video) {
@@ -205,7 +213,7 @@ const CourseDetailLesson = (props) => {
                                    color={theme.emphasis}/>
             </View>
         )
-    } else if (error) {
+    } else if (!isAccessible) {
         return (
             <NoDataView message={`You must enroll to access this course's lessons.`}/>
         )
