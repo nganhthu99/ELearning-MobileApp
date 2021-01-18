@@ -3,8 +3,8 @@ import {Image, View, StyleSheet, ActivityIndicator} from "react-native";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
-import {clearAllStorage, getStorageToken} from "../../Core/Service/async-storage-service";
 import {getUserInfoService} from "../../Core/Service/authentication-service";
+import {getStorageToken, removeStorageToken} from "../../Core/Service/storage-service";
 
 const SplashScreen = (props) => {
     // State
@@ -29,7 +29,7 @@ const SplashScreen = (props) => {
                             }
                         })
                         .catch(() => {
-                            clearAllStorage()
+                            removeStorageToken()
                                 .then(() => {
                                     props.navigation.navigate(ScreenName.StartMenu)
                                 })

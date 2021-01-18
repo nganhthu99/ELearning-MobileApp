@@ -10,11 +10,11 @@ import ChangeEmail from "./change-email";
 import ChangePassword from "./change-password";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
-import {clearAllStorage} from "../../Core/Service/async-storage-service";
 import {ScreenName} from "../../Globals/constants";
 import * as ImagePicker from 'expo-image-picker';
 import {imgurUploadImageService} from "../../Core/Service/image-upload-service";
 import {updateProfileService} from "../../Core/Service/authentication-service";
+import {removeStorageToken} from "../../Core/Service/storage-service";
 
 const Account = (props) => {
     // State
@@ -36,7 +36,7 @@ const Account = (props) => {
 
     // Control
     const handleSignOutButton = () => {
-        clearAllStorage()
+        removeStorageToken()
             .then(() => {
                 authenticationContext.signOut()
                 props.navigation.replace(ScreenName.StartMenu)
