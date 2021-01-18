@@ -7,10 +7,10 @@ import {AuthenticationContext} from "../../../Core/Provider/authentication-provi
 import {Icon} from "react-native-elements";
 import {CurrentLessonContext} from "../../../Core/Provider/current-lesson-provider";
 import * as FileSystem from "expo-file-system";
-import {setStorageDownloadedVideo} from "../../../Core/Service/async-storage-service";
 import {DownloadedCoursesContext} from "../../../Core/Provider/downloaded-courses-provider";
 import NoDataView from "../../Common/no-data-view";
 import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
+import {addDownloadStorageUser} from "../../../Core/Service/storage-service";
 
 const CourseDetailLesson = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -133,9 +133,10 @@ const CourseDetailLesson = (props) => {
             .then(({ uri }) => {
                 console.log('Finished downloading to ', uri);
                 lesson.video.videoUrl = uri
-                setStorageDownloadedVideo(lesson)
-                    .then(() => {})
-                setDownloadedCourses(prev => prev.concat(lesson))
+                addDownloadStorageUser(authenticationContext.state.userInfo.email, lesson)
+                    .then(() => {
+                        setDownloadedCourses(prev => prev.concat(lesson))
+                    })
             })
             .catch(error => {
                 console.error(error);

@@ -15,7 +15,7 @@ import {AuthenticationContext} from "../../Core/Provider/authentication-provider
 import {ActivityIndicator, View} from "react-native";
 import {getContinueCoursesService, getFavoriteCoursesService} from "../../Core/Service/course-service";
 import {ContinueCoursesContext} from "../../Core/Provider/continue-courses-provider";
-import {getStorageDownloadedVideo, setStorageDownloadedVideo} from "../../Core/Service/async-storage-service";
+import {getStorageUser} from "../../Core/Service/storage-service";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,27 +41,24 @@ const MainTab = (props) => {
                         setFavouriteCourses(response.data.payload)
                     }
                 })
-            const resultDownloadedCourses = getStorageDownloadedVideo()
-                .then(async (value) => {
-                    const parsedValue = await JSON.parse(value)
-                    console.log("VALUEVALUEVALUE", parsedValue)
-                    if (parsedValue) {
-                        setDownloadedCourses(parsedValue)
-                    } else {
-                        setStorageDownloadedVideo({})
-                            .then(() => {
-                            })
+            // const resultDownloadedCourses = getStorageDownloadedVideo()
+            //     .then(async (value) => {
+            //         const parsedValue = await JSON.parse(value)
+            //         if (parsedValue) {
+            //             setDownloadedCourses(parsedValue)
+            //         } else {
+            //             setStorageDownloadedVideo({})
+            //                 .then(() => {
+            //                 })
+            //         }
+            //     })
+            const resultDownloadedCourses = getStorageUser(authenticationContext.state.userInfo.email)
+                .then((value) =>{
+                    if (value) {
+                        setDownloadedCourses(value.download)
                     }
                 })
-            // .then((value) => {
-            //     console.log("VALUEVALUEVALUE")
-            //     if (value) {
-            //         setDownloadedCourses(value)
-            //     } else {
-            //         setStorageDownloadedVideo({})
-            //             .then(() => {})
-            //     }
-            // })
+
             Promise.all([resultContinueCourses, resultFavouriteCourses, resultDownloadedCourses])
                 .then(() => {
                     setIsLoading(false)

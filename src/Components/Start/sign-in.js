@@ -12,7 +12,7 @@ import {signInService, signInWithGoogleService} from "../../Core/Service/authent
 import * as Google from 'expo-google-app-auth';
 import i18n from "i18n-js";
 import {strings} from "../../Globals/Localization/string";
-import {setStorageToken} from "../../Core/Service/async-storage-service";
+import {getStorageUser, initializeStorageUser, setStorageToken} from "../../Core/Service/storage-service";
 
 const SignIn = (props) => {
     // State
@@ -26,7 +26,6 @@ const SignIn = (props) => {
     // Listen
     useEffect(() => {
         if (authenticationContext.state.isAuthenticated) {
-            // props.navigation.replace(ScreenName.MainTab)
             props.navigation.reset({
                 index: 0,
                 routes: [{ name: ScreenName.MainTab }],
@@ -57,10 +56,30 @@ const SignIn = (props) => {
             signInService(email, password)
                 .then((response) => {
                     if (response.status === 200) {
+                        console.log('hello')
+                        // setStorageToken(response.data.token)
+                        //     .then(() => {
+                        //         authenticationContext.signIn(response)
+                        //     })
+                        //
+                        getStorageUser(email)
+                            .then((value) => {
+                                if (!value) {
+                                    initializeStorageUser(email)
+                                        .then(() => {
+                                            console.log('INITIALIZE USER: ', email)
+                                            // setStorageToken(response.data.token)
+                                            //     .then(() => {
+                                            //         authenticationContext.signIn(response)
+                                            //     })
+                                        })
+                                }
+                            })
                         setStorageToken(response.data.token)
                             .then(() => {
                                 authenticationContext.signIn(response)
                             })
+                        //
                     } else if (response.status === 400) {
                         Alert.alert(
                             'Error Signing In',
@@ -132,6 +151,9 @@ const SignIn = (props) => {
                             .then(() => {
                                 authenticationContext.signIn(response)
                             })
+                        //
+
+                        //
                     } else {
                         Alert.alert(
                             'Error Signing In With Google',
