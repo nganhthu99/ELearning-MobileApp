@@ -21,8 +21,7 @@ export const clearAllStorageKeys = async () => {
 // Token
 export const getStorageToken = async () => {
     try {
-        const jsonValue = await AsyncStorage.getItem('token')
-        return jsonValue
+        return await AsyncStorage.getItem('token')
     } catch(e) {
         console.log('ERROR: ', e)
         return null
@@ -105,8 +104,7 @@ export const addDownloadStorageUser = async (email, lesson) => {
 
 export const deleteDownloadStorageUser = async (email, lesson) => {
     const user = await getStorageUser(email)
-    const download = user.download.filter(returnItem => returnItem.id !== lesson.id)
-    user.download = download
+    user.download = user.download.filter(returnItem => returnItem.id !== lesson.id)
     try {
         const jsonValue = JSON.stringify(user)
         await AsyncStorage.setItem(email, jsonValue)
