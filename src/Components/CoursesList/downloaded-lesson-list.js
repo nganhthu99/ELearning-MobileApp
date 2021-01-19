@@ -8,6 +8,7 @@ import {Icon} from "react-native-elements";
 import {deleteDownloadStorageUser} from "../../Core/Service/storage-service";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import * as FileSystem from "expo-file-system";
+import {ScreenName} from "../../Globals/constants";
 
 const DownloadedLessonList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -15,7 +16,7 @@ const DownloadedLessonList = (props) => {
     const authenticationContext = useContext(AuthenticationContext)
 
     const handleOnClickItem = (item) => {
-        props.navigation.navigate('DownloadedLessonDetail', {
+        props.navigation.navigate(ScreenName.DownloadedLessonDetail, {
             item: item
         })
     }

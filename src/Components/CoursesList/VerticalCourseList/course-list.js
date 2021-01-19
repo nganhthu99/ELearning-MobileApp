@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, StyleSheet, View} from "react-native";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import {
     getCategoryCoursesService, getContinueCoursesService, getFavoriteCoursesService,
@@ -24,6 +24,7 @@ const CourseList = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
+    const [isLoading, setIsLoading] = useState(true)
     const [courses, setCourses] = useState(props.route.params.items)
     const [page, setPage] = useState(1)
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -65,6 +66,7 @@ const CourseList = (props) => {
             header === i18n.t(strings.courses)) {
             // do nothing
             setPage(p => p + 1)
+            setIsLoading(false)
         } else { // new, category, recommend
             service(constLimit, startPage)
                 .then((response) => {
@@ -74,6 +76,9 @@ const CourseList = (props) => {
                             setCourses(response.data.payload.rows) :
                             setCourses(response.data.payload)
                     }
+                })
+                .finally(() => {
+                    setIsLoading(false)
                 })
         }
         return () => {}
@@ -150,47 +155,56 @@ const CourseList = (props) => {
 
     // View
     const renderItem = ({ item }) => {
-            if (props.route.params.header === i18n.t(strings.favourite)) {
-                return (
-                    <SwipeableVerticalCourseItem
-                        handleOnClick={handleOnClick}
-                        handleOnDelete={handleOnDelete}
-                        key={item.id}
-                        item={item}/>
-                )
-            } else {
-                return (
-                    <VerticalCourseItem
-                        handleOnClick={handleOnClick}
-                        key={item.id}
-                        item={item}/>
-                );
-            }
-        // }
+        if (props.route.params.header === i18n.t(strings.favourite)) {
+            return (
+                <SwipeableVerticalCourseItem
+                    handleOnClick={handleOnClick}
+                    handleOnDelete={handleOnDelete}
+                    key={item.id}
+                    item={item}/>
+            )
+        } else {
+            return (
+                <VerticalCourseItem
+                    handleOnClick={handleOnClick}
+                    key={item.id}
+                    item={item}/>
+            );
+        }
     };
-    if (courses.length === 0 && favouriteCourses.length === 0) {
+
+    if (isLoading) {
         return (
-            <NoDataView message={`There's no courses matched or available.`}/>
+            <View style={{marginTop: 20}}>
+                <ActivityIndicator size='small'
+                                   color={theme.emphasis}/>
+            </View>
         )
-    } else return (
-        <FlatList
-            data={header === i18n.t(strings.favourite) ? favouriteCourses : courses}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => (
-                <View style={{
-                    height: 1,
-                    width: '100%',
-                    backgroundColor: theme.primary,
-                }}/>
-            )}
-            style={{padding: 5}}
-            refreshControl={
-                <RefreshControl refreshing={isRefreshing}
-                                onRefresh={handleOnRefresh}/>
-            }
-            onEndReachedThreshold={2}
-            onEndReached={handleOnEndReached}/>
-    )
+    } else {
+        if (courses.length === 0 || (header === i18n.t(strings.favourite) && favouriteCourses.length === 0)) {
+            return (
+                <NoDataView message={`There's no courses matched or available.`}/>
+            )
+        } else return (
+            <FlatList
+                data={header === i18n.t(strings.favourite) ? favouriteCourses : courses}
+                renderItem={renderItem}
+                ItemSeparatorComponent={() => (
+                    <View style={{
+                        height: 1,
+                        width: '100%',
+                        backgroundColor: theme.primary,
+                    }}/>
+                )}
+                style={{padding: 5, backgroundColor: theme.background}}
+                refreshControl={
+                    <RefreshControl refreshing={isRefreshing}
+                                    onRefresh={handleOnRefresh}/>
+                }
+                onEndReachedThreshold={2}
+                onEndReached={handleOnEndReached}/>
+        )
+    }
 };
 
 const styles = (theme) => StyleSheet.create({

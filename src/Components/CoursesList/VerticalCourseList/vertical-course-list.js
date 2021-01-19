@@ -1,7 +1,5 @@
 import React, {useContext} from 'react';
-import {FlatList, StyleSheet, View, Animated, TouchableOpacity, Text} from "react-native";
-import {Icon} from "react-native-elements";
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {FlatList, View} from "react-native";
 import VerticalCourseItem from "./vertical-course-item";
 import {ScreenName} from "../../../Globals/constants";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
@@ -39,12 +37,5 @@ const VerticalCourseList = (props) => {
             style={{padding: 5}}/>
     )
 };
-
-const styles = (theme) => StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.background,
-    },
-});
 
 export default VerticalCourseList;
