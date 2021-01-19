@@ -71,7 +71,7 @@ export const initializeStorageUser = async (email) => {
 }
 
 export const setThemeStorageUser = async (email, theme) => {
-    const user = getStorageUser(email)
+    const user = await getStorageUser(email)
     user.theme = theme
     try {
         const jsonValue = JSON.stringify(user)
@@ -82,7 +82,7 @@ export const setThemeStorageUser = async (email, theme) => {
 }
 
 export const setLanguageStorageUser = async (email, language) => {
-    const user = getStorageUser(email)
+    const user = await getStorageUser(email)
     user.language = language
     try {
         const jsonValue = JSON.stringify(user)
@@ -93,16 +93,20 @@ export const setLanguageStorageUser = async (email, language) => {
 }
 
 export const addDownloadStorageUser = async (email, lesson) => {
-    // const user = getStorageUser(email)
-    // user.download.push(lesson)
-    // try {
-    //     const jsonValue = JSON.stringify(user)
-    //     await AsyncStorage.setItem(email, jsonValue)
-    // } catch(e) {
-    //     console.log('ERROR: ', e)
-    // }
     const user = await getStorageUser(email)
     user.download.push(lesson)
+    try {
+        const jsonValue = JSON.stringify(user)
+        await AsyncStorage.setItem(email, jsonValue)
+    } catch(e) {
+        console.log('ERROR: ', e)
+    }
+}
+
+export const deleteDownloadStorageUser = async (email, lesson) => {
+    const user = await getStorageUser(email)
+    const download = user.download.filter(returnItem => returnItem.id !== lesson.id)
+    user.download = download
     try {
         const jsonValue = JSON.stringify(user)
         await AsyncStorage.setItem(email, jsonValue)
