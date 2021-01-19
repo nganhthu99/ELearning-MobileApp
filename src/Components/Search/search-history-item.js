@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {Button} from "react-native-elements";
-import {ThemeContext} from "../../../Core/Provider/theme-provider";
+import {ThemeContext} from "../../Core/Provider/theme-provider";
 
 const SearchHistoryItem = (props) => {
     const {theme} = useContext(ThemeContext)
