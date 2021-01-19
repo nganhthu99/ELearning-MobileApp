@@ -23,5 +23,7 @@ export const ScreenName = {
     CourseDetailInformation: "CourseDetailInformation",
     CourseDetailLesson: "CourseDetailLesson",
     CourseDetailExercise: "CourseDetailExercise",
-    CourseDetailComment: "CourseDetailComment"
+    CourseDetailComment: "CourseDetailComment",
+    DownloadedLessonList: "DownloadedLessonList",
+    DownloadedLessonDetail: "DownloadedLessonDetail",
 }
