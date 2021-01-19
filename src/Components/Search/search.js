@@ -2,13 +2,14 @@ import React, {useContext, useEffect} from 'react';
 import {View, StyleSheet, FlatList} from "react-native";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {SearchHistoryContext} from "../../Core/Provider/search-history-provider";
-import SearchHistoryItem from "./SearchHistory/search-history-item";
 import SectionHeader from "../Common/section-header";
 import {SearchInputContext} from "../../Core/Provider/search-input-provider";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
 import {deleteSearchHistoryService, getSearchHistoryService} from "../../Core/Service/course-service";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
+import SearchHistoryItem from "./search-history-item";
+import SectionHeader2 from "../Common/section-header-2";
 
 const Search = (props) => {
     // State
@@ -42,10 +43,6 @@ const Search = (props) => {
             })
     }
 
-    const handleDeleteAllHistory = () => {
-        setSearchHistory([])
-    }
-
     const renderItem = ({item}) => {
         return (
             <SearchHistoryItem
@@ -70,8 +67,7 @@ const Search = (props) => {
                 }}/>
             )}
             ListHeaderComponent={() => (
-                <SectionHeader title={i18n.t(strings.recent_searches)} type='delete'
-                               handleOnClick={handleDeleteAllHistory}/>
+                <SectionHeader2 title={i18n.t(strings.recent_searches)}/>
             )}
             style={{paddingTop: 10}}
         />

@@ -22,10 +22,6 @@ const SearchBarSection = (props) => {
 
     const handleSubmit = () => {
         if (searchInput) {
-            // setSearchHistory(preHistory => [...preHistory, {
-            //     id: searchInput,
-            //     content: searchInput
-            // }])
             searchService(searchInput, authenticationContext.state.token)
                 .then((response) => {
                     getSearchHistoryService(authenticationContext.state.token)
