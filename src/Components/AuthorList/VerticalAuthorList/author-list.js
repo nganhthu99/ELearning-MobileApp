@@ -3,7 +3,7 @@ import {FlatList, RefreshControl, StyleSheet, View} from "react-native";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import {ScreenName} from "../../../Globals/constants";
 import VerticalAuthorListItem from "./vertical-author-list-item";
-import {getListIntructors} from "../../../Core/Service/instructor-service";
+import {getListInstructorsService} from "../../../Core/Service/instructor-service";
 import NoDataView from "../../Common/no-data-view";
 
 const AuthorList = (props) => {
@@ -15,10 +15,10 @@ const AuthorList = (props) => {
     // Control
     const handleOnRefresh = () => {
         setIsRefreshing(true)
-        getListIntructors()
+        getListInstructorsService()
             .then((response) => {
                 if (response.status === 200) {
-                    setAuthors(response.data.payload)
+                    // setAuthors(response.data.payload)
                 }
             })
             .finally(() => {

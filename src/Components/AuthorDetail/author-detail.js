@@ -3,7 +3,7 @@ import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "reac
 import VerticalCourseList from "../CoursesList/VerticalCourseList/vertical-course-list";
 import SectionHeader2 from "../Common/section-header-2";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
-import {getIntructorInfo} from "../../Core/Service/instructor-service";
+import {getInstructorInfoService} from "../../Core/Service/instructor-service";
 import {Icon} from "react-native-elements";
 import NoDataView from "../Common/no-data-view";
 
@@ -11,15 +11,14 @@ const AuthorDetail = (props) => {
     const {theme} = useContext(ThemeContext)
     const [isLoading, setIsLoading] = useState(true)
     const [detail, setDetail] = useState({})
+
     useEffect(() => {
-        getIntructorInfo(props.route.params.itemId)
+        getInstructorInfoService(props.route.params.itemId)
             .then((response) => {
                 if (response.status === 200) {
                     setDetail(response.data.payload)
+                    setIsLoading(false)
                 }
-            })
-            .finally(() => {
-                setIsLoading(false)
             })
     }, [])
 
@@ -48,7 +47,7 @@ const AuthorDetail = (props) => {
                 <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 14, paddingBottom: 15}]}>{detail.intro}</Text>
                 <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 14}]}>Skills</Text>
                 <View>
-                    {detail["skills"] && detail["skills"].map(skill => {
+                    {detail["skills"].map(skill => {
                         return (
                             <View style={{flexDirection: 'row', marginLeft: 20, marginTop: 5}}>
                                 <Icon type='octicon'
@@ -66,11 +65,10 @@ const AuthorDetail = (props) => {
             {/*courses container*/}
             <View style={styles(theme).coursesContainer}>
                 <SectionHeader2 title={`${detail.name}'s courses`}/>
-                {detail.courses &&
                 <VerticalCourseList navigation={props.navigation}
-                                    items={detail.courses}/>}
-                {detail.courses && detail.courses.length === 0 &&
-                <NoDataView message='Author has no courses available now!'/>}
+                                    items={detail.courses}/>
+                {detail.courses.length === 0 &&
+                <NoDataView message='Author has no courses available now.'/>}
             </View>
         </ScrollView>
     )
@@ -81,6 +79,7 @@ const styles = (theme) => StyleSheet.create({
         backgroundColor: theme.background,
     },
     avatarContainer: {
+        padding: 5,
         height: 350,
         width: 350,
         alignSelf: 'center',
@@ -90,7 +89,7 @@ const styles = (theme) => StyleSheet.create({
         resizeMode: 'cover',
         width: '100%',
         height: '100%',
-        borderRadius: 20,
+        borderRadius: 43.75,
         borderWidth: 2,
         borderColor: theme.emphasis,
         aspectRatio: 1

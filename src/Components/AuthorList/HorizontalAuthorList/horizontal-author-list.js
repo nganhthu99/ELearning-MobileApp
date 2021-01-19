@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {FlatList, StyleSheet, View} from "react-native";
+import {FlatList} from "react-native";
 import HorizontalAuthorItem from "./horizontal-author-item";
 import {ScreenName} from "../../../Globals/constants";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
