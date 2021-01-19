@@ -23,6 +23,8 @@ const CourseDetailLesson = (props) => {
     const [courseSections, setCoursesSection] = useState(props.route.params.detail.section)
     const [isAccessible, setIsAccessible] = useState(false)
 
+    const [downloadingLessons, setDownloadingLessons] = useState([])
+
     useEffect(() => {
         if (props.route.params.initialLesson) {
             setCurrentLesson(props.route.params.initialLesson)
@@ -39,7 +41,10 @@ const CourseDetailLesson = (props) => {
                         setIsAccessible(false)
                     })
             })
-        })]).then(r => setIsLoading(false))
+        })])
+            .then(() => {
+                setIsLoading(false)
+            })
 
         return () => {
             console.log('DID MOUNT')
@@ -124,12 +129,35 @@ const CourseDetailLesson = (props) => {
     }
 
     const handleDownloadButton = (lesson) => {
-        console.log('downloading: ', lesson.id)
-        console.log(FileSystem.documentDirectory)
-        FileSystem.downloadAsync(
-            lesson.video.videoUrl,
-            FileSystem.documentDirectory + lesson.id +'.mp4'
+        // console.log('downloading: ', lesson.id)
+        // console.log(FileSystem.documentDirectory)
+        // FileSystem.downloadAsync(
+        //     lesson.video.videoUrl,
+        //     FileSystem.documentDirectory + lesson.id +'.mp4'
+        // )
+        //     .then(({ uri }) => {
+        //         console.log('Finished downloading to ', uri);
+        //         lesson.video.videoUrl = uri
+        //         addDownloadStorageUser(authenticationContext.state.userInfo.email, lesson)
+        //             .then(() => {
+        //                 setDownloadedCourses(prev => prev.concat(lesson))
+        //             })
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
+        console.log("DOWNLOADNG: ", lesson.id)
+        setDownloadingLessons(prev => prev.concat(lesson.id))
+        FileSystem.createDownloadResumable(lesson.video.videoUrl,
+            FileSystem.documentDirectory + lesson.id + '.mp4',
+            {},
+            (downloadProgressData) => {
+            if (downloadProgressData.totalBytesWritten === downloadProgressData.totalBytesExpectedToWrite) {
+                setDownloadingLessons(prev => prev.filter(returnItem => returnItem !== lesson.id))
+            }
+            }
         )
+            .downloadAsync()
             .then(({ uri }) => {
                 console.log('Finished downloading to ', uri);
                 lesson.video.videoUrl = uri
@@ -138,9 +166,6 @@ const CourseDetailLesson = (props) => {
                         setDownloadedCourses(prev => prev.concat(lesson))
                     })
             })
-            .catch(error => {
-                console.error(error);
-            });
     }
 
     const _renderHeader = (section, index) => {
@@ -156,6 +181,42 @@ const CourseDetailLesson = (props) => {
     };
 
     const _renderContent = section => {
+        const renderLessonIcon = (lesson) => {
+            if (downloadedCourses.some(returnItem => returnItem.id === lesson.id)) {
+                return <View style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
+                            <Icon type="simple-line-icon"
+                                  name="check"
+                                  color="green"/>
+                        </View>
+
+            } else {
+                if (lesson.video) {
+                    if (downloadingLessons.some(returnItem => returnItem === lesson.id)) {
+                        return <ActivityIndicator style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}/>
+                    } else {
+                        if (lesson.video.videoUrl.includes('youtube')) {
+                            return <TouchableOpacity
+                                onPress={() => handleDownloadButton(lesson)}
+                                style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
+                                <Icon
+                                    type='simple-line-icon'
+                                    name='cloud-download'
+                                    color={theme.emphasis}/>
+                            </TouchableOpacity>
+                        } else {
+                            return <TouchableOpacity
+                                onPress={() => handleDownloadButton(lesson)}
+                                style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
+                                <Icon
+                                    type='simple-line-icon'
+                                    name='cloud-download'
+                                    color={theme.emphasis}/>
+                            </TouchableOpacity>
+                        }
+                    }
+                }
+            }
+        }
         const renderLessonItem = (lesson, index) => {
             const totalMinutes = Math.floor(Number(lesson.hours) * 60)
             const currentTime = (lesson.video && lesson.video.currentTime !== null) ? `${Math.floor(Number(lesson.video.currentTime) / 60)}:${Math.floor(Number(lesson.video.currentTime) % 60)}` : `0:0`
@@ -176,18 +237,20 @@ const CourseDetailLesson = (props) => {
                             {`at ${currentTime} minute / ${totalMinutes} minutes`}
                         </Text>
                     </View>
-                    {lesson.video && !lesson.video.videoUrl.includes('youtube') &&
-                    <TouchableOpacity
-                        onPress={() => handleDownloadButton(lesson)}
-                        style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
-                        <Icon
-                            type='simple-line-icon'
-                            name='cloud-download'
-                            color={theme.emphasis}/>
-                    </TouchableOpacity>}
+                    {renderLessonIcon(lesson)}
+                    {/*{lesson.video && !lesson.video.videoUrl.includes('youtube') &&*/}
+                    {/*<TouchableOpacity*/}
+                    {/*    onPress={() => handleDownloadButton(lesson)}*/}
+                    {/*    style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>*/}
+                    {/*    <Icon*/}
+                    {/*        type='simple-line-icon'*/}
+                    {/*        name='cloud-download'*/}
+                    {/*        color={theme.emphasis}/>*/}
+                    {/*</TouchableOpacity>}*/}
                 </TouchableOpacity>
             )
         }
+
         return (
             <View
                 key={section.id}
