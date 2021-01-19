@@ -95,13 +95,10 @@ const ChangePassword = (props) => {
         <View style={{flex: 1, alignSelf: 'flex-start'}}>
             <Button
                 type="clear"
-                icon={
-                    <Icon
+                icon={<Icon
                         type='ionicons'
                         name='lock'
-                        color={theme.emphasis}
-                    />
-                }
+                        color={theme.emphasis}/>}
                 iconLeft
                 titleStyle={{paddingLeft: 6, color: theme.primary}}
                 title={i18n.t(strings.change_password)}

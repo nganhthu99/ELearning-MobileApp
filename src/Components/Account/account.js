@@ -28,7 +28,7 @@ const Account = (props) => {
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
                 if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
+                    Alert.alert('Permission to Camera roll has benn denied.');
                 }
             }
         })();
@@ -60,31 +60,20 @@ const Account = (props) => {
         setIsImageLoading(true)
         imgurUploadImageService(image)
             .then((response) => {
-                updateProfileService(authenticationContext.state.userInfo.name, response.data.data.link,  authenticationContext.state.userInfo.phone, authenticationContext.state.token)
-                    .then((response) => {
-                        setIsImageLoading(false)
-                        if (response.status === 200) {
-                            authenticationContext.updateProfile(response)
-                        } else if (response.status >= 400) {
-                            Alert.alert(
-                                'Error Updating Avatar',
-                                'Please try again later',
-                                [
-                                    {
-                                        text: 'OK',
-                                        onPress: () => {
-                                        }
-                                    }
-                                ]
-                            )
-                        }
-                    })
+                if (response.status === 200) {
+                    updateProfileService(authenticationContext.state.userInfo.name, response.data.data.link, authenticationContext.state.userInfo.phone, authenticationContext.state.token)
+                        .then((response) => {
+                            setIsImageLoading(false)
+                            if (response.status === 200) {
+                                authenticationContext.updateProfile(response)
+                            }
+                        })
+                }
             })
             .catch((error) => {
-                console.log(error)
                 Alert.alert(
                     'Error Upload Avatar',
-                    'Please try again later',
+                    'Please try again later.',
                     [
                         {
                             text: 'OK',
@@ -107,7 +96,7 @@ const Account = (props) => {
                 {/*image container*/}
                 <View style={styles(theme).avatarContainer}>
                     {isImageLoading &&
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator size='small'
                                            color={theme.emphasis}/>
                     </View>}

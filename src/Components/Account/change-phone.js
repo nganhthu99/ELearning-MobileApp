@@ -3,7 +3,7 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
-import {renderPhoneValidation, validatePhoneUtil, validateUsernameUtil} from "../Start/render-validation";
+import {renderPhoneValidation, validatePhoneUtil} from "../Start/render-validation";
 import {updateProfileService} from "../../Core/Service/authentication-service";
 
 const ChangePhone = (props) => {
@@ -26,21 +26,8 @@ const ChangePhone = (props) => {
             setIsLoading(true)
             updateProfileService(authenticationContext.state.userInfo.name, authenticationContext.state.userInfo.avatar, phone, authenticationContext.state.token)
                 .then((response) => {
-                    console.log(response)
                     if (response.status === 200) {
                         authenticationContext.updateProfile(response)
-                    } else if (response.status >= 400) {
-                        Alert.alert(
-                            'Error Updating Phone Number',
-                            'Please try again later',
-                            [
-                                {
-                                    text: 'OK',
-                                    onPress: () => {
-                                    }
-                                }
-                            ]
-                        )
                     }
                 })
                 .catch((error) => {
@@ -73,9 +60,7 @@ const ChangePhone = (props) => {
                     <Icon
                         type='ionicons'
                         name='call'
-                        color={theme.emphasis}
-                    />
-                }
+                        color={theme.emphasis}/>}
                 rightIcon={
                     <TouchableOpacity onPress={toggleOverlay}>
                         <Icon
@@ -83,9 +68,7 @@ const ChangePhone = (props) => {
                             color={theme.emphasis}
                             name='pencil-square-o'
                         />
-                    </TouchableOpacity>
-                }
-            />
+                    </TouchableOpacity>}/>
             <Overlay
                 overlayStyle={{height: 250, width: '100%', justifyContent: 'center'}}
                 isVisible={isOverLayVisible}

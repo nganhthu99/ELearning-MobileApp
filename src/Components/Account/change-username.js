@@ -26,21 +26,8 @@ const ChangeUsername = (props) => {
             setIsLoading(true)
             updateProfileService(username, authenticationContext.state.userInfo.avatar, authenticationContext.state.userInfo.phone, authenticationContext.state.token)
                 .then((response) => {
-                     console.log(response)
                     if (response.status === 200) {
                         authenticationContext.updateProfile(response)
-                    } else if (response.status >= 400) {
-                        Alert.alert(
-                            'Error Updating Username',
-                            'Please try again later',
-                            [
-                                {
-                                    text: 'OK',
-                                    onPress: () => {
-                                    }
-                                }
-                            ]
-                        )
                     }
                 })
                 .catch((error) => {

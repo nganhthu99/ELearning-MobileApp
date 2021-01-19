@@ -34,7 +34,6 @@ const ChangeEmail = (props) => {
             setIsLoading(true)
             updateEmailService(email, authenticationContext.state.token)
                 .then((response) => {
-                    console.log(response)
                     if (response.status === 200) {
                         Alert.alert(
                             'Update Email Successfully',
