@@ -6,11 +6,9 @@ import {
     getCourseDetail,
     getLastWatchedLessonService,
     getLessonDetailService,
-    getLessonWithVideoUrl
 } from "../../Core/Service/course-service";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import { Video } from 'expo-av';
-import {Button} from "react-native-elements";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import {ContinueCoursesContext} from "../../Core/Provider/continue-courses-provider";
 
@@ -20,13 +18,11 @@ const CourseDetail = (props) => {
     const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const [isLoading, setIsLoading] = useState(true)
     const [detail, setDetail] = useState({})
-    const [initialLesson, setInitialLesson] = useState(null)
-
+    const [initialLesson, setInitialLesson] = useState(null) //
     const [video, setVideo] = useState({
         url: '',
         currentTime: 0
     })
-
     let playerRef = useRef(null)
 
     useEffect(() => {
@@ -34,7 +30,6 @@ const CourseDetail = (props) => {
         getCourseDetail(props.route.params.itemId)
             .then((response) => {
                 if(response.status === 200) {
-                    console.log(response.data.payload)
                     promoVidUrl = response.data.payload.promoVidUrl
                     setDetail(response.data.payload)
                 }
@@ -59,13 +54,10 @@ const CourseDetail = (props) => {
                                         newLesson.video = video
                                         setInitialLesson(newLesson)
                                     }
-                                })
-                                .finally(() => {
                                     setIsLoading(false)
                                 })
                         })
                         .catch((error) => {
-                            console.log(error)
                             setVideo({
                                 url: promoVidUrl,
                                 currentTime: 0
@@ -88,6 +80,33 @@ const CourseDetail = (props) => {
         })
     }
 
+    const renderVideo = () => {
+        if (video.url.includes('youtube')) {
+            return (
+                <YoutubePlayer
+                    onReady={() => {playerRef.current.seekTo(video.currentTime)}}
+                    videoId={video.url.substring(25)}
+                    // play={true}
+                    ref={playerRef}
+                    height={220}
+                    volume={50}
+                    playbackRate={1}/>
+            )
+        } else if (video.url) {
+            return (
+                <Video
+                    onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
+                    source={{uri: video.url}}
+                    // shouldPlay={true}
+                    volume={1.0}
+                    isMuted={false}
+                    useNativeControls
+                    ref={playerRef}
+                    style={{height: 220}}/>
+            )
+        }
+    }
+
     if (isLoading) {
         return (
             <View style={{marginTop: 40}}>
@@ -98,27 +117,7 @@ const CourseDetail = (props) => {
     } else {
         return (
             <View style={styles.container}>
-                {!video.url.includes('youtube') &&
-                <Video
-                    onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
-                    source={{uri: video.url}}
-                    // shouldPlay={true}
-                    useNativeControls
-                    ref={playerRef}
-                    style={{height: 220}}/>}
-                {video.url.includes('youtube') &&
-                <YoutubePlayer
-                    onReady={() => {playerRef.current.seekTo(video.currentTime)}}
-                    videoId={video.url.substring(25)}
-                    // play={true}
-                    ref={playerRef}
-                    height={220}
-                    volume={50}
-                    playbackRate={1}/>}
-                {/*<Button title='Seek to'*/}
-                {/*        onPress={async () => {await playerRef.current.setPositionAsync(15000)}}/>*/}
-                {/*<Button title='Seek to'*/}
-                {/*        onPress={() => {playerRef.current.seekTo(15)}}/>*/}
+                {renderVideo()}
                 <CourseDetailTab
                     initialLesson={initialLesson}
                     playerRef={playerRef}

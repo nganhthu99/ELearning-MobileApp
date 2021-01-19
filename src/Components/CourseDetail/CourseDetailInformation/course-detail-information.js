@@ -8,7 +8,6 @@ import {AuthenticationContext} from "../../../Core/Provider/authentication-provi
 import {
     enrollCourseService, getContinueCoursesService,
     getFavoriteCoursesService,
-    getUserCourseFavouriteStatus,
     updateCourseFavouriteStatus
 } from "../../../Core/Service/course-service";
 import CourseInfo3 from "../../CoursesList/course-info-3";
@@ -28,14 +27,6 @@ const CourseDetailInformation = (props) => {
     const [isEnrolled, setIsEnrolled] = useState(false)
 
     useEffect(() => {
-        // if (authenticationContext.state.isAuthenticated) {
-        //     getUserCourseFavouriteStatus(detail.id, authenticationContext.state.token)
-        //         .then((response) => {
-        //             if (response.status === 200) {
-        //                 setIsFavourite(response.data.likeStatus)
-        //             }
-        //         })
-        // }
         setIsFavourite(favouriteCourses.some(returnItem => returnItem.id === detail.id))
     }, [favouriteCourses])
 

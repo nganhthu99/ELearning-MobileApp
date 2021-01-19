@@ -28,15 +28,19 @@ const CourseDetailExercise= (props) => {
     }, [currentLesson])
 
     useEffect(() => {
+        const promiseArray = []
         exerciseSections.map((exercise) => {
-            getExerciseQuestions(authenticationContext.state.token, exercise.id)
+            promiseArray.push(getExerciseQuestions(authenticationContext.state.token, exercise.id)
                 .then((response) => {
                     if (response.status === 200) {
                         exercise.exercises_questions = response.data.payload.exercises.exercises_questions
                     }
-                })
+                }))
         })
-        setIsLoading(false)
+        Promise.all(promiseArray)
+            .then(() => {
+                setIsLoading(false)
+            })
     }, [exerciseSections])
 
     const _renderHeader = (section, index) => {

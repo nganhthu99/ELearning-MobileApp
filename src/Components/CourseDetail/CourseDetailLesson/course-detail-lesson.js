@@ -18,68 +18,70 @@ const CourseDetailLesson = (props) => {
     const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const {downloadedCourses, setDownloadedCourses} = useContext(DownloadedCoursesContext)
     const {currentLesson, setCurrentLesson} = useContext(CurrentLessonContext)
+
     const [isLoading, setIsLoading] = useState(true)
     const [activeSections, setActiveSections] = useState([0])
     const [courseSections, setCoursesSection] = useState(props.route.params.detail.section)
     const [isAccessible, setIsAccessible] = useState(false)
 
     const [downloadingLessons, setDownloadingLessons] = useState([])
+    const [totalStudied, setTotalStudied] = useState(0)
+
+    const componentWillUnmount = () => {
+        console.log('COMPONENT WILL UNMOUNT')
+        console.log(currentLesson)
+        if (currentLesson.video) {
+            let currentTime = null
+            let promise
+            if (currentLesson.video.videoUrl.includes('youtube')) {
+                console.log("YOUTUBE HERE")
+                promise = props.route.params.playerRef.current?.getCurrentTime()
+                    .then((time) => {
+                        console.log(time)
+                        currentTime = time
+                    })
+            } else {
+                console.log("MP4 HERE")
+                promise = props.route.params.playerRef.current?.getStatusAsync()
+                    .then((response) => {
+                        console.log(response.positionMillis)
+                        currentTime = Number(response.positionMillis) / 1000
+                    })
+            }
+            Promise.all([promise])
+                .then(() => {
+                    console.log('currenttime: ', currentTime)
+                    updateCurrentLearntTimeLessonService(authenticationContext.state.token, currentLesson.id, currentTime)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                console.log('UPDATE latest lesson succeed')
+                            }
+                        })
+                        .catch((error) => {
+                            console.log('ERROR: ', error)
+                        })
+                })
+        }
+    }
 
     useEffect(() => {
         if (props.route.params.initialLesson) {
             setCurrentLesson(props.route.params.initialLesson)
         }
-        Promise.all([courseSections.map((section) => {
+        const promiseArray = []
+        courseSections.map((section) => {
             section.lesson.map((lesson) => {
-                getLessonWithVideoUrl(authenticationContext.state.token, lesson.courseId, lesson.id)
+                promiseArray.push(getLessonWithVideoUrl(authenticationContext.state.token, lesson.courseId, lesson.id)
                     .then((response) => {
                         if (response.status === 200) {
+                            setTotalStudied(totalStudied => totalStudied + response.data.payload.currentTime)
                             lesson.video = response.data.payload
                         }
-                    })
-                    .catch((error) => {
-                        setIsAccessible(false)
-                    })
+                    }))
             })
-        })])
-            .then(() => {
-                setIsLoading(false)
-            })
-
-        return () => {
-            console.log('DID MOUNT')
-            // bug needs fix
-            /*if (currentLesson.video) {
-                let currentTime = null
-                let promise
-                if (currentLesson.video.videoUrl.includes('youtube')) {
-                    promise = props.route.params.playerRef.current?.getCurrentTime()
-                        .then((time) => {
-                            console.log(time)
-                            currentTime = time
-                        })
-                } else {
-                    promise = props.route.params.playerRef.current?.getStatusAsync()
-                        .then((response) => {
-                            console.log(response.positionMillis)
-                            currentTime = Number(response.positionMillis) / 1000
-                        })
-                }
-                Promise.all([promise])
-                    .then(() => {
-                        console.log('currenttime: ',currentTime)
-                        updateCurrentLearntTimeLessonService(authenticationContext.state.token, currentLesson.id, currentTime)
-                            .then((response) => {
-                                if (response.status === 200) {
-                                    console.log('UPDATE latest lesson succeed')
-                                }
-                            })
-                            .catch((error) => {
-                                console.log('ERROR: ', error)
-                            })
-                    })
-            }*/
-        }
+        })
+        Promise.all(promiseArray)
+            .then(() => setIsLoading(false))
     }, [])
 
     useEffect(() => {
@@ -129,23 +131,6 @@ const CourseDetailLesson = (props) => {
     }
 
     const handleDownloadButton = (lesson) => {
-        // console.log('downloading: ', lesson.id)
-        // console.log(FileSystem.documentDirectory)
-        // FileSystem.downloadAsync(
-        //     lesson.video.videoUrl,
-        //     FileSystem.documentDirectory + lesson.id +'.mp4'
-        // )
-        //     .then(({ uri }) => {
-        //         console.log('Finished downloading to ', uri);
-        //         lesson.video.videoUrl = uri
-        //         addDownloadStorageUser(authenticationContext.state.userInfo.email, lesson)
-        //             .then(() => {
-        //                 setDownloadedCourses(prev => prev.concat(lesson))
-        //             })
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
         console.log("DOWNLOADNG: ", lesson.id)
         setDownloadingLessons(prev => prev.concat(lesson.id))
         FileSystem.createDownloadResumable(lesson.video.videoUrl,
@@ -190,7 +175,6 @@ const CourseDetailLesson = (props) => {
                         </View>
 
             } else {
-                if (lesson.video) {
                     if (downloadingLessons.some(returnItem => returnItem === lesson.id)) {
                         return <ActivityIndicator style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}/>
                     } else {
@@ -214,12 +198,11 @@ const CourseDetailLesson = (props) => {
                             </TouchableOpacity>
                         }
                     }
-                }
             }
         }
         const renderLessonItem = (lesson, index) => {
-            const totalMinutes = Math.floor(Number(lesson.hours) * 60)
-            const currentTime = (lesson.video && lesson.video.currentTime !== null) ? `${Math.floor(Number(lesson.video.currentTime) / 60)}:${Math.floor(Number(lesson.video.currentTime) % 60)}` : `0:0`
+            const totalMinutes = (Number(lesson.hours) * 60).toFixed(2)
+            const currentTime = (lesson.video.currentTime !== null) ? `${(Number(lesson.video.currentTime)/60).toFixed(2)}` : `0`
             return (
                 <TouchableOpacity
                     key={lesson.id}
@@ -234,19 +217,10 @@ const CourseDetailLesson = (props) => {
                         </Text>
                         {/*${lesson.video.currentTime}*/}
                         <Text style={(lesson.id === currentLesson.id) ? {color: theme.text, fontSize: 10, fontWeight: 'bold'} : {color: theme.text, fontSize: 10}}>
-                            {`at ${currentTime} minute / ${totalMinutes} minutes`}
+                            {`at ${currentTime} minutes / ${totalMinutes} minutes`}
                         </Text>
                     </View>
                     {renderLessonIcon(lesson)}
-                    {/*{lesson.video && !lesson.video.videoUrl.includes('youtube') &&*/}
-                    {/*<TouchableOpacity*/}
-                    {/*    onPress={() => handleDownloadButton(lesson)}*/}
-                    {/*    style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>*/}
-                    {/*    <Icon*/}
-                    {/*        type='simple-line-icon'*/}
-                    {/*        name='cloud-download'*/}
-                    {/*        color={theme.emphasis}/>*/}
-                    {/*</TouchableOpacity>}*/}
                 </TouchableOpacity>
             )
         }
@@ -284,6 +258,9 @@ const CourseDetailLesson = (props) => {
     } else {
         return (
             <ScrollView style={styles(theme).container}>
+                <View style={{padding: 5}}>
+                    <Text style={{color: theme.text, textDecorationLine: "underline"}}>You have studied {(totalStudied / 60).toFixed(2)} minutes</Text>
+                </View>
                 <Accordion
                     sections={courseSections}
                     activeSections={activeSections}
