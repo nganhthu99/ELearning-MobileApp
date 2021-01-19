@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Switch, Text, View} from "react-native";
-import {ButtonGroup} from "react-native-elements";
+import {ScrollView, Share, StyleSheet, Switch, Text, View} from "react-native";
+import {Button, ButtonGroup} from "react-native-elements";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {themes} from "../../Globals/themes";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
 
-const Settings = (props) => {
+const Settings = () => {
     const {theme, setTheme} = useContext(ThemeContext)
     const [isLightMode, setIsLightMode] = (theme === themes.light) ? useState(true) : useState(false);
     const [selectedLanguageIndex, setSelectedLanguageIndex] = (i18n.locale === 'vi') ? useState(0) : useState(1);
@@ -28,6 +28,12 @@ const Settings = (props) => {
     useEffect(() => {
         selectedLanguageIndex === 0 ? i18n.locale = 'vi' : i18n.locale = 'en'
     }, [selectedLanguageIndex])
+
+    const handleShareApplication = () => {
+        Share.share({
+            message: 'http://dev.letstudy.org/'
+        });
+    }
 
     return (
         <ScrollView style={styles(theme).container}>
@@ -65,7 +71,7 @@ const Settings = (props) => {
             </View>
             <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 18, color: theme.header, marginBottom: 10}}>Contact</Text>
-                <Text style={{marginBottom: 5}}>nganhthu99@gmail.com</Text>
+                <Text style={{marginBottom: 5, textDecorationLine: 'underline'}}>nganhthu99@gmail.com</Text>
             </View>
             <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 18, color: theme.header}}>App version</Text>
@@ -75,6 +81,13 @@ const Settings = (props) => {
                 <Text style={{fontSize: 18, color: theme.header}}>Release</Text>
                 <Text>01/21/2021</Text>
             </View>
+            <Button
+                onPress={handleShareApplication}
+                type="outline"
+                buttonStyle={{borderColor: theme.primary}}
+                containerStyle={{padding: 40, paddingTop: 20, paddingBottom: 20}}
+                titleStyle={{color: theme.primary}}
+                title="Share BLUEDU now!"/>
         </ScrollView>
     )
 };
