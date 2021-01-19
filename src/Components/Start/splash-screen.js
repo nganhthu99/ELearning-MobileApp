@@ -10,10 +10,9 @@ const SplashScreen = (props) => {
     // State
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        setIsLoading(true)
         getStorageToken()
             .then((storageToken) => {
                 if(storageToken) {
@@ -28,10 +27,10 @@ const SplashScreen = (props) => {
                                 })
                             }
                         })
-                        .catch(() => {
+                        .catch((error) => {
                             removeStorageToken()
                                 .then(() => {
-                                    props.navigation.navigate(ScreenName.StartMenu)
+                                    props.navigation.replace(ScreenName.StartMenu)
                                 })
                         })
                         .finally(() => {
@@ -45,7 +44,7 @@ const SplashScreen = (props) => {
 
     useEffect(() => {
         if (authenticationContext.state.isAuthenticated) {
-            props.navigation.navigate(ScreenName.MainTab)
+            props.navigation.replace(ScreenName.MainTab)
         }
     }, [authenticationContext.state.isAuthenticated])
 

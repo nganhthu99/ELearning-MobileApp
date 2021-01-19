@@ -58,7 +58,7 @@ const SignUp = (props) => {
                     if (response.status === 200) {
                         Alert.alert(
                             'Sign Up Successfully',
-                            'Follow instruction on your email to activate your account',
+                            'Follow instruction on your email to activate your account.',
                             [
                                 {
                                     text: 'OK',
@@ -71,7 +71,19 @@ const SignUp = (props) => {
                     } else if (response.status === 400){
                         Alert.alert(
                             'Error Signing Up',
-                            'Email or phone number has already existed',
+                            'Email or phone number has already existed.',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    } else {
+                        Alert.alert(
+                            'Error Signing Up',
+                            'Please try again later.',
                             [
                                 {
                                     text: 'OK',
@@ -85,7 +97,7 @@ const SignUp = (props) => {
                 .catch((error) => {
                     Alert.alert(
                         'Error Signing Up',
-                        'Please try again later',
+                        'Please try again later.',
                         [
                             {
                                 text: 'OK',
@@ -115,54 +127,45 @@ const SignUp = (props) => {
                        }
                        onChangeText={(text) => handleUsernameInput(text)}
                        errorMessage={renderUsernameValidation(username)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Input placeholder={i18n.t(strings.email)}
                        inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='mail-outline'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        onChangeText={(text) => handleEmailInput(text)}
                        errorMessage={renderEmailValidation(email)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Input placeholder={i18n.t(strings.phone)}
                        inputStyle={{color: theme.text}}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='call'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        onChangeText={(text) => handlePhoneInput(text)}
                        errorMessage={renderPhoneValidation(phone)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Input placeholder={i18n.t(strings.password)}
                        inputStyle={{color: theme.text}}
                        secureTextEntry={true}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='lock-outline'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        onChangeText={(text) => handlePasswordInput(text)}
                        errorMessage={renderPasswordValidation(password)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Input placeholder={i18n.t(strings.confirm_password)}
                        inputStyle={{color: theme.text}}
                        secureTextEntry={true}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='lock'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        onChangeText={(text) => handleConfirmPasswordInput(text)}
                        errorMessage={renderConfirmPasswordValidation(confirmPassword, password)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Button type='outline'
                         title={i18n.t(strings.sign_up)}
                         buttonStyle={{borderColor: theme.primary}}

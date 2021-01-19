@@ -24,16 +24,15 @@ const ForgetPassword = (props) => {
             setIsLoading(true)
             forgetPasswordSendEmailService(email)
                 .then((response) => {
-                    console.log(response)
                     if (response.status === 200) {
                         Alert.alert(
                             'Send Email Successfully',
-                            'Follow instruction on your email to reset your password',
+                            'Follow instruction on your email to reset your password.',
                             [
                                 {
                                     text: 'OK',
                                     onPress: () => {
-                                        props.navigation.navigate(ScreenName.SignIn)
+                                        props.navigation.replace(ScreenName.SignIn)
                                     }
                                 }
                             ]
@@ -41,7 +40,19 @@ const ForgetPassword = (props) => {
                     } else if (response.status === 400) {
                         Alert.alert(
                             'Error Sending Email',
-                            'Email does not exist in the system',
+                            'Email does not exist in the system.',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                    }
+                                }
+                            ]
+                        )
+                    } else {
+                        Alert.alert(
+                            'Error Sending Email',
+                            'Please try again later.',
                             [
                                 {
                                     text: 'OK',
@@ -82,12 +93,10 @@ const ForgetPassword = (props) => {
                     leftIcon={
                         <Icon type='ionicons'
                               name='mail-outline'
-                              color={theme.emphasis}/>
-                    }
+                              color={theme.emphasis}/>}
                     onChangeText={(text) => handleEmailInput(text)}
                     errorMessage={renderEmailValidation(email)}
-                    errorStyle={{color: theme.danger}}
-                />
+                    errorStyle={{color: theme.danger}}/>
                 <Button
                     type='outline'
                     buttonStyle={{borderColor: theme.primary}}

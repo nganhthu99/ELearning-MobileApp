@@ -56,22 +56,12 @@ const SignIn = (props) => {
             signInService(email, password)
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log('hello')
-                        // setStorageToken(response.data.token)
-                        //     .then(() => {
-                        //         authenticationContext.signIn(response)
-                        //     })
-                        //
                         getStorageUser(email)
                             .then((value) => {
                                 if (!value) {
                                     initializeStorageUser(email)
                                         .then(() => {
                                             console.log('INITIALIZE USER: ', email)
-                                            // setStorageToken(response.data.token)
-                                            //     .then(() => {
-                                            //         authenticationContext.signIn(response)
-                                            //     })
                                         })
                                 }
                             })
@@ -79,11 +69,10 @@ const SignIn = (props) => {
                             .then(() => {
                                 authenticationContext.signIn(response)
                             })
-                        //
                     } else if (response.status === 400) {
                         Alert.alert(
                             'Error Signing In',
-                            'Wrong email or password',
+                            'Wrong email or password.',
                             [
                                 {
                                     text: 'OK',
@@ -95,7 +84,7 @@ const SignIn = (props) => {
                     } else if (response.status === 403) {
                         Alert.alert(
                             'Error Signing In',
-                            'Account has not been activated',
+                            'Account has not been activated.',
                             [
                                 {
                                     text: 'OK',
@@ -107,7 +96,7 @@ const SignIn = (props) => {
                     } else {
                         Alert.alert(
                             'Error Signing In',
-                            'Please try again later',
+                            'Please try again later.',
                             [
                                 {
                                     text: 'OK',
@@ -121,7 +110,7 @@ const SignIn = (props) => {
                 .catch((error) => {
                     Alert.alert(
                         'Error Signing In',
-                        'Please try again later',
+                        'Please try again later.',
                         [
                             {
                                 text: 'OK',
@@ -147,17 +136,23 @@ const SignIn = (props) => {
             signInWithGoogleService(user.email, user.id)
                 .then((response) => {
                     if (response.status === 200) {
+                        getStorageUser(user.email)
+                            .then((value) => {
+                                if (!value) {
+                                    initializeStorageUser(user.email)
+                                        .then(() => {
+                                            console.log('INITIALIZE USER: ', user.email)
+                                        })
+                                }
+                            })
                         setStorageToken(response.data.token)
                             .then(() => {
                                 authenticationContext.signIn(response)
                             })
-                        //
-
-                        //
                     } else {
                         Alert.alert(
                             'Error Signing In With Google',
-                            'Please try again later',
+                            'Please try again later.',
                             [
                                 {
                                     text: 'OK',
@@ -171,7 +166,7 @@ const SignIn = (props) => {
                 .catch((error) => {
                     Alert.alert(
                         'Error Signing In With Google',
-                        'Please try again later',
+                        'Please try again later.',
                         [
                             {
                                 text: 'OK',
@@ -180,7 +175,6 @@ const SignIn = (props) => {
                             }
                         ]
                     )
-                    console.log(error)
                 })
                 .finally(() => {
                     setIsLoading(false)
@@ -199,32 +193,27 @@ const SignIn = (props) => {
                        leftIcon={
                            <Icon type='ionicons'
                                  name='mail-outline'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        onChangeText={(text) => handleEmailInput(text)}
                        errorMessage={renderEmailValidation(email)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <Input placeholder={i18n.t(strings.password)}
                        inputStyle={{color: theme.text}}
                        secureTextEntry={!seePassword}
                        leftIcon={
                            <Icon type='ionicons'
                                  name='lock-outline'
-                                 color={theme.emphasis}/>
-                       }
+                                 color={theme.emphasis}/>}
                        rightIcon={
                            <Icon
                                type='font-awesome-5'
                                name={(seePassword) ? 'eye' : 'eye-slash'}
                                color={theme.emphasis}
                                size={22}
-                               onPress={handleSeePasswordIcon}/>
-                       }
+                               onPress={handleSeePasswordIcon}/>}
                        onChangeText={(text) => handlePasswordInput(text)}
                        errorMessage={renderPasswordValidation(password)}
-                       errorStyle={{color: theme.danger}}
-                />
+                       errorStyle={{color: theme.danger}}/>
                 <TouchableOpacity
                     style={{alignSelf: 'flex-end', paddingRight: 10, marginBottom: 20}}
                     onPress={handleForgetPasswordButton}>
