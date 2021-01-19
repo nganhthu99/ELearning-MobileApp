@@ -1,14 +1,10 @@
 import axios from "axios";
-import {api} from "./authentication-service";
+import {api} from "../../Globals/API";
 
-export const getListIntructors = () => {
-    return axios.get(api + '/instructor',{
-        validateStatus: () => true
-    })
+export const getListInstructorsService = () => {
+    return axios.get(api + '/instructor')
 }
 
-export const getIntructorInfo = (instructorId) => {
-    return axios.get(api + '/instructor/detail/' + instructorId, {
-        validateStatus: () => true
-    })
+export const getInstructorInfoService = (instructorId) => {
+    return axios.get(api + '/instructor/detail/' + instructorId)
 }

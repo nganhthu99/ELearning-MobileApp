@@ -1,6 +1,13 @@
 import axios from "axios";
+import {api} from "../../Globals/API";
 
-export const api = 'http://api.dev.letstudy.org'
+export const getUserInfoService = (token) => {
+    return axios.get(api + '/user/me', {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    })
+}
 
 export const signUpService = (name, email, phone, password) => {
     return axios.post(api + '/user/register', {
@@ -41,8 +48,7 @@ export const updateProfileService = (username, avatar, phone, token) => {
     }, {
         headers: {
             Authorization: 'Bearer ' + token
-        },
-        validateStatus: () => true
+        }
     })
 }
 
@@ -67,13 +73,5 @@ export const updateEmailService = (newEmail, token) => {
             Authorization: 'Bearer ' + token
         },
         validateStatus: () => true
-    })
-}
-
-export const getUserInfoService = (token) => {
-    return axios.get(api + '/user/me', {
-        headers: {
-            Authorization: 'Bearer ' + token
-        }
     })
 }

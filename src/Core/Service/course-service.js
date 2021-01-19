@@ -1,5 +1,5 @@
 import axios from "axios";
-import {api} from "./authentication-service";
+import {api} from "../../Globals/API";
 
 export const getNewCoursesService = (limit, page) => {
     return axios.post(api + '/course/top-new', {
