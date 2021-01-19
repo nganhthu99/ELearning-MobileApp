@@ -10,7 +10,6 @@ import ImageButton from "../Common/image-button";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
 import {ContinueCoursesContext} from "../../Core/Provider/continue-courses-provider";
-import {DownloadedCoursesContext} from "../../Core/Provider/downloaded-courses-provider";
 import {FavouriteCoursesContext} from "../../Core/Provider/favourite-courses-provider";
 
 const MyCourses = (props) => {
@@ -20,7 +19,7 @@ const MyCourses = (props) => {
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
 
     const handleDownloadedButton = () => {
-        props.navigation.navigate('DownloadedLessonList')
+        props.navigation.navigate(ScreenName.DownloadedLessonList)
     }
 
     const handleRecommendButton = () => {

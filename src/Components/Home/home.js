@@ -9,7 +9,7 @@ import SectionHeader from "../Common/section-header";
 import {ScreenName} from "../../Globals/constants";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {getTopRatingCoursesService, getTopSellingCoursesService} from "../../Core/Service/course-service";
-import {getListIntructors} from "../../Core/Service/instructor-service";
+import {getListInstructorsService} from "../../Core/Service/instructor-service";
 import {getAllCategoryService} from "../../Core/Service/category-service";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
@@ -17,10 +17,10 @@ import {strings} from "../../Globals/Localization/string";
 const Home = (props) => {
     const {theme} = useContext(ThemeContext)
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [categories, setCategories] = useState([])
     const [topRatingCourses, setTopRatingCourses] = useState([])
     const [topSellingCourses, setTopSellingCourses] = useState([])
     const [authors, setAuthors] = useState([])
-    const [categories, setCategories] = useState([])
 
     // Listen
     useEffect(() => {
@@ -45,7 +45,7 @@ const Home = (props) => {
                                 }
                             })
                             .finally(() => {
-                                getListIntructors()
+                                getListInstructorsService()
                                     .then((response) => {
                                         if (response.status === 200) {
                                             setAuthors(response.data.payload)
@@ -77,7 +77,7 @@ const Home = (props) => {
                     setTopSellingCourses(response.data.payload)
                 }
             })
-        const resultListAuthors = getListIntructors()
+        const resultListAuthors = getListInstructorsService()
             .then((response) => {
                 if (response.status === 200) {
                     setAuthors(response.data.payload)

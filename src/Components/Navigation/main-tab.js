@@ -41,24 +41,12 @@ const MainTab = (props) => {
                         setFavouriteCourses(response.data.payload)
                     }
                 })
-            // const resultDownloadedCourses = getStorageDownloadedVideo()
-            //     .then(async (value) => {
-            //         const parsedValue = await JSON.parse(value)
-            //         if (parsedValue) {
-            //             setDownloadedCourses(parsedValue)
-            //         } else {
-            //             setStorageDownloadedVideo({})
-            //                 .then(() => {
-            //                 })
-            //         }
-            //     })
             const resultDownloadedCourses = getStorageUser(authenticationContext.state.userInfo.email)
                 .then((value) =>{
                     if (value) {
                         setDownloadedCourses(value.download)
                     }
                 })
-
             Promise.all([resultContinueCourses, resultFavouriteCourses, resultDownloadedCourses])
                 .then(() => {
                     setIsLoading(false)
@@ -104,7 +92,7 @@ const MainTab = (props) => {
                     },
                     tabStyle: {
                         backgroundColor: theme.secondary,
-                    },
+                    }
                 }}>
                 <Tab.Screen name={ScreenName.HomeStack}
                             component={HomeStack}
@@ -117,10 +105,7 @@ const MainTab = (props) => {
                             options={{title: i18n.t(strings.search)}}/>
                 <Tab.Screen name={ScreenName.AccountStack}
                             component={AccountStack}
-                            options={{
-                                startNavigation: props.navigation,
-                                title: i18n.t(strings.account)
-                            }}/>
+                            options={{title: i18n.t(strings.account)}}/>
             </Tab.Navigator>
         )
     }

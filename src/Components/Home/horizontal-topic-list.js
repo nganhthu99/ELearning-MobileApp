@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, ScrollView, StyleSheet, View} from "react-native";
+import {FlatList, View} from "react-native";
 import ImageButton from "../Common/image-button";
 import {ScreenName} from "../../Globals/constants";
 

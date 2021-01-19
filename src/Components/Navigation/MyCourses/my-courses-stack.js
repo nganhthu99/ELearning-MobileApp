@@ -35,14 +35,12 @@ const MyCoursesStack = () => {
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('Settings')
-                        }}
-                    >
+                        }}>
                         <Icon
                             type='ionicons'
                             name='settings'
                             color={theme.emphasis}
-                            size={28}
-                        />
+                            size={28}/>
                     </TouchableOpacity>
                 ),
                 headerRightContainerStyle: {
@@ -59,20 +57,18 @@ const MyCoursesStack = () => {
                           }}/>
             <Stack.Screen name={ScreenName.CourseDetail}
                           component={CourseDetail}
-                          options={{
-                              headerShown: false
-                          }}/>
+                          options={{headerShown: false}}/>
             <Stack.Screen name={ScreenName.CourseList}
                           component={CourseList}
                           options={({ route }) => ({
                               title: route.params.header
                           })}/>
-            <Stack.Screen name='DownloadedLessonList'
+            <Stack.Screen name={ScreenName.DownloadedLessonList}
                           component={DownloadedLessonList}
                           options={{
                               title: 'Downloaded Lessons',
                           }}/>
-            <Stack.Screen name='DownloadedLessonDetail'
+            <Stack.Screen name={ScreenName.DownloadedLessonDetail}
                           component={DownloadedLessonDetail}
                           options={{
                               title: '',
