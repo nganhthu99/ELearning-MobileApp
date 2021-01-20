@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Input, Icon} from "react-native-elements";
-import {StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator, StatusBar} from "react-native";
 import {ScreenName} from "../../Globals/constants";
 import {
     renderEmailValidation, renderPasswordValidation,
@@ -13,10 +13,11 @@ import i18n from "i18n-js";
 import {strings} from "../../Globals/Localization/string";
 import {getStorageUser, initializeStorageUser, setStorageToken} from "../../Core/Service/storage-service";
 import {validateEmailUtil, validatePasswordUtil} from "../../Core/Util/validate-input";
+import {themes} from "../../Globals/themes";
 
 const SignIn = (props) => {
     // State
-    const {theme} = useContext(ThemeContext)
+    const {theme, setTheme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState("")
@@ -63,6 +64,19 @@ const SignIn = (props) => {
                                         .then(() => {
                                             console.log('INITIALIZE USER: ', email)
                                         })
+                                } else {
+                                    if (value.theme === 'light') {
+                                        setTheme(themes.light)
+                                        StatusBar.setBarStyle('default', true)
+                                    } else {
+                                        setTheme(themes.dark)
+                                        StatusBar.setBarStyle('light-content', true)
+                                    }
+                                    if (value.language === "vi") {
+                                        i18n.locale = "vi"
+                                    } else {
+                                        i18n.locale = "en"
+                                    }
                                 }
                             })
                         setStorageToken(response.data.token)

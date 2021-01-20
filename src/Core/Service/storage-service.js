@@ -58,7 +58,7 @@ export const getStorageUser = async (email) => {
 export const initializeStorageUser = async (email) => {
     const initializedData = {
         theme: "light",
-        language: "vi",
+        language: "en",
         download: []
     }
     try {

@@ -6,14 +6,15 @@ import {themes} from "../../Globals/themes";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
 import { StatusBar } from 'react-native';
+import {setLanguageStorageUser, setThemeStorageUser} from "../../Core/Service/storage-service";
+import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 const Settings = () => {
     const {theme, setTheme} = useContext(ThemeContext)
     const [isLightMode, setIsLightMode] = (theme === themes.light) ? useState(true) : useState(false);
     const [selectedLanguageIndex, setSelectedLanguageIndex] = (i18n.locale.toString().includes("vi")) ? useState(0) : useState(1);
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-
-    console.log('LOCALE: ', i18n.locale)
+    const authenticationContext = useContext(AuthenticationContext)
 
     const toggleSwitch = () => {
         setIsLightMode(previousState => !previousState);
@@ -24,14 +25,39 @@ const Settings = () => {
     }
 
     useEffect(() => {
-        isLightMode ? setTheme(themes.light) : setTheme(themes.dark)
-        if (!isLightMode) StatusBar.setBarStyle('light-content', true)
-        else StatusBar.setBarStyle('default', true)
+        if (isLightMode) {
+            setTheme(themes.light)
+            StatusBar.setBarStyle('default', true)
+            if (authenticationContext.state.isAuthenticated) {
+                setThemeStorageUser(authenticationContext.state.userInfo.email, 'light')
+            }
+        } else {
+            setTheme(themes.dark)
+            StatusBar.setBarStyle('light-content', true)
+            if (authenticationContext.state.isAuthenticated) {
+                setThemeStorageUser(authenticationContext.state.userInfo.email, 'dark')
+            }
+        }
+        // isLightMode ? setTheme(themes.light) : setTheme(themes.dark)
+        // if (!isLightMode) StatusBar.setBarStyle('light-content', true)
+        // else StatusBar.setBarStyle('default', true)
     }, [isLightMode])
 
     useEffect(() => {
-        selectedLanguageIndex === 0 ? i18n.locale = 'vi' : i18n.locale = 'en'
+        if (selectedLanguageIndex === 0) {
+            i18n.locale = 'vi'
+            if (authenticationContext.state.isAuthenticated) {
+                setLanguageStorageUser(authenticationContext.state.userInfo.email, 'vi')
+            }
+        } else {
+            i18n.locale = 'en'
+            if (authenticationContext.state.isAuthenticated) {
+                setLanguageStorageUser(authenticationContext.state.userInfo.email, 'en')
+            }
+        }
         forceUpdate()
+        // selectedLanguageIndex === 0 ? i18n.locale = 'vi' : i18n.locale = 'en'
+        // forceUpdate()
     }, [selectedLanguageIndex])
 
     const handleShareApplication = () => {
