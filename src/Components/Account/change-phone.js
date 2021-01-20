@@ -6,6 +6,8 @@ import {Button, Icon, Input, Overlay} from "react-native-elements";
 import {renderPhoneValidation} from "../Start/render-validation";
 import {updateProfileService} from "../../Core/Service/authentication-service";
 import {validatePhoneUtil} from "../../Core/Util/validate-input";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const ChangePhone = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -76,10 +78,10 @@ const ChangePhone = (props) => {
                 onBackdropPress={toggleOverlay}>
                 <View>
                     <View style={{paddingLeft: 15, paddingBottom: 20}}>
-                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>Change Phone Number</Text>
+                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>{i18n.t(strings.change_phone)}</Text>
                     </View>
                     {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
-                    <Input placeholder='New Phone Number'
+                    <Input placeholder={i18n.t(strings.new_phone_number)}
                            leftIcon={
                                <Icon type='ionicons'
                                      name='call'
@@ -90,7 +92,7 @@ const ChangePhone = (props) => {
                            errorStyle={{color: theme.danger}}
                     />
                     <Button type='outline'
-                            title='Update'
+                            title={i18n.t(strings.update)}
                             containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 10}}
                             onPress={handleUpdateButton}/>
                 </View>

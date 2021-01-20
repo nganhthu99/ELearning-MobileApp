@@ -5,6 +5,8 @@ import {ScreenName} from "../../../Globals/constants";
 import VerticalAuthorListItem from "./vertical-author-list-item";
 import {getListInstructorsService} from "../../../Core/Service/instructor-service";
 import NoDataView from "../../Common/no-data-view";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const AuthorList = (props) => {
     // State
@@ -42,7 +44,7 @@ const AuthorList = (props) => {
 
     if(authors.length === 0) {
         return (
-            <NoDataView message={`There's no authors matched your search`}/>
+            <NoDataView message={i18n.t(strings.no_data_view_no_author)}/>
         )
     }
     return(

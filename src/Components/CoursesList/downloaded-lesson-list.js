@@ -9,6 +9,8 @@ import {deleteDownloadStorageUser} from "../../Core/Service/storage-service";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import * as FileSystem from "expo-file-system";
 import {ScreenName} from "../../Globals/constants";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const DownloadedLessonList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -86,7 +88,7 @@ const DownloadedLessonList = (props) => {
 
     if (downloadedCourses.length === 0) {
         return (
-            <NoDataView message='You have no downloaded lessons.'/>
+            <NoDataView message={i18n.t(strings.no_data_view_no_download)}/>
         )
     } else return(
         <FlatList

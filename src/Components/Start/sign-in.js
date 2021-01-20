@@ -218,7 +218,7 @@ const SignIn = (props) => {
                     style={{alignSelf: 'flex-end', paddingRight: 10, marginBottom: 20}}
                     onPress={handleForgetPasswordButton}>
                     <Text style={{color: theme.primary, textDecorationLine: 'underline'}}>
-                        {i18n.t('forget_password')}
+                        {i18n.t(strings.forget_password)}
                     </Text>
                 </TouchableOpacity>
                 <Button type='outline'

@@ -6,6 +6,8 @@ import {updateProfileService} from "../../Core/Service/authentication-service";
 import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
 import {validateUsernameUtil} from "../../Core/Util/validate-input";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const ChangeUsername = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -80,10 +82,10 @@ const ChangeUsername = (props) => {
                 onBackdropPress={toggleOverlay}>
                 <View>
                     <View style={{paddingLeft: 15, paddingBottom: 20}}>
-                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>Change Username</Text>
+                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>{i18n.t(strings.change_username)}</Text>
                     </View>
                     {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
-                    <Input placeholder='New Username'
+                    <Input placeholder={i18n.t(strings.new_username)}
                            leftIcon={
                                <Icon type='ionicons'
                                      name='person'
@@ -94,7 +96,7 @@ const ChangeUsername = (props) => {
                            errorStyle={{color: theme.danger}}
                     />
                     <Button type='outline'
-                            title='Update'
+                            title={i18n.t(strings.update)}
                             containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 10}}
                             onPress={handleUpdateButton}/>
                 </View>

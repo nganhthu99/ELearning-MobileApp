@@ -6,6 +6,8 @@ import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-nati
 import {Button, Icon, Input, Overlay} from "react-native-elements";
 import {updateEmailService} from "../../Core/Service/authentication-service";
 import {validateUsernameUtil} from "../../Core/Util/validate-input";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const ChangeEmail = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -123,10 +125,10 @@ const ChangeEmail = (props) => {
                 onBackdropPress={toggleOverlay}>
                 <View>
                     <View style={{paddingLeft: 15, paddingBottom: 20}}>
-                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>Change Email</Text>
+                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>{i18n.t(strings.change_email)}</Text>
                     </View>
                     {isLoading && <ActivityIndicator size='small' color={theme.emphasis}/>}
-                    <Input placeholder='New Email'
+                    <Input placeholder={i18n.t(strings.new_email)}
                            leftIcon={
                                <Icon type='ionicons'
                                      name='mail'
@@ -137,7 +139,7 @@ const ChangeEmail = (props) => {
                            errorStyle={{color: theme.danger}}
                     />
                     <Button type='outline'
-                            title='Update'
+                            title={i18n.t(strings.update)}
                             containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 10}}
                             onPress={handleUpdateButton}/>
                 </View>

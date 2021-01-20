@@ -183,7 +183,7 @@ const CourseList = (props) => {
     } else {
         if (courses.length === 0 || (header === i18n.t(strings.favourite) && favouriteCourses.length === 0)) {
             return (
-                <NoDataView message={`There's no courses matched or available.`}/>
+                <NoDataView message={i18n.t(strings.no_data_view_no_course)}/>
             )
         } else return (
             <FlatList

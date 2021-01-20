@@ -16,8 +16,11 @@ import {clearAllStorageKeys, getAllStorageKeys} from "./src/Core/Service/storage
 
 export default function App() {
     i18n.translations = {
-        "en": english,
         "vi": vietnamese,
+        "vi-VN": vietnamese,
+        "en-US": english,
+        "en-VN": english,
+        "en":english
     };
     // Set the locale once at the beginning of your app.
     i18n.locale = Localization.locale;

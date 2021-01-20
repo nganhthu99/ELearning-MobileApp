@@ -11,6 +11,8 @@ import {DownloadedCoursesContext} from "../../../Core/Provider/downloaded-course
 import NoDataView from "../../Common/no-data-view";
 import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
 import {addDownloadStorageUser} from "../../../Core/Service/storage-service";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const CourseDetailLesson = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -246,7 +248,7 @@ const CourseDetailLesson = (props) => {
 
     if (!authenticationContext.state.isAuthenticated) {
         return (
-            <NoDataView message={`Please sign in to view more.`}/>
+            <NoDataView message={i18n.t(strings.unauthentication_instruction)}/>
         )
     } else if (isLoading) {
         return (
@@ -257,7 +259,7 @@ const CourseDetailLesson = (props) => {
         )
     } else if (!isAccessible) {
         return (
-            <NoDataView message={`You must enroll to access this course's lessons.`}/>
+            <NoDataView message={i18n.t(strings.no_data_view_no_enroll)}/>
         )
     } else {
         return (

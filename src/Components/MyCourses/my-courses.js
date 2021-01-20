@@ -52,7 +52,7 @@ const MyCourses = (props) => {
             <ScrollView style={styles(theme).container}>
                 <View style={[styles(theme).buttonContainer, {paddingBottom: 0}]}>
                     <ImageButton handleOnClick={handleDownloadedButton}
-                                 title='Downloaded Lessons'
+                                 title={i18n.t(strings.downloaded_lessons)}
                                  image={{uri: 'https://images.pexels.com/photos/1111317/pexels-photo-1111317.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}}/>
                 </View>
                 <View style={styles(theme).buttonContainer}>

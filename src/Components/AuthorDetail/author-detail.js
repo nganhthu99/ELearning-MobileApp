@@ -6,6 +6,8 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {getInstructorInfoService} from "../../Core/Service/instructor-service";
 import {Icon} from "react-native-elements";
 import NoDataView from "../Common/no-data-view";
+import i18n from 'i18n-js';
+import {strings} from "../../Globals/Localization/string";
 
 const AuthorDetail = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -45,7 +47,7 @@ const AuthorDetail = (props) => {
             {/*detail info container*/}
             <View style={styles(theme).detailInfoContainer}>
                 <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 14, paddingBottom: 15}]}>{detail.intro}</Text>
-                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 14}]}>Skills</Text>
+                <Text style={[styles(theme).text, {fontWeight:'bold', fontSize: 14}]}>{i18n.t(strings.skills)}</Text>
                 <View>
                     {detail["skills"].map(skill => {
                         return (
@@ -68,7 +70,7 @@ const AuthorDetail = (props) => {
                 <VerticalCourseList navigation={props.navigation}
                                     items={detail.courses}/>
                 {detail.courses.length === 0 &&
-                <NoDataView message='Author has no courses available now.'/>}
+                <NoDataView message={i18n.t(strings.no_data_view_author_no_course)}/>}
             </View>
         </ScrollView>
     )

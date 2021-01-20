@@ -4,6 +4,8 @@ import {ScreenName} from "../../../Globals/constants";
 import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import HorizontalCourseItem from "./horizontal-course-item";
 import NoDataView from "../../Common/no-data-view";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const HorizontalCourseList = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -31,7 +33,7 @@ const HorizontalCourseList = (props) => {
 
     if(props.items.length === 0) {
         return (
-            <NoDataView message={`There's no courses matched or available`}/>
+            <NoDataView message={i18n.t(strings.no_data_view_no_course)}/>
         )
     } else return (
         <FlatList horizontal={true}

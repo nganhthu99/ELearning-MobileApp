@@ -6,6 +6,8 @@ import {AuthenticationContext} from "../../../Core/Provider/authentication-provi
 import {getExerciseQuestions, getLessonExercises} from "../../../Core/Service/course-service";
 import {CurrentLessonContext} from "../../../Core/Provider/current-lesson-provider";
 import NoDataView from "../../Common/no-data-view";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const CourseDetailExercise= (props) => {
     const {theme} = useContext(ThemeContext)
@@ -112,7 +114,7 @@ const CourseDetailExercise= (props) => {
                     onChange={_updateSections}
                     expandMultiple
                 />}
-                {exerciseSections.length === 0 && <NoDataView message='This lesson has no exercises available.'/>}
+                {exerciseSections.length === 0 && <NoDataView message={i18n.t(strings.no_data_view_no_exercise)}/>}
             </ScrollView>
         )
     }
