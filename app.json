@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "projectmobile",
-    "slug": "projectmobile",
+    "name": "Bluedu",
+    "slug": "bluedu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.blooe.bluedu",
+      "versionCode": 1
+    },
     "ios": {
+      "bundleIdentifier": "com.blooe.bluedu",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "web": {
