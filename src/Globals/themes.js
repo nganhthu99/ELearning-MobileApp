@@ -34,10 +34,10 @@ export const themes = {
         bright: '#0E66EE'
     },
     dark: {
-        background: '#2E2F32',
+        background: '#212223',
         header: '#AED3F2',
         primary: '#AED3F2',
-        secondary: '#2E2F32',
+        secondary: '#212223',
         emphasis: '#D5E8FE',
         text: '#F5EDED',
         danger: '#D72323',
