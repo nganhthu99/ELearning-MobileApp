@@ -5,7 +5,7 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {themes} from "../../Globals/themes";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
-
+import { StatusBar } from 'react-native';
 const Settings = () => {
     const {theme, setTheme} = useContext(ThemeContext)
     const [isLightMode, setIsLightMode] = (theme === themes.light) ? useState(true) : useState(false);
@@ -25,6 +25,8 @@ const Settings = () => {
 
     useEffect(() => {
         isLightMode ? setTheme(themes.light) : setTheme(themes.dark)
+        if (!isLightMode) StatusBar.setBarStyle('light-content', true)
+        else StatusBar.setBarStyle('default', true)
     }, [isLightMode])
 
     useEffect(() => {
@@ -65,24 +67,24 @@ const Settings = () => {
                 <Text style={{fontSize: 18, color: theme.header, marginBottom: 10}}>{i18n.t(strings.about_us)}</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{color: theme.text, marginBottom: 3}}>{i18n.t(strings.developer)}</Text>
-                    <Text style={{marginBottom: 5}}>Thu Anh Nguyen - 1712177</Text>
+                    <Text style={{color: theme.text, marginBottom: 5}}>Thu Anh Nguyen - 1712177</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{color: theme.text, marginBottom: 10}}>{i18n.t(strings.mentor)}</Text>
-                    <Text style={{marginBottom: 5}}>Hai Hoang Pham</Text>
+                    <Text style={{color: theme.text, marginBottom: 5}}>Hai Hoang Pham</Text>
                 </View>
             </View>
             <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 18, color: theme.header, marginBottom: 10}}>{i18n.t(strings.contact)}</Text>
-                <Text style={{marginBottom: 5, textDecorationLine: 'underline'}}>nganhthu99@gmail.com</Text>
+                <Text style={{color: theme.text, marginBottom: 5, textDecorationLine: 'underline'}}>nganhthu99@gmail.com</Text>
             </View>
             <View style={{height: 80, borderBottomWidth: 0.5, borderBottomColor: theme.emphasis, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 18, color: theme.header}}>{i18n.t(strings.app_version)}</Text>
-                <Text>1.0</Text>
+                <Text style={{color: theme.text}}>1.0</Text>
             </View>
             <View style={{height: 80, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 18, color: theme.header}}>{i18n.t(strings.release)}</Text>
-                <Text>01/21/2021</Text>
+                <Text style={{color: theme.text}}>01/21/2021</Text>
             </View>
             <Button
                 onPress={handleShareApplication}
