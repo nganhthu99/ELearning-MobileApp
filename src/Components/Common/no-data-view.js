@@ -13,7 +13,8 @@ const NoDataView = (props) => {
             borderRadius: 10,
             margin: 5,
             justifyContent: 'space-evenly',
-            alignItems: 'center'
+            alignItems: 'center',
+            backgroundColor: theme.background
         }}>
             <Icon type='octicon'
                   name='info'

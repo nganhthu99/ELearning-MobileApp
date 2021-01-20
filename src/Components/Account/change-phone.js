@@ -73,7 +73,7 @@ const ChangePhone = (props) => {
                         />
                     </TouchableOpacity>}/>
             <Overlay
-                overlayStyle={{height: 250, width: '100%', justifyContent: 'center'}}
+                overlayStyle={{height: 250, width: '100%', justifyContent: 'center', backgroundColor: theme.background}}
                 isVisible={isOverLayVisible}
                 onBackdropPress={toggleOverlay}>
                 <View>
@@ -87,6 +87,7 @@ const ChangePhone = (props) => {
                                      name='call'
                                      color={theme.emphasis}/>
                            }
+                           inputStyle={{color: theme.text}}
                            onChangeText={(text) => handleOnChangeText(text)}
                            errorMessage={renderPhoneValidation(phone)}
                            errorStyle={{color: theme.danger}}

@@ -120,7 +120,7 @@ const ChangeEmail = (props) => {
                 }
             />
             <Overlay
-                overlayStyle={{height: 250, width: '100%', justifyContent: 'center'}}
+                overlayStyle={{height: 250, width: '100%', justifyContent: 'center', backgroundColor: theme.background}}
                 isVisible={isOverLayVisible}
                 onBackdropPress={toggleOverlay}>
                 <View>
@@ -134,6 +134,7 @@ const ChangeEmail = (props) => {
                                      name='mail'
                                      color={theme.emphasis}/>
                            }
+                           inputStyle={{color: theme.text}}
                            onChangeText={(text) => handleOnChangeText(text)}
                            errorMessage={renderEmailValidation(email)}
                            errorStyle={{color: theme.danger}}

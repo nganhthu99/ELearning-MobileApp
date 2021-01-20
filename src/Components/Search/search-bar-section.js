@@ -42,9 +42,9 @@ const SearchBarSection = (props) => {
         <View style={{flexDirection: 'row', alignItems: 'center', padding: 5, paddingTop: 25, backgroundColor: theme.secondary}}>
             <SearchBar
                 placeholder={i18n.t(strings.search)}
-                inputStyle={{color: '#011534', fontSize: 15}}
+                inputStyle={{color: "#011534", fontSize: 15}}
                 containerStyle={{flex: 1, height: 40, padding: 0}}
-                inputContainerStyle={{height: 40, backgroundColor: theme.background}}
+                inputContainerStyle={{height: 40, backgroundColor: "#F2F2F2"}}
                 lightTheme={true}
                 value={searchInput}
                 onChangeText={(text)=> handleOnChangeText(text)}

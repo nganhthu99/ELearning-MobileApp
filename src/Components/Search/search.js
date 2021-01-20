@@ -69,7 +69,7 @@ const Search = (props) => {
             ListHeaderComponent={() => (
                 <SectionHeader2 title={i18n.t(strings.recent_searches)}/>
             )}
-            style={{paddingTop: 10}}
+            style={{backgroundColor: theme.background, paddingTop: 10}}
         />
     )
 };

@@ -88,7 +88,9 @@ const DownloadedLessonList = (props) => {
 
     if (downloadedCourses.length === 0) {
         return (
-            <NoDataView message={i18n.t(strings.no_data_view_no_download)}/>
+            <View style={{flex: 1, backgroundColor: theme.background}}>
+                <NoDataView message={i18n.t(strings.no_data_view_no_download)}/>
+            </View>
         )
     } else return(
         <FlatList
@@ -102,7 +104,7 @@ const DownloadedLessonList = (props) => {
                 }}/>
             )}
             keyExtractor={(item, index) => item.id}
-            style={{padding: 5}}/>
+            style={{backgroundColor: theme.background, padding: 5}}/>
     )
 };
 

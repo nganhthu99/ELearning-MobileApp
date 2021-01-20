@@ -77,7 +77,7 @@ const ChangeUsername = (props) => {
                 }
             />
             <Overlay
-                overlayStyle={{height: 250, width: '100%', justifyContent: 'center'}}
+                overlayStyle={{height: 250, width: '100%', justifyContent: 'center', backgroundColor: theme.background}}
                 isVisible={isOverLayVisible}
                 onBackdropPress={toggleOverlay}>
                 <View>
@@ -91,6 +91,7 @@ const ChangeUsername = (props) => {
                                      name='person'
                                      color={theme.emphasis}/>
                            }
+                           inputStyle={{color: theme.text}}
                            onChangeText={(text) => handleOnChangeText(text)}
                            errorMessage={renderUsernameValidation(username)}
                            errorStyle={{color: theme.danger}}

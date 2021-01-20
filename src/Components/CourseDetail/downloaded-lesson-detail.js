@@ -6,9 +6,9 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 const DownloadedLessonDetail = (props) => {
     const {theme} = useContext(ThemeContext)
     let playerRef = useRef(null)
-    console.log(props.route.params.item.video.videoUrl)
+
     return (
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <Video
                 source={{uri: props.route.params.item.video.videoUrl}}
                 shouldPlay={false}
@@ -30,10 +30,11 @@ const DownloadedLessonDetail = (props) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20
+        paddingTop: 20,
+        backgroundColor: theme.background
     },
 });
 

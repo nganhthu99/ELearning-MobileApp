@@ -105,7 +105,7 @@ const ChangePassword = (props) => {
                 title={i18n.t(strings.change_password)}
                 onPress={toggleOverlay}/>
             <Overlay
-                overlayStyle={{height: 330, width: '100%', justifyContent: 'center'}}
+                overlayStyle={{height: 330, width: '100%', justifyContent: 'center', backgroundColor: theme.background}}
                 isVisible={isOverLayVisible}
                 onBackdropPress={toggleOverlay}>
                 <View>
@@ -120,6 +120,7 @@ const ChangePassword = (props) => {
                                      name='lock-outline'
                                      color={theme.emphasis}/>
                            }
+                           inputStyle={{color: theme.text}}
                            onChangeText={(text) => handleOnChangeCurrentPassword(text)}
                            errorMessage={renderPasswordValidation(currentPassword)}
                            errorStyle={{color: theme.danger}}
@@ -131,6 +132,7 @@ const ChangePassword = (props) => {
                                      name='lock'
                                      color={theme.emphasis}/>
                            }
+                           inputStyle={{color: theme.text}}
                            onChangeText={(text) => handleOnChangeNewPassword(text)}
                            errorMessage={renderPasswordValidation(newPassword)}
                            errorStyle={{color: theme.danger}}

@@ -34,13 +34,15 @@ export const themes = {
         bright: '#0E66EE'
     },
     dark: {
-        background: '#000710',
-        header: '#155FBF',
-        primary: '#F2F2F2',
-        secondary: '#000710',
+        background: '#2E2F32',
+        header: '#AED3F2',
+        primary: '#AED3F2',
+        secondary: '#2E2F32',
         emphasis: '#D5E8FE',
         text: '#F5EDED',
         danger: '#D72323',
         bright: '#0E66EE'
     },
 }
+
+// 212223
