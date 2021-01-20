@@ -98,6 +98,7 @@ const CourseDetail = (props) => {
             } else {
                 return (
                     <Video
+                        resizeMode={Video.RESIZE_MODE_CONTAIN}
                         onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
                         source={{uri: video.url}}
                         shouldPlay={true}
