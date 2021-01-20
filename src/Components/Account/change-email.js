@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
-import {renderEmailValidation, validateUsernameUtil} from "../Start/render-validation";
+import {renderEmailValidation} from "../Start/render-validation";
 import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
 import {updateEmailService} from "../../Core/Service/authentication-service";
+import {validateUsernameUtil} from "../../Core/Util/validate-input";
 
 const ChangeEmail = (props) => {
     const {theme} = useContext(ThemeContext)

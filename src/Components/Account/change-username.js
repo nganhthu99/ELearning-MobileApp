@@ -1,10 +1,11 @@
 import React, {useContext, useState} from "react";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
-import {renderUsernameValidation, validateUsernameUtil} from "../Start/render-validation";
+import {renderUsernameValidation} from "../Start/render-validation";
 import {updateProfileService} from "../../Core/Service/authentication-service";
 import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
+import {validateUsernameUtil} from "../../Core/Util/validate-input";
 
 const ChangeUsername = (props) => {
     const {theme} = useContext(ThemeContext)

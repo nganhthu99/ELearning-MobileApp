@@ -2,11 +2,12 @@ import React, {useContext, useState} from "react";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {ActivityIndicator, Alert, Text, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
-import {renderPasswordValidation, validatePasswordUtil} from "../Start/render-validation";
+import {renderPasswordValidation} from "../Start/render-validation";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import {updatePasswordService} from "../../Core/Service/authentication-service";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
+import {validatePasswordUtil} from "../../Core/Util/validate-input";
 
 const ChangePassword = (props) => {
     const {theme} = useContext(ThemeContext)

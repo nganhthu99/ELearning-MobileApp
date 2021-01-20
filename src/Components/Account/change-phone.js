@@ -3,8 +3,9 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import {ActivityIndicator, Alert, Text, TouchableOpacity, View} from "react-native";
 import {Button, Icon, Input, Overlay} from "react-native-elements";
-import {renderPhoneValidation, validatePhoneUtil} from "../Start/render-validation";
+import {renderPhoneValidation} from "../Start/render-validation";
 import {updateProfileService} from "../../Core/Service/authentication-service";
+import {validatePhoneUtil} from "../../Core/Util/validate-input";
 
 const ChangePhone = (props) => {
     const {theme} = useContext(ThemeContext)

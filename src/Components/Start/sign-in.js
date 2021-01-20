@@ -4,7 +4,6 @@ import {StyleSheet, Text, View, TouchableOpacity, Alert, ActivityIndicator} from
 import {ScreenName} from "../../Globals/constants";
 import {
     renderEmailValidation, renderPasswordValidation,
-    validateEmailUtil, validatePasswordUtil,
 } from "./render-validation";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
@@ -13,6 +12,7 @@ import * as Google from 'expo-google-app-auth';
 import i18n from "i18n-js";
 import {strings} from "../../Globals/Localization/string";
 import {getStorageUser, initializeStorageUser, setStorageToken} from "../../Core/Service/storage-service";
+import {validateEmailUtil, validatePasswordUtil} from "../../Core/Util/validate-input";
 
 const SignIn = (props) => {
     // State

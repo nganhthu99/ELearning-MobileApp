@@ -1,12 +1,13 @@
 import React, {useContext, useState} from 'react';
 import {ActivityIndicator, Alert, StyleSheet, Text, View} from "react-native";
 import {Button, Icon, Input} from "react-native-elements";
-import {renderEmailValidation, validateEmailUtil} from "./render-validation";
+import {renderEmailValidation} from "./render-validation";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {forgetPasswordSendEmailService} from "../../Core/Service/authentication-service";
 import {ScreenName} from "../../Globals/constants";
 import i18n from "i18n-js";
 import {strings} from "../../Globals/Localization/string";
+import {validateEmailUtil} from "../../Core/Util/validate-input";
 
 const ForgetPassword = (props) => {
     // State

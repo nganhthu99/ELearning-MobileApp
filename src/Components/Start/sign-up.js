@@ -6,14 +6,19 @@ import {ScreenName} from "../../Globals/constants";
 import {
     renderConfirmPasswordValidation, renderEmailValidation,
     renderPasswordValidation, renderPhoneValidation,
-    renderUsernameValidation, validateConfirmPasswordUtil,
-    validateEmailUtil, validatePasswordUtil,
-    validatePhoneUtil, validateUsernameUtil
+    renderUsernameValidation
 } from "./render-validation";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {signUpService} from "../../Core/Service/authentication-service";
 import i18n from "i18n-js";
 import {strings} from "../../Globals/Localization/string";
+import {
+    validateConfirmPasswordUtil,
+    validateEmailUtil,
+    validatePasswordUtil,
+    validatePhoneUtil,
+    validateUsernameUtil
+} from "../../Core/Util/validate-input";
 
 const SignUp = (props) => {
     // State
