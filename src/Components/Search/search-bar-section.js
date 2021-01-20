@@ -24,12 +24,14 @@ const SearchBarSection = (props) => {
         if (searchInput) {
             searchService(searchInput, authenticationContext.state.token)
                 .then((response) => {
-                    getSearchHistoryService(authenticationContext.state.token)
-                        .then((response) => {
-                            if (response.status === 200) {
-                                setSearchHistory(response.data.payload.data)
-                            }
-                        })
+                    if (authenticationContext.state.isAuthenticated) {
+                        getSearchHistoryService(authenticationContext.state.token)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    setSearchHistory(response.data.payload.data)
+                                }
+                            })
+                    }
                     props.navigation.push(ScreenName.SearchResult, {
                         courses: response.data.payload.courses,
                         authors: response.data.payload.instructors

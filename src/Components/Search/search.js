@@ -1,8 +1,7 @@
 import React, {useContext, useEffect} from 'react';
-import {View, StyleSheet, FlatList} from "react-native";
+import {View, FlatList} from "react-native";
 import {ThemeContext} from "../../Core/Provider/theme-provider";
 import {SearchHistoryContext} from "../../Core/Provider/search-history-provider";
-import SectionHeader from "../Common/section-header";
 import {SearchInputContext} from "../../Core/Provider/search-input-provider";
 import i18n from 'i18n-js';
 import {strings} from "../../Globals/Localization/string";
@@ -10,6 +9,7 @@ import {deleteSearchHistoryService, getSearchHistoryService} from "../../Core/Se
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import SearchHistoryItem from "./search-history-item";
 import SectionHeader2 from "../Common/section-header-2";
+import UnauthenticationView from "../Common/unauthentication-view";
 
 const Search = (props) => {
     // State
@@ -20,12 +20,14 @@ const Search = (props) => {
 
     // Listen
     useEffect(() => {
-        getSearchHistoryService(authenticationContext.state.token)
-            .then((response) => {
-                if (response.status === 200) {
-                    setSearchHistory(response.data.payload.data)
-                }
-            })
+        if (authenticationContext.state.isAuthenticated) {
+            getSearchHistoryService(authenticationContext.state.token)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setSearchHistory(response.data.payload.data)
+                    }
+                })
+        }
     }, [])
 
     // Control
@@ -54,31 +56,30 @@ const Search = (props) => {
         )
     }
 
-    return (
-        <FlatList
-            data={searchHistory}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => (
-                <View style={{
-                    height: 1,
-                    backgroundColor: theme.primary,
-                    marginLeft: 5,
-                    marginRight: 5
-                }}/>
-            )}
-            ListHeaderComponent={() => (
-                <SectionHeader2 title={i18n.t(strings.recent_searches)}/>
-            )}
-            style={{backgroundColor: theme.background, paddingTop: 10}}
-        />
-    )
+    if (!authenticationContext.state.isAuthenticated) {
+        return (
+            <UnauthenticationView navigation={props.navigation}/>
+        )
+    } else {
+        return (
+            <FlatList
+                data={searchHistory}
+                renderItem={renderItem}
+                ItemSeparatorComponent={() => (
+                    <View style={{
+                        height: 1,
+                        backgroundColor: theme.primary,
+                        marginLeft: 5,
+                        marginRight: 5
+                    }}/>
+                )}
+                ListHeaderComponent={() => (
+                    <SectionHeader2 title={i18n.t(strings.recent_searches)}/>
+                )}
+                style={{backgroundColor: theme.background, paddingTop: 10}}
+            />
+        )
+    }
 };
-
-const styles = (theme) => StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.background,
-    },
-});
 
 export default Search;
