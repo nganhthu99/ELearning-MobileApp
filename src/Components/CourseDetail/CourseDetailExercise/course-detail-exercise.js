@@ -23,7 +23,6 @@ const CourseDetailExercise= (props) => {
     const [isAccessible, setIsAccessible] = useState(false)
 
     useEffect(() => {
-        console.log(props.route.params)
         if (continueCourses.some(returnItem => returnItem.id === props.route.params.courseId)) {
             setIsAccessible(true)
         }
