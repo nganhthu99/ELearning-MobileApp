@@ -83,29 +83,30 @@ const CourseDetail = (props) => {
     }
 
     const renderVideo = () => {
-
-        if (video.url.includes('youtube')) {
-            return (
-                <YoutubePlayer
-                    onReady={() => {playerRef.current.seekTo(video.currentTime)}}
-                    videoId={youtubeParserUtil(video.url)}
-                    play={true}
-                    ref={playerRef}
-                    height={220}
-                    volume={50}
-                    playbackRate={1}/>
-            )
-        } else if (video.url) {
-            return (
-                <Video
-                    onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
-                    source={{uri: video.url}}
-                    shouldPlay={true}
-                    volume={1.0}
-                    useNativeControls
-                    ref={playerRef}
-                    style={{height: 220}}/>
-            )
+        if (video.url) {
+            if (video.url.includes('youtube')) {
+                return (
+                    <YoutubePlayer
+                        onReady={() => {playerRef.current.seekTo(video.currentTime)}}
+                        videoId={youtubeParserUtil(video.url)}
+                        play={true}
+                        ref={playerRef}
+                        height={220}
+                        volume={50}
+                        playbackRate={1}/>
+                )
+            } else {
+                return (
+                    <Video
+                        onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
+                        source={{uri: video.url}}
+                        shouldPlay={true}
+                        volume={1.0}
+                        useNativeControls
+                        ref={playerRef}
+                        style={{height: 220}}/>
+                )
+            }
         }
     }
 
