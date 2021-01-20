@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from "@react-navigation/native";
 import StartStack from "./src/Components/Navigation/start-stack";
@@ -22,10 +22,12 @@ export default function App() {
         "en-VN": english,
         "en":english
     };
-    // Set the locale once at the beginning of your app.
-    i18n.locale = Localization.locale;
-    // When a value is missing from a language it'll fallback to another language with the key present.
-    i18n.fallbacks = true;
+    useEffect(() => {
+        // Set the locale once at the beginning of your app.
+        i18n.locale = Localization.locale;
+        // When a value is missing from a language it'll fallback to another language with the key present.
+        i18n.fallbacks = true;
+    }, [])
 
     // clearAllStorageKeys()
     //     .then(() => {
