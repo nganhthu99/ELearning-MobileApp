@@ -75,5 +75,20 @@
   "no_data_view_no_exercise": "This lesson has no exercises available",
   "no_data_view_no_enroll": "You must enroll to access this course's lessons",
   "no_data_view_no_download": "You have no downloaded lessons",
-  "no_data_view_no_course": "There's no courses matched or available"
+  "no_data_view_no_course": "There's no courses matched or available",
+  "like": "Like",
+  "liked": "Liked",
+  "enroll": "Enroll",
+  "enrolled": "Enrolled",
+  "share": "Share",
+  "description": "Description",
+  "field": "Field",
+  "requirement": "Requirement",
+  "related_courses": "Related Courses",
+  "rate_formality": "Rate formality",
+  "rate_content": "Rate content",
+  "rate_presentation": "Rate presentation",
+  "comment": "Comment",
+  "submit_rating": "Submit Rating",
+  "enter_your_comment": "Enter your comment"
 }

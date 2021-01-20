@@ -75,5 +75,20 @@ export const strings = {
     no_data_view_no_exercise: "no_data_view_no_exercise",
     no_data_view_no_enroll: "no_data_view_no_enroll",
     no_data_view_no_download: "no_data_view_no_download",
-    no_data_view_no_course: "no_data_view_no_course"
+    no_data_view_no_course: "no_data_view_no_course",
+    like: "like",
+    liked: "liked",
+    enroll: "enroll",
+    enrolled: "enrolled",
+    share: "share",
+    description: "description",
+    field: "field",
+    requirement: "requirement",
+    related_courses: "related_courses",
+    rate_formality: "rate_formality",
+    rate_content: "rate_content",
+    rate_presentation: "rate_presentation",
+    comment: "comment",
+    submit_rating: "submit_rating",
+    enter_your_comment: "enter_your_comment"
 }

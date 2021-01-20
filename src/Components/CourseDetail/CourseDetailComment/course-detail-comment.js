@@ -6,6 +6,8 @@ import {ThemeContext} from "../../../Core/Provider/theme-provider";
 import StarRating from "react-native-star-rating";
 import {AuthenticationContext} from "../../../Core/Provider/authentication-provider";
 import {getCourseDetail, getUserRatingCourse, updateUserRatingCourse} from "../../../Core/Service/course-service";
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const CourseDetailComment = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -87,7 +89,6 @@ const CourseDetailComment = (props) => {
                     }
                 })
                 .catch((error) => {
-                    console.log('ERRORRRRR', error)
                     Alert.alert(
                         'Error',
                         'Please try again later.',
@@ -106,37 +107,6 @@ const CourseDetailComment = (props) => {
         }
     }
 
-    /*const handleCommentOnSubmit = () => {
-        if (inputComment.length > 0) {
-            if (authentication) {
-                const today = new Date();
-                const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-                const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                const dateTime = date + ' ' + time;
-
-                const newComment = comment.slice()
-                setComment(newComment.concat({
-                    id: 11,
-                    time: dateTime,
-                    username: authentication.username,
-                    content: inputComment
-                }))
-            } else {
-                Alert.alert(
-                    'Authentication Error',
-                    'Please Sign In or Sign Up to use this feature',
-                    [
-                        {
-                            text: 'Cancel',
-                            onPress: () => console.log('Cancel Pressed'),
-                            style: 'cancel'
-                        }
-                    ]
-                );
-            }
-        }
-    }*/
-
     const commentInputModal = () => {
         return (
             <Overlay
@@ -145,14 +115,14 @@ const CourseDetailComment = (props) => {
                 onBackdropPress={toggleOverlay}>
                 <View>
                     <View style={{paddingLeft: 10, paddingBottom: 20}}>
-                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>Add Comment</Text>
+                        <Text style={{color: theme.emphasis,fontWeight:'bold', fontSize: 18}}>{i18n.t(strings.comment)}</Text>
                     </View>
                     <Input multiline
-                           placeholder='Enter your comment'
+                           placeholder={i18n.t(strings.enter_your_comment)}
                            inputStyle={{color: theme.text, maxHeight: 120}}
                            onChangeText={(text) => handleCommentOnChangeText(text)}/>
                     <Button type='outline'
-                            title='Update'
+                            title={i18n.t(strings.update)}
                             containerStyle={{paddingLeft: 40, paddingRight: 40, paddingTop: 10}}
                             onPress={toggleOverlay}/>
                 </View>
@@ -187,7 +157,7 @@ const CourseDetailComment = (props) => {
                         paddingTop: 20,
                         paddingBottom: 0}}>
                         <Text style={{color: theme.emphasis, fontWeight: 'bold', fontSize: 16, paddingRight: 40}}>
-                            Rate formality
+                            {i18n.t(strings.rate_formality)}
                         </Text>
                         <StarRating
                             iconSet={'Ionicons'}
@@ -211,7 +181,7 @@ const CourseDetailComment = (props) => {
                         paddingBottom: 0
                     }}>
                         <Text style={{color: theme.emphasis, fontWeight: 'bold', fontSize: 16, paddingRight: 40}}>
-                            Rate content
+                            {i18n.t(strings.rate_content)}
                         </Text>
                         <StarRating
                             iconSet={'Ionicons'}
@@ -235,7 +205,7 @@ const CourseDetailComment = (props) => {
                         paddingBottom: 0
                     }}>
                         <Text style={{color: theme.emphasis, fontWeight: 'bold', fontSize: 16, paddingRight: 40}}>
-                            Rate presentation
+                            {i18n.t(strings.rate_presentation)}
                         </Text>
                         <StarRating
                             iconSet={'Ionicons'}
@@ -259,7 +229,7 @@ const CourseDetailComment = (props) => {
                             name='comment-o'
                             color={theme.emphasis}/>
                         <Text style={{color: theme.primary, fontWeight: 'bold', fontSize: 16, marginLeft: 8}}>
-                            Comment
+                            {i18n.t(strings.comment)}
                         </Text>
                     </TouchableOpacity>
                     {commentInputModal()}
@@ -275,7 +245,7 @@ const CourseDetailComment = (props) => {
                     {/*Button submit*/}
                     <Button
                         type="outline"
-                        title='Submit Rating'
+                        title={i18n.t(strings.submit_rating)}
                         icon={{
                             type: 'ionicons',
                             name: 'cloud-upload',

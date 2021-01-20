@@ -14,6 +14,8 @@ import CourseInfo3 from "../../CoursesList/course-info-3";
 import SectionHeader2 from "../../Common/section-header-2";
 import HorizontalCourseList from "../../CoursesList/HorizontalCourseList/horizontal-course-list";
 import * as WebBrowser from 'expo-web-browser';
+import i18n from 'i18n-js';
+import {strings} from "../../../Globals/Localization/string";
 
 const CourseDetailInformation = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -126,7 +128,7 @@ const CourseDetailInformation = (props) => {
                         {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.background, backgroundColor: theme.danger, borderWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={!isFavourite?
                         {fontWeight: 'bold', paddingRight: 5, color: theme.danger}:
-                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isFavourite ? 'Like' : 'Liked'}</Text>
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isFavourite ? i18n.t(strings.like) : i18n.t(strings.liked)}</Text>
                     <Icon type='octicon'
                           name='heart'
                           size={35}
@@ -140,7 +142,7 @@ const CourseDetailInformation = (props) => {
                         {flex: 1, flexDirection: 'row', margin: 2, borderColor: theme.background, backgroundColor: theme.primary, borderWidth: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={!isEnrolled?
                         {fontWeight: 'bold', paddingRight: 5, color: theme.primary}:
-                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isEnrolled ? 'Enroll' : 'Enrolled'}</Text>
+                        {fontWeight: 'bold', paddingRight: 5, color: theme.background}}>{!isEnrolled ? i18n.t(strings.enroll) : i18n.t(strings.enrolled)}</Text>
                     <Icon type='ionicons'
                           name='person-add'
                           size={35}
@@ -151,7 +153,7 @@ const CourseDetailInformation = (props) => {
             <TouchableOpacity
                 style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderColor: theme.primary, borderWidth: 1, margin: 2}}
                 onPress={handleShareButton}>
-                <Text style={{fontWeight: 'bold', paddingRight: 5, color: theme.primary}}>Share</Text>
+                <Text style={{fontWeight: 'bold', paddingRight: 5, color: theme.primary}}>{i18n.t(strings.share)}</Text>
                 <Icon type='ionicons'
                       name='share'
                       size={35}
@@ -159,13 +161,13 @@ const CourseDetailInformation = (props) => {
             </TouchableOpacity>
             <View style={{padding: 5, paddingTop: 10}}>
                 <Text style={styles(theme).headerText}>
-                    Description:
+                    {i18n.t(strings.description)}
                 </Text>
                 <Text style={styles(theme).text}>
                     {detail.description}
                 </Text>
                 <Text style={styles(theme).headerText}>
-                    Field:
+                    {i18n.t(strings.field)}
                 </Text>
                 <View>
                     {detail["learnWhat"] && detail["learnWhat"].map(learn => {
@@ -184,7 +186,7 @@ const CourseDetailInformation = (props) => {
                     })}
                 </View>
                 <Text style={styles(theme).headerText}>
-                    Requirement:
+                    {i18n.t(strings.requirement)}
                 </Text>
                 <Text style={styles(theme).text}>
                     {detail.requirement}

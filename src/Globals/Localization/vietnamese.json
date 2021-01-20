@@ -75,5 +75,20 @@
   "no_data_view_no_exercise": "Bài học này không có bài tập",
   "no_data_view_no_enroll": "Bạn chưa đăng ký khoá học này",
   "no_data_view_no_download": "Bạn chưa tải khoá học nào cả",
-  "no_data_view_no_course": "Không có khoá học nào phù hợp"
+  "no_data_view_no_course": "Không có khoá học nào phù hợp",
+  "like": "Yêu thích",
+  "liked": "Đã yêu thích",
+  "enroll": "Đăng ký",
+  "enrolled": "Đã đăng ký",
+  "share": "Chia sẻ",
+  "description": "Mô tả",
+  "field": "Lĩnh vực",
+  "requirement": "Yêu cầu",
+  "related_courses": "Khoá học tương tự",
+  "rate_formality": "Đánh giá hình thức",
+  "rate_content": "Đánh giá nội dung",
+  "rate_presentation": "Đánh giá trình bày",
+  "comment": "Bình luận",
+  "submit_rating": "Gửi đánh giá",
+  "enter_your_comment": "Nhập bình luận"
 }
