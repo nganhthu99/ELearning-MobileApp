@@ -8,35 +8,48 @@ import {AuthenticationContext} from "../../../Core/Provider/authentication-provi
 import {getCourseDetail, getUserRatingCourse, updateUserRatingCourse} from "../../../Core/Service/course-service";
 import i18n from 'i18n-js';
 import {strings} from "../../../Globals/Localization/string";
+import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
+import NoDataView from "../../Common/no-data-view";
 
 const CourseDetailComment = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [starRating, setStarRating] = useState({
-        formalityPoint: 0,
-        contentPoint: 0,
-        presentationPoint: 0
+        formalityPoint: 5,
+        contentPoint: 5,
+        presentationPoint: 5
     })
     const [isCommentOverlayVisible, setIsCommentOverlayVisible] = useState(false)
     const [inputComment, setInputComment] = useState("")
     const [listRating, setListRating] = useState(props.route.params.detail.ratings.ratingList)
 
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
+    const [isAccessible, setIsAccessible] = useState(false)
     useEffect(() => {
-        getUserRatingCourse(authenticationContext.state.token, props.route.params.detail.id)
-            .then((response) => {
-                if (response.status === 200 && response.data.payload) {
-                    setStarRating({
-                        formalityPoint: response.data.payload.formalityPoint,
-                        contentPoint: response.data.payload.contentPoint,
-                        presentationPoint: response.data.payload.presentationPoint
-                    })
-                    setInputComment(response.data.payload.content)
-                }
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+        if (continueCourses.some(returnItem => returnItem.id === props.route.params.detail.id)) {
+            setIsAccessible(true)
+        }
+    }, [continueCourses])
+
+    useEffect(() => {
+        if (authenticationContext.state.isAuthenticated) {
+            setIsLoading(true)
+            getUserRatingCourse(authenticationContext.state.token, props.route.params.detail.id)
+                .then((response) => {
+                    if (response.status === 200 && response.data.payload) {
+                        setStarRating({
+                            formalityPoint: response.data.payload.formalityPoint,
+                            contentPoint: response.data.payload.contentPoint,
+                            presentationPoint: response.data.payload.presentationPoint
+                        })
+                        setInputComment(response.data.payload.content)
+                    }
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
     }, [])
 
     const handleOnFormalityStarPress = (point) => {
@@ -160,6 +173,7 @@ const CourseDetailComment = (props) => {
                             {i18n.t(strings.rate_formality)}
                         </Text>
                         <StarRating
+                            disabled={!isAccessible || !authenticationContext.state.isAuthenticated}
                             iconSet={'Ionicons'}
                             emptyStar={'ios-star-outline'}
                             fullStar={'ios-star'}
@@ -184,6 +198,7 @@ const CourseDetailComment = (props) => {
                             {i18n.t(strings.rate_content)}
                         </Text>
                         <StarRating
+                            disabled={!isAccessible || !authenticationContext.state.isAuthenticated}
                             iconSet={'Ionicons'}
                             emptyStar={'ios-star-outline'}
                             fullStar={'ios-star'}
@@ -208,6 +223,7 @@ const CourseDetailComment = (props) => {
                             {i18n.t(strings.rate_presentation)}
                         </Text>
                         <StarRating
+                            disabled={!isAccessible || !authenticationContext.state.isAuthenticated}
                             iconSet={'Ionicons'}
                             emptyStar={'ios-star-outline'}
                             fullStar={'ios-star'}
@@ -222,6 +238,7 @@ const CourseDetailComment = (props) => {
 
                     {/*Comment section*/}
                     <TouchableOpacity
+                        disabled={!isAccessible || !authenticationContext.state.isAuthenticated}
                         onPress={toggleOverlay}
                         style={{flexDirection: 'row', padding: 5, paddingTop: 10, paddingBottom: 20}}>
                         <Icon
@@ -244,6 +261,7 @@ const CourseDetailComment = (props) => {
 
                     {/*Button submit*/}
                     <Button
+                        disabled={!isAccessible || !authenticationContext.state.isAuthenticated}
                         type="outline"
                         title={i18n.t(strings.submit_rating)}
                         icon={{

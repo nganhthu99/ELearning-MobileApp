@@ -79,18 +79,6 @@ const CourseDetailInformation = (props) => {
                                 setContinueCourses(response.data.payload)
                             }
                         })
-                    // if (response.status === 200) {
-                    //     Alert.alert(
-                    //         'Enroll Course Successfully',
-                    //         '',
-                    //         [
-                    //             {
-                    //                 text: 'OK',
-                    //                 onPress: () => {}
-                    //             }
-                    //         ]
-                    //     )
-                    // }
                 })
                 .catch((error) => {
                     WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id)

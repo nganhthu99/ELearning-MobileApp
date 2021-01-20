@@ -91,7 +91,7 @@ const CourseDetail = (props) => {
                         videoId={youtubeParserUtil(video.url)}
                         play={true}
                         ref={playerRef}
-                        height={220}
+                        height={210}
                         volume={50}
                         playbackRate={1}/>
                 )
@@ -107,6 +107,10 @@ const CourseDetail = (props) => {
                         style={{height: 220}}/>
                 )
             }
+        } else {
+            return (
+                <View style={{paddingTop: 20, backgroundColor: theme.background}}/>
+            )
         }
     }
 
@@ -136,7 +140,6 @@ const CourseDetail = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20
     },
 });
 

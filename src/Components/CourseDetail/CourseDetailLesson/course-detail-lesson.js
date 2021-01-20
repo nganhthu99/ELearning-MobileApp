@@ -21,7 +21,7 @@ const CourseDetailLesson = (props) => {
     const {downloadedCourses, setDownloadedCourses} = useContext(DownloadedCoursesContext)
     const {currentLesson, setCurrentLesson} = useContext(CurrentLessonContext)
 
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [activeSections, setActiveSections] = useState([0])
     const [courseSections, setCoursesSection] = useState(props.route.params.detail.section)
     const [isAccessible, setIsAccessible] = useState(false)
@@ -67,34 +67,38 @@ const CourseDetailLesson = (props) => {
     }
 
     useEffect(() => {
-        if (props.route.params.initialLesson) {
-            setCurrentLesson(props.route.params.initialLesson)
-        }
-        const promiseArray = []
-        courseSections.map((section) => {
-            section.lesson.map((lesson) => {
-                promiseArray.push(getLessonWithVideoUrl(authenticationContext.state.token, lesson.courseId, lesson.id)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            setTotalStudied(totalStudied => totalStudied + response.data.payload.currentTime)
-                            lesson.video = response.data.payload
-                        }
-                    })
-                    .catch((error) => {
-                        setIsAccessible(false)
-                    })
-                )
-            })
-        })
-        Promise.all(promiseArray)
-            .then(() => setIsLoading(false))
-    }, [])
-
-    useEffect(() => {
         if (continueCourses.some(returnItem => returnItem.id === props.route.params.detail.id)) {
             setIsAccessible(true)
+            setIsLoading(true)
+            if (props.route.params.initialLesson) {
+                setCurrentLesson(props.route.params.initialLesson)
+            }
+            const promiseArray = []
+            courseSections.map((section) => {
+                section.lesson.map((lesson) => {
+                    promiseArray.push(getLessonWithVideoUrl(authenticationContext.state.token, lesson.courseId, lesson.id)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                setTotalStudied(totalStudied => totalStudied + response.data.payload.currentTime)
+                                lesson.video = response.data.payload
+                            }
+                        })
+                        .catch((error) => {
+                            setIsAccessible(false)
+                        })
+                    )
+                })
+            })
+            Promise.all(promiseArray)
+                .then(() => setIsLoading(false))
         }
     }, [continueCourses])
+
+    // useEffect(() => {
+    //     if (continueCourses.some(returnItem => returnItem.id === props.route.params.detail.id)) {
+    //         setIsAccessible(true)
+    //     }
+    // }, [continueCourses])
 
     const handleOnChangeLesson = (lesson) => {
         if (currentLesson.video) {

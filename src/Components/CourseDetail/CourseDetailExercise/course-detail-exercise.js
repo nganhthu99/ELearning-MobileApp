@@ -8,6 +8,7 @@ import {CurrentLessonContext} from "../../../Core/Provider/current-lesson-provid
 import NoDataView from "../../Common/no-data-view";
 import i18n from 'i18n-js';
 import {strings} from "../../../Globals/Localization/string";
+import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
 
 const CourseDetailExercise= (props) => {
     const {theme} = useContext(ThemeContext)
@@ -18,31 +19,45 @@ const CourseDetailExercise= (props) => {
 
     const {currentLesson, setCurrentLesson} = useContext(CurrentLessonContext)
 
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
+    const [isAccessible, setIsAccessible] = useState(false)
+
     useEffect(() => {
-        if (currentLesson.id) {
-            getLessonExercises(authenticationContext.state.token, currentLesson.id)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setExerciseSections(response.data.payload.exercises)
-                    }
-                })
+        console.log(props.route.params)
+        if (continueCourses.some(returnItem => returnItem.id === props.route.params.courseId)) {
+            setIsAccessible(true)
+        }
+    }, [continueCourses])
+
+    useEffect(() => {
+        if (authenticationContext.state.isAuthenticated) {
+            if (currentLesson.id) {
+                getLessonExercises(authenticationContext.state.token, currentLesson.id)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setExerciseSections(response.data.payload.exercises)
+                        }
+                    })
+            }
         }
     }, [currentLesson])
 
     useEffect(() => {
-        const promiseArray = []
-        exerciseSections.map((exercise) => {
-            promiseArray.push(getExerciseQuestions(authenticationContext.state.token, exercise.id)
-                .then((response) => {
-                    if (response.status === 200) {
-                        exercise.exercises_questions = response.data.payload.exercises.exercises_questions
-                    }
-                }))
-        })
-        Promise.all(promiseArray)
-            .then(() => {
-                setIsLoading(false)
+        if (authenticationContext.state.isAuthenticated) {
+            const promiseArray = []
+            exerciseSections.map((exercise) => {
+                promiseArray.push(getExerciseQuestions(authenticationContext.state.token, exercise.id)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            exercise.exercises_questions = response.data.payload.exercises.exercises_questions
+                        }
+                    }))
             })
+            Promise.all(promiseArray)
+                .then(() => {
+                    setIsLoading(false)
+                })
+        }
     }, [exerciseSections])
 
     const _renderHeader = (section, index) => {
@@ -95,7 +110,15 @@ const CourseDetailExercise= (props) => {
         setActiveSections(activeSections);
     };
 
-    if (isLoading) {
+    if (!authenticationContext.state.isAuthenticated) {
+        return (
+            <NoDataView message={i18n.t(strings.unauthentication_instruction)}/>
+        )
+    } else if (!isAccessible) {
+        return (
+            <NoDataView message={i18n.t(strings.no_data_view_no_enroll)}/>
+        )
+    } else if (isLoading) {
         return (
             <View style={{marginTop: 20}}>
                 <ActivityIndicator size='small'

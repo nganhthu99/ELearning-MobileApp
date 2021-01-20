@@ -52,6 +52,9 @@ const CourseDetailTab = (props) => {
                             options={{title: i18n.t(strings.lesson)}}/>
                 <Tab.Screen name={ScreenName.CourseDetailExercise}
                             component={CourseDetailExercise}
+                            initialParams={{
+                                courseId: props.detail.id,
+                            }}
                             options={{
                                 title: i18n.t(strings.exercise)
                             }}/>
