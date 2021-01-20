@@ -77,7 +77,11 @@ const CourseDetailLesson = (props) => {
                             setTotalStudied(totalStudied => totalStudied + response.data.payload.currentTime)
                             lesson.video = response.data.payload
                         }
-                    }))
+                    })
+                    .catch((error) => {
+                        setIsAccessible(false)
+                    })
+                )
             })
         })
         Promise.all(promiseArray)

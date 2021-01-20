@@ -11,6 +11,7 @@ import {ThemeContext} from "../../Core/Provider/theme-provider";
 import { Video } from 'expo-av';
 import {AuthenticationContext} from "../../Core/Provider/authentication-provider";
 import {ContinueCoursesContext} from "../../Core/Provider/continue-courses-provider";
+import {youtubeParserUtil} from "../../Core/Util/youtube-parser";
 
 const CourseDetail = (props) => {
     const {theme} = useContext(ThemeContext)
@@ -58,6 +59,7 @@ const CourseDetail = (props) => {
                                 })
                         })
                         .catch((error) => {
+                            setIsLoading(false)
                             setVideo({
                                 url: promoVidUrl,
                                 currentTime: 0
@@ -81,12 +83,13 @@ const CourseDetail = (props) => {
     }
 
     const renderVideo = () => {
+
         if (video.url.includes('youtube')) {
             return (
                 <YoutubePlayer
                     onReady={() => {playerRef.current.seekTo(video.currentTime)}}
-                    videoId={video.url.substring(25)}
-                    // play={true}
+                    videoId={youtubeParserUtil(video.url)}
+                    play={true}
                     ref={playerRef}
                     height={220}
                     volume={50}
@@ -97,9 +100,8 @@ const CourseDetail = (props) => {
                 <Video
                     onLoadStart={async () => {await playerRef.current.setPositionAsync(video.currentTime * 1000)}}
                     source={{uri: video.url}}
-                    // shouldPlay={true}
+                    shouldPlay={true}
                     volume={1.0}
-                    isMuted={false}
                     useNativeControls
                     ref={playerRef}
                     style={{height: 220}}/>
