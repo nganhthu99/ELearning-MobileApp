@@ -15,6 +15,7 @@ import {FavouriteCoursesContext} from "../../../Core/Provider/favourite-courses-
 import i18n from 'i18n-js';
 import {strings} from "../../../Globals/Localization/string";
 import NoDataView from "../../Common/no-data-view";
+import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
 
 const constLimit = 5
 const startPage = 1
@@ -24,6 +25,7 @@ const CourseList = (props) => {
     const {theme} = useContext(ThemeContext)
     const authenticationContext = useContext(AuthenticationContext)
     const {favouriteCourses, setFavouriteCourses} = useContext(FavouriteCoursesContext)
+    const {continueCourses, setContinueCourses} = useContext(ContinueCoursesContext)
     const [isLoading, setIsLoading] = useState(true)
     const [courses, setCourses] = useState(props.route.params.items)
     const [page, setPage] = useState(1)
@@ -181,7 +183,9 @@ const CourseList = (props) => {
             </View>
         )
     } else {
-        if (courses.length === 0 || (header === i18n.t(strings.favourite) && favouriteCourses.length === 0)) {
+        if (courses.length === 0 ||
+            (header === i18n.t(strings.favourite) && favouriteCourses.length === 0) ||
+            (header === i18n.t(strings.continue_learning) && continueCourses.length === 0)) {
             return (
                 <View style={{flex:1, backgroundColor: theme.background}}>
                     <NoDataView message={i18n.t(strings.no_data_view_no_course)}/>
@@ -189,7 +193,7 @@ const CourseList = (props) => {
             )
         } else return (
             <FlatList
-                data={header === i18n.t(strings.favourite) ? favouriteCourses : courses}
+                data={(header === i18n.t(strings.favourite)) ? favouriteCourses : (header === i18n.t(strings.continue_learning)) ? continueCourses : courses}
                 renderItem={renderItem}
                 ItemSeparatorComponent={() => (
                     <View style={{

@@ -188,16 +188,7 @@ const CourseDetailLesson = (props) => {
                     if (downloadingLessons.some(returnItem => returnItem === lesson.id)) {
                         return <ActivityIndicator style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}/>
                     } else {
-                        if (lesson.video.videoUrl.includes('youtube')) {
-                            return <TouchableOpacity
-                                onPress={() => handleDownloadButton(lesson)}
-                                style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
-                                <Icon
-                                    type='simple-line-icon'
-                                    name='cloud-download'
-                                    color={theme.emphasis}/>
-                            </TouchableOpacity>
-                        } else {
+                        if (!lesson.video.videoUrl.includes('youtube')) {
                             return <TouchableOpacity
                                 onPress={() => handleDownloadButton(lesson)}
                                 style={{justifyContent: 'center', alignItems: 'center', flex: 1.5}}>
