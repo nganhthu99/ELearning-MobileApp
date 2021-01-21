@@ -84,7 +84,7 @@ const CourseDetailExercise= (props) => {
                         {question.exercises_answers && question.exercises_answers.map((answer, index) => {
                             return (
                                 <TouchableOpacity key={answer.id}>
-                                    <Text style={{paddingBottom: 5}}>
+                                    <Text style={{paddingBottom: 5, color: theme.text}}>
                                         {`${String.fromCharCode(index + 65)}. ${answer.content}`}
                                     </Text>
                                 </TouchableOpacity>

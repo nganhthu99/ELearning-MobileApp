@@ -219,7 +219,7 @@ const CourseDetailLesson = (props) => {
                     onPress={() => handleOnChangeLesson(lesson)}
                     style={{flex: 1, flexDirection: 'row', paddingTop: 10, paddingBottom: 10}}>
                     <View style={{flex: 1.5, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={(lesson.id === currentLesson.id) ? {fontSize: 10, fontWeight: 'bold'} : {fontSize: 10}}>{index + 1}</Text>
+                        <Text style={(lesson.id === currentLesson.id) ? {fontSize: 10, fontWeight: 'bold', color: theme.text} : {fontSize: 10, color: theme.text}}>{index + 1}</Text>
                     </View>
                     <View style={{flex: 8}}>
                         <Text style={(lesson.id === currentLesson.id) ? {color: theme.text, fontSize: 14, paddingBottom: 8, fontWeight: 'bold'} : {color: theme.text, fontSize: 14, paddingBottom: 8}}>

@@ -41,7 +41,7 @@ export const themes = {
         emphasis: '#D5E8FE',
         text: '#F5EDED',
         danger: '#D72323',
-        bright: '#0E66EE'
+        bright: '#1C9AFF'
     },
 }
 

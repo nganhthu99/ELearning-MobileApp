@@ -36,7 +36,7 @@ const styles = (theme) => StyleSheet.create({
         justifyContent: 'center'
     },
     text: {
-        color: theme.normalText,
+        color: theme.text,
         padding: 10,
         paddingLeft: 15
     },
