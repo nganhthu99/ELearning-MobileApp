@@ -73,12 +73,19 @@ const CourseDetailInformation = (props) => {
         } else if (!isEnrolled) {
             enrollCourseService(authenticationContext.state.token, detail.id)
                 .then((response) => {
-                    getContinueCoursesService(authenticationContext.state.token)
-                        .then((response) => {
-                            if (response.status === 200) {
-                                setContinueCourses(response.data.payload)
-                            }
-                        })
+                    if(response.status === 200 || response.status === 500) {
+                        getContinueCoursesService(authenticationContext.state.token)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    setContinueCourses(response.data.payload)
+                                }
+                            })
+                    } else {
+                        WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id)
+                            .then(() => {
+                                console.log('open google chrome')
+                            })
+                    }
                 })
                 .catch((error) => {
                     WebBrowser.openBrowserAsync('http://dev.letstudy.org/payment/'+detail.id)

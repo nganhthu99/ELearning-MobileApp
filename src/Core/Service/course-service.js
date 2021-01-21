@@ -165,6 +165,7 @@ export const enrollCourseService = (token, courseId) => {
     return axios.post(api + '/payment/get-free-courses', {
         courseId
     }, {
+        validateStatus: () => true,
         headers: {
             Authorization: 'Bearer ' + token
         }
