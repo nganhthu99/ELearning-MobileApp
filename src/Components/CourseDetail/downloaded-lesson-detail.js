@@ -10,6 +10,8 @@ const DownloadedLessonDetail = (props) => {
     return (
         <View style={styles(theme).container}>
             <Video
+                resizeMode={Video.RESIZE_MODE_CONTAIN}
+                volume={1.0}
                 source={{uri: props.route.params.item.video.videoUrl}}
                 shouldPlay={false}
                 useNativeControls
