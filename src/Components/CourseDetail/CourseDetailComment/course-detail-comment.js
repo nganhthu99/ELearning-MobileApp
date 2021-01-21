@@ -9,7 +9,6 @@ import {getCourseDetail, getUserRatingCourse, updateUserRatingCourse} from "../.
 import i18n from 'i18n-js';
 import {strings} from "../../../Globals/Localization/string";
 import {ContinueCoursesContext} from "../../../Core/Provider/continue-courses-provider";
-import NoDataView from "../../Common/no-data-view";
 
 const CourseDetailComment = (props) => {
     const {theme} = useContext(ThemeContext)

@@ -44,7 +44,9 @@ const AuthorList = (props) => {
 
     if(authors.length === 0) {
         return (
-            <NoDataView message={i18n.t(strings.no_data_view_no_author)}/>
+            <View style={{flex:1, backgroundColor: theme.background}}>
+                <NoDataView message={i18n.t(strings.no_data_view_no_author)}/>
+            </View>
         )
     }
     return(

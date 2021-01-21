@@ -43,11 +43,4 @@ const HorizontalCourseList = (props) => {
     )
 }
 
-const styles = (theme) => StyleSheet.create({
-    container: {
-        backgroundColor: theme.background,
-    },
-});
-
-
 export default HorizontalCourseList;

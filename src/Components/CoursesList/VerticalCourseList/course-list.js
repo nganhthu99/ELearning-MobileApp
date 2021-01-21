@@ -209,17 +209,4 @@ const CourseList = (props) => {
     }
 };
 
-const styles = (theme) => StyleSheet.create({
-    container: {
-        backgroundColor: theme.background,
-    },
-    list: {
-        padding: 5
-    },
-    header: {
-        paddingTop: 10,
-        paddingBottom: 10
-    }
-});
-
 export default CourseList;

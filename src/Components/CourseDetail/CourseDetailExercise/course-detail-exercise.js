@@ -111,11 +111,15 @@ const CourseDetailExercise= (props) => {
 
     if (!authenticationContext.state.isAuthenticated) {
         return (
-            <NoDataView message={i18n.t(strings.unauthentication_instruction)}/>
+            <View style={{flex:1, backgroundColor: theme.background}}>
+                <NoDataView message={i18n.t(strings.unauthentication_instruction)}/>
+            </View>
         )
     } else if (!isAccessible) {
         return (
-            <NoDataView message={i18n.t(strings.no_data_view_no_enroll)}/>
+            <View style={{flex:1, backgroundColor: theme.background}}>
+                <NoDataView message={i18n.t(strings.no_data_view_no_enroll)}/>
+            </View>
         )
     } else if (isLoading) {
         return (
